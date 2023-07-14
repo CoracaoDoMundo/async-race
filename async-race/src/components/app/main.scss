@@ -1,0 +1,10 @@
+$font-size: 1rem;
+$font-color: #ff0000;
+$font-header: 'Bangers', sans-serif;
+
+.body {
+  background-color: #000000;
+  font-size: $font-size;
+  color: $font-color;
+  font-family: $font-header;
+}

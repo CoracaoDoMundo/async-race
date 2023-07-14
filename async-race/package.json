@@ -41,6 +41,8 @@
     "postcss-loader": "^7.3.3",
     "postcss-preset-env": "^9.0.0",
     "prettier": "^3.0.0",
+    "sass": "^1.63.6",
+    "sass-loader": "^13.3.2",
     "style-loader": "^3.3.3",
     "svgo": "^3.0.2",
     "ts-loader": "^9.4.4",

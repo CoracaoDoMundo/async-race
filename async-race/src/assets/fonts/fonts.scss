@@ -1,0 +1,24 @@
+  /* bangers-regular - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Bangers';
+    font-style: normal;
+    font-weight: 400;
+    src: url('bangers-v21-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  }
+  /* fira-sans-extra-condensed-regular - latin */
+@font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Fira Sans Extra Condensed';
+    font-style: normal;
+    font-weight: 400;
+    src: url('fira-sans-extra-condensed-v10-latin-regular.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  }
+  /* fira-sans-extra-condensed-700 - latin */
+  @font-face {
+    font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+    font-family: 'Fira Sans Extra Condensed';
+    font-style: normal;
+    font-weight: 700;
+    src: url('fira-sans-extra-condensed-v10-latin-700.woff2') format('woff2'); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+  }

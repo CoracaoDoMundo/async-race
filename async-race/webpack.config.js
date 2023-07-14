@@ -17,7 +17,12 @@ module.exports = {
       { test: /\.ts$/i, use: 'ts-loader' },
       {
         test: /\.(scss|css)$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader'],
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'postcss-loader',
+          'sass-loader',
+        ],
       },
       {
         test: /\.(png|jpg|jpeg|gif|svg)$/i,
@@ -65,7 +70,7 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash:8].css',
-    }),
+    })
   ],
   devServer: {
     watchFiles: path.join(__dirname, 'src'),
