@@ -5,6 +5,9 @@ $font-header: 'Bangers', sans-serif;
 $font-regular: 'Fira Sans Extra Condensed', sans-serif;
 
 .body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   background-color: #000000;
   font-family: $font-regular;
   margin: 0 auto;

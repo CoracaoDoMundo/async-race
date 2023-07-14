@@ -1,0 +1,27 @@
+@import '../app/main.scss';
+
+.controlBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 30%;
+  .buttonText {
+    font-size: 0.7rem;
+  }
+}
+
+.inputsLine,
+.buttonsBlock {
+  display: flex;
+  gap: 0.5rem;
+  .input {
+    flex-grow: 1;
+  }
+}
+
+.buttonsBlock {
+  .button {
+    flex-grow: 1;
+    white-space: nowrap;
+  }
+}
