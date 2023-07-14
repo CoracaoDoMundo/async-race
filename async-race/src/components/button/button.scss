@@ -1,0 +1,26 @@
+@import '../app/main.scss';
+
+.button {
+  display: flex;
+  justify-content: center;
+  border: 1px solid $font-color;
+  border-radius: 5px;
+  width: fit-content;
+  padding: 0.3rem 0.5rem;
+  cursor: pointer;
+  box-shadow: 2px 3px 0px 0px $font-color;
+
+  .buttonText {
+    color: $font-color;
+  }
+}
+
+.button:active {
+  box-shadow: 1px 1px 0px 0px $font-color;
+}
+
+.button:hover {
+  .buttonText {
+    filter: drop-shadow(0px 0px 7px $font-color);
+  }
+}

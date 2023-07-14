@@ -1,6 +1,7 @@
 import './main.scss';
 import '../../assets/fonts/fonts.scss';
 import Header from '../header/header';
+import Controls from '../control-panel/control-panel';
 
 class App {
   private header: Header;
@@ -9,9 +10,7 @@ class App {
     this.header = new Header();
   }
 
-  start() {
-    this.header.draw();
-  }
+  start() {}
 
   draw() {}
 }

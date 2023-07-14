@@ -1,1 +1,17 @@
+@import '../app/main.scss';
 
+.header {
+  display: flex;
+  flex-direction: column;
+}
+
+.mainHeader {
+  font-family: $font-header;
+  color: $font-header-color;
+  margin: 1rem 0 0.5rem;
+}
+
+.buttonBlock {
+  display: flex;
+  gap: 1rem;
+}
