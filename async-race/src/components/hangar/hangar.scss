@@ -6,9 +6,20 @@
   padding: 0 3%;
 }
 
-.headerLine {
+.headerLine,
+.paginationLine {
   display: flex;
   font-family: 'Bangers', sans-serif;
   color: $font-header-color;
   gap: 0.3rem;
+}
+
+.hangarHeader,
+.balloonsNum {
+  margin: 1rem 0 0.5rem;
+}
+
+.pageText,
+.pageNum {
+  margin: 0 0 0.5rem;
 }

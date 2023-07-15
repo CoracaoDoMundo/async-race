@@ -9,6 +9,8 @@ class Hangar {
   private hangarHeader: HTMLHeadingElement;
   private balloonNum: HTMLHeadingElement;
   private paginationLine: HTMLDivElement;
+  private pageText: HTMLHeadingElement;
+  private pageNum: HTMLHeadingElement;
 
   constructor() {
     this.controller = Controller.getInstance();
@@ -18,18 +20,24 @@ class Hangar {
       'h3',
       ['hangarHeader'],
       this.headerLine,
-      'HANGAR'
+      'Hangar'
     );
-    this.balloonNum = createElement(
-      'h3',
-      ['balloonsNum'],
-      this.headerLine,
-      `()`
-    );
+    this.balloonNum = createElement('h3', ['balloonsNum'], this.headerLine);
     this.controller.getGarageObject().then((obj) => {
       this.balloonNum.innerText = `(${Object.keys(obj).length})`;
     });
-    this.paginationLine = createElement('div', ['paginationLine'], this.hangarBlock);
+    this.paginationLine = createElement(
+      'div',
+      ['paginationLine'],
+      this.hangarBlock
+    );
+    this.pageText = createElement(
+      'h5',
+      ['pageText'],
+      this.paginationLine,
+      'Page'
+    );
+    this.pageNum = createElement('h5', ['pageNum'], this.paginationLine, '#');
   }
 }
 
