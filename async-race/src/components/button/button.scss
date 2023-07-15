@@ -6,11 +6,18 @@
   align-items: center;
   border: 1px solid $font-color;
   border-radius: 5px;
-  width: fit-content;
-  padding: 0.2rem 0.5rem;
   cursor: pointer;
   box-shadow: 2px 3px 0px 0px $font-color;
+}
 
+.buttonInner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  height: 100%;
+  width: fit-content;
+  padding: 0 0.5rem;
   .buttonText {
     color: $font-color;
   }
@@ -21,7 +28,7 @@
 }
 
 .button:hover {
-  .buttonText {
-    filter: drop-shadow(0px 0px 2px $shadow-color);
+  .buttonInner {
+    box-shadow: inset 0px 0px 3px 0px $shadow-color;
   }
 }

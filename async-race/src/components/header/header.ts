@@ -18,7 +18,7 @@ class Header {
       'Async Air Race'
     );
     this.buttonBlock = createElement('div', ['buttonBlock'], this.header);
-    this.garageBtn = new Button(this.buttonBlock, 'TO GARAGE');
+    this.garageBtn = new Button(this.buttonBlock, 'TO HANGAR');
     this.winnersBtn = new Button(this.buttonBlock, 'TO WINNERS');
   }
 
