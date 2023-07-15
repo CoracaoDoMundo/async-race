@@ -1,6 +1,7 @@
 import './hangar.scss';
-import { createElement } from '../../utilities/service-functions';
+import { createElement, createBalloonBlocks } from '../../utilities/service-functions';
 import Controller from '../../utilities/server-requests';
+import Button from '../button/button';
 
 class Hangar {
   private controller: Controller;
@@ -11,6 +12,10 @@ class Hangar {
   private paginationLine: HTMLDivElement;
   private pageText: HTMLHeadingElement;
   private pageNum: HTMLHeadingElement;
+  private balloonBlocks: HTMLDivElement[];
+  private paginationButtonsBlock: HTMLDivElement;
+  private prevBtn: Button;
+  private nextBtn: Button;
 
   constructor() {
     this.controller = Controller.getInstance();
@@ -38,6 +43,10 @@ class Hangar {
       'Page'
     );
     this.pageNum = createElement('h5', ['pageNum'], this.paginationLine, '#');
+    this.balloonBlocks = createBalloonBlocks(this.hangarBlock);
+    this.paginationButtonsBlock = createElement('div', ['paginationButtonsBlock'], this.hangarBlock);
+    this.prevBtn = new Button(this.paginationButtonsBlock, 'PREV');
+    this.nextBtn = new Button(this.paginationButtonsBlock, 'NEXT');
   }
 }
 

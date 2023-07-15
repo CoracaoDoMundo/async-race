@@ -23,3 +23,22 @@
 .pageNum {
   margin: 0 0 0.5rem;
 }
+
+.balloonBlock {
+  padding: 0 3%;
+  width: 100%;
+  height: fit-content;
+}
+
+.paginationButtonsBlock {
+  display: flex;
+  justify-content: space-between;
+  width: 20%;
+  .button {
+    width: 45%;
+    .buttonInner {
+      flex-grow: 1;
+      font-size: 0.7rem;
+    }
+  }
+}

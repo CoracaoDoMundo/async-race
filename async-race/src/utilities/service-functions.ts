@@ -18,4 +18,15 @@ const createElement = <T extends HTMLElement>(
   return element;
 };
 
-export { createElement };
+const createBalloonBlocks = (container:HTMLDivElement): HTMLDivElement[] => {
+  let arr: HTMLDivElement[] = [];
+  let i = 0;
+  while (i < 7) {
+    const block:HTMLDivElement = createElement('div', ['balloonBlock'], container);
+    arr.push(block);
+    i += 1;
+  }
+  return arr;
+};
+
+export { createElement, createBalloonBlocks };
