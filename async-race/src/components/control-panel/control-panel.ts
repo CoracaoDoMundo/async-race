@@ -37,7 +37,7 @@ class Controls {
       this.controlBlock
     );
     this.inputCreate = new TextInput(this.inputCreateLine);
-    this.inputUpdate = new TextInput(this.inputUpdateLine);
+    this.inputUpdate = new TextInput(this.inputUpdateLine, false);
     this.inputColorCreate = new ColorInput(this.inputCreateLine, '#5900ff');
     this.inputColorUpdate = new ColorInput(this.inputUpdateLine, '#ff00a2');
     this.createBtn = new Button(this.inputCreateLine, 'CREATE');
