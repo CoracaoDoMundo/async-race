@@ -1,0 +1,14 @@
+@import '../app/main.scss';
+
+.hangarBlock {
+  display: flex;
+  flex-direction: column;
+  padding: 0 3%;
+}
+
+.headerLine {
+  display: flex;
+  font-family: 'Bangers', sans-serif;
+  color: $font-header-color;
+  gap: 0.3rem;
+}
