@@ -3,4 +3,10 @@
 .input {
   font-family: $font-regular;
   min-width: 7rem;
+  color: $font-color;
+}
+
+.input::placeholder {
+  color: $font-color;
+  opacity: 0.5;
 }

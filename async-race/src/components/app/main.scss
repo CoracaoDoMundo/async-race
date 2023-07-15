@@ -1,15 +1,20 @@
 $font-size: 1rem;
-$font-header-color: #ff0000;
-$font-color: #ffffff;
+$font-header-color: #52006b;
+$font-color: #230141;
+$shadow-color: #ff00e6;
 $font-header: 'Bangers', sans-serif;
 $font-regular: 'Fira Sans Extra Condensed', sans-serif;
 
 .body {
   display: flex;
   flex-direction: column;
+  background-image: url(../../assets/img/illustr-mountain-background.jpg);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  width: 100vw;
+  height: 100vh;
   gap: 1rem;
-  background-color: #000000;
   font-family: $font-regular;
   margin: 0 auto;
-  padding: 0 3%;
 }

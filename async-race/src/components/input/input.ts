@@ -6,7 +6,7 @@ class TextInput {
 
   constructor(container: HTMLDivElement) {
     this.input = createElement('input', ['input'], container);
-    this.input.placeholder = 'Car name...';
+    this.input.placeholder = 'Balloon name...';
   }
 }
 

@@ -38,13 +38,13 @@ class Controls {
     );
     this.inputCreate = new TextInput(this.inputCreateLine);
     this.inputUpdate = new TextInput(this.inputUpdateLine);
-    this.inputColorCreate = new ColorInput(this.inputCreateLine, '#fbff00');
-    this.inputColorUpdate = new ColorInput(this.inputUpdateLine, '#00ffbf');
+    this.inputColorCreate = new ColorInput(this.inputCreateLine, '#5900ff');
+    this.inputColorUpdate = new ColorInput(this.inputUpdateLine, '#ff00a2');
     this.createBtn = new Button(this.inputCreateLine, 'CREATE');
     this.updateBtn = new Button(this.inputUpdateLine, 'UPDATE');
     this.raceBtn = new Button(this.buttonsLine, 'RACE');
     this.resetBtn = new Button(this.buttonsLine, 'RESET');
-    this.generateBtn = new Button(this.buttonsLine, 'GENERATE CARS');
+    this.generateBtn = new Button(this.buttonsLine, 'GENERATE BALLOONS');
   }
 }
 
