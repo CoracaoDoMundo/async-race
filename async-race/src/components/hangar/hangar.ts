@@ -1,7 +1,11 @@
 import './hangar.scss';
-import { createElement, createBalloonBlocks } from '../../utilities/service-functions';
+import {
+  createElement,
+  createBalloonBlocks,
+} from '../../utilities/service-functions';
 import Controller from '../../utilities/server-requests';
 import Button from '../button/button';
+import BalloonBlock from '../balloon-block/balloon-block';
 
 class Hangar {
   private controller: Controller;
@@ -44,9 +48,24 @@ class Hangar {
     );
     this.pageNum = createElement('h5', ['pageNum'], this.paginationLine, '#');
     this.balloonBlocks = createBalloonBlocks(this.hangarBlock);
-    this.paginationButtonsBlock = createElement('div', ['paginationButtonsBlock'], this.hangarBlock);
+    this.paginationButtonsBlock = createElement(
+      'div',
+      ['paginationButtonsBlock'],
+      this.hangarBlock
+    );
     this.prevBtn = new Button(this.paginationButtonsBlock, 'PREV');
     this.nextBtn = new Button(this.paginationButtonsBlock, 'NEXT');
+    this.fillBalloonBlocks();
+  }
+
+  fillBalloonBlocks() {
+    this.controller.getGarageObject().then((obj) => {
+      const length = Object.keys(obj).length;
+      console.log('length:', length);
+      this.controller.getBalloonInfo(1).then((obj) => {
+        console.log('obj:', obj);
+      });
+    });
   }
 }
 

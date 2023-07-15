@@ -22,6 +22,17 @@ class Controller {
     const res = num();
     return res;
   }
+
+  getBalloonInfo(index: number): Promise<Object> {
+    const balloon = async () => {
+      const data = await fetch(`${this.url}/garage/${index}`);
+      const body = await data.json();
+      return body;
+    };
+    const res = balloon();
+    // console.log('res:', res);
+    return res;
+  }
 }
 
 export default Controller;

@@ -8,7 +8,7 @@ class TextInput {
     this.input = createElement('input', ['input'], container);
     this.input.placeholder = 'Balloon name...';
     if (state === false) {
-      this.input.setAttribute('disabled', 'disabled');
+      this.input.setAttribute('disabled', '');
     }
   }
 }
