@@ -1,1 +1,20 @@
 @import '../app/main.scss';
+
+.buttonsNameBlock {
+  display: flex;
+  align-items: center;
+  width: 20%;
+  gap: 0.5rem;
+  .button {
+    width: fit-content;
+    font-size: 0.7rem;
+    border-radius: 2px;
+    .buttonInner {
+      border-radius: 2px;
+    }
+  }
+  .balloonName {
+    font-size: 0.9rem;
+    margin-top: 0.1rem;
+  }
+}

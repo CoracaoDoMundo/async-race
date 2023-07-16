@@ -62,9 +62,12 @@ class Hangar {
     this.controller.getGarageObject().then((obj) => {
       const length = Object.keys(obj).length;
       console.log('length:', length);
-      this.controller.getBalloonInfo(1).then((obj) => {
-        console.log('obj:', obj);
-      });
+      let i = 0;
+      while (i < length) {
+        const name = Object.values(obj)[i].name;
+        const block = new BalloonBlock(this.balloonBlocks[i], name);
+        i += 1;
+      }
     });
   }
 }
