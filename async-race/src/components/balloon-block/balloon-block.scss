@@ -25,6 +25,7 @@
   .button {
     font-size: 0.5rem;
     box-shadow: 1px 1.5px 0px 0px $font-color;
+    height: fit-content;
     .buttonInner {
       padding: 0 0.2rem;
     }
@@ -32,4 +33,8 @@
   .button:active {
     box-shadow: 0.5px 0.7px 0px 0px $font-color;
   }
+}
+
+.balloonContainer {
+  width: 30px;
 }

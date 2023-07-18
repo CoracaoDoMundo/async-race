@@ -11,8 +11,10 @@ class BalloonBlock {
   private raceBlock: HTMLDivElement;
   private upButton: Button;
   private landButton: Button;
+  private balloon: HTMLDivElement;
+  private balloonSvg: Balloon;
 
-  constructor(container: HTMLDivElement, name: string) {
+  constructor(container: HTMLDivElement, name: string, color: string) {
     this.buttonsNameBlock = createElement(
       'div',
       ['buttonsNameBlock'],
@@ -29,6 +31,9 @@ class BalloonBlock {
     this.raceBlock = createElement('div', ['raceBlock'], container);
     this.upButton = new Button(this.raceBlock, 'Up');
     this.landButton = new Button(this.raceBlock, 'Land');
+    this.balloon = createElement('div', ['balloonContainer'], this.raceBlock)
+    this.balloonSvg = new Balloon();
+    this.balloonSvg.draw(this.balloon, color);
   }
 }
 

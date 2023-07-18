@@ -65,7 +65,8 @@ class Hangar {
       let i = 0;
       while (i < length) {
         const name = Object.values(obj)[i].name;
-        const block = new BalloonBlock(this.balloonBlocks[i], name);
+        const color = Object.values(obj)[i].color;
+        const block = new BalloonBlock(this.balloonBlocks[i], name, color);
         i += 1;
       }
     });
