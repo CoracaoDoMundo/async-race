@@ -1,6 +1,25 @@
 @import '../app/main.scss';
 
 .balloon {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
+  animation: soar-animation 4s ease infinite;
+}
+
+@keyframes soar-animation {
+  0% {
+    transform: translateY(2px);
+  }
+  25% {
+    transform: translateY(-2px);
+  }
+  50% {
+    transform: translateY(2px);
+  }
+  75% {
+    transform: translateY(-2px);
+  }
+  100% {
+    transform: translateY(2px);
+  }
 }
