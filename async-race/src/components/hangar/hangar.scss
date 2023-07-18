@@ -25,6 +25,9 @@
 }
 
 .balloonBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
   width: 100%;
   height: fit-content;
   margin: 0.3rem 0;

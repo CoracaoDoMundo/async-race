@@ -18,3 +18,18 @@
     margin-top: 0.1rem;
   }
 }
+
+.raceBlock {
+  display: flex;
+  gap: 0.3rem;
+  .button {
+    font-size: 0.5rem;
+    box-shadow: 1px 1.5px 0px 0px $font-color;
+    .buttonInner {
+      padding: 0 0.2rem;
+    }
+  }
+  .button:active {
+    box-shadow: 0.5px 0.7px 0px 0px $font-color;
+  }
+}
