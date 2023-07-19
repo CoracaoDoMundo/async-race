@@ -1,5 +1,5 @@
 import './balloon.scss';
-import { createElement } from '../../utilities/service-functions';
+
 import { DAttribute, FillAttribute } from '../../utilities/types';
 
 class Balloon {

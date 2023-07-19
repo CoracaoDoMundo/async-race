@@ -2,6 +2,7 @@ import './balloon-block.scss';
 import { createElement } from '../../utilities/service-functions';
 import Button from '../button/button';
 import Balloon from '../balloon/balloon';
+import Ribbon from '../ribbon/ribbon';
 
 class BalloonBlock {
   private buttonsNameBlock: HTMLDivElement;
@@ -13,6 +14,8 @@ class BalloonBlock {
   private landButton: Button;
   private balloon: HTMLDivElement;
   private balloonSvg: Balloon;
+  private ribbon: HTMLDivElement;
+  private ribbonSvg: Ribbon;
 
   constructor(container: HTMLDivElement, name: string, color: string) {
     this.buttonsNameBlock = createElement(
@@ -34,6 +37,8 @@ class BalloonBlock {
     this.balloon = createElement('div', ['balloonContainer'], this.raceBlock)
     this.balloonSvg = new Balloon();
     this.balloonSvg.draw(this.balloon, color);
+    this.ribbon = createElement('div', ['ribbonContainer'], this.raceBlock);
+    this.ribbonSvg = new Ribbon();
   }
 }
 
