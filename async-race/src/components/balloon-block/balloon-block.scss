@@ -21,6 +21,7 @@
 
 .raceBlock {
   display: flex;
+  position: relative;
   gap: 0.3rem;
   .button {
     font-size: 0.5rem;
@@ -43,7 +44,14 @@
   display: flex;
   align-items: flex-end;
   position: absolute;
-  right: 3%;
+  right: 2%;
   width: 20px;
   height: 40px;
+}
+
+.trackLine {
+  position: absolute;
+  top: 117%;
+  border-bottom: 2px dashed $font-color;
+  width: 100%;
 }

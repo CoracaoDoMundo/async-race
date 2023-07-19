@@ -16,6 +16,7 @@ class BalloonBlock {
   private balloonSvg: Balloon;
   private ribbon: HTMLDivElement;
   private ribbonSvg: Ribbon;
+  private trackLine: HTMLDivElement;
 
   constructor(container: HTMLDivElement, name: string, color: string) {
     this.buttonsNameBlock = createElement(
@@ -40,6 +41,7 @@ class BalloonBlock {
     this.ribbon = createElement('div', ['ribbonContainer'], this.raceBlock);
     this.ribbonSvg = new Ribbon();
     this.ribbonSvg.draw(this.ribbon);
+    this.trackLine = createElement('div', ['trackLine'], this.raceBlock);
   }
 }
 
