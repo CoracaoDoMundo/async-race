@@ -39,6 +39,7 @@ class BalloonBlock {
     this.balloonSvg.draw(this.balloon, color);
     this.ribbon = createElement('div', ['ribbonContainer'], this.raceBlock);
     this.ribbonSvg = new Ribbon();
+    this.ribbonSvg.draw(this.ribbon);
   }
 }
 

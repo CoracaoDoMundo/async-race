@@ -38,3 +38,12 @@
 .balloonContainer {
   width: 25px;
 }
+
+.ribbonContainer {
+  display: flex;
+  align-items: flex-end;
+  position: absolute;
+  right: 3%;
+  width: 20px;
+  height: 40px;
+}
