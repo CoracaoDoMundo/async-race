@@ -1,4 +1,5 @@
 import { createElement } from './service-functions';
+import { BalloonData } from './types';
 
 class Controller {
   private static instance: Controller;
@@ -30,8 +31,47 @@ class Controller {
       return body;
     };
     const res = balloon();
-    // console.log('res:', res);
     return res;
+  }
+
+  createNewBalloon(data: BalloonData) {
+    // console.log(2);
+    const balloon = async () => {
+      const resp = await fetch(`${this.url}/garage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: data.name,
+          color: data.color,
+          id: data.id,
+        }),
+      });
+    };
+    balloon();
+  }
+
+  postNewBalloon(data: BalloonData) {
+    // console.log(1);
+    const balloon = async () => {
+      const res = await this.createNewBalloon(data);
+      console.log('res:', res);
+    };
+    balloon();
+  }
+
+  deleteBalloon(id: number) {
+    console.log(1);
+    const balloon = async (id: number) => {
+      const resp = await fetch(`${this.url}/garage/${id}`, {
+        method: 'DELETE',
+      });
+    };
+    const del = async () => {
+      const res = await balloon(id);
+    };
+    del();
   }
 }
 

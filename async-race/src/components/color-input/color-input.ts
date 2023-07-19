@@ -2,7 +2,7 @@ import './color-input.scss';
 import { createElement } from '../../utilities/service-functions';
 
 class ColorInput {
-    private colorInput: HTMLInputElement;
+    public colorInput: HTMLInputElement;
   
     constructor(container: HTMLDivElement, color: string) {
       this.colorInput = createElement('input', ['colorInput'], container);

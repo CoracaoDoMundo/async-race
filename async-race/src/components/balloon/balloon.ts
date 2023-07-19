@@ -22,7 +22,7 @@ class Balloon {
       'g'
     );
     secondGBlock.setAttribute('id', 'svg_1');
-    for (let i = 2; i <= 26; i += 1) {
+    for (let i = 2; i <= 22; i += 1) {
       const path: SVGPathElement = document.createElementNS(
         'http://www.w3.org/2000/svg',
         'path'

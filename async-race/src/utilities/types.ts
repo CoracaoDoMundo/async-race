@@ -28,3 +28,9 @@ export enum DAttribute {
     '#f57547',
     '#fbb03b',
   }
+
+  export type BalloonData = {
+    name: string, 
+    color: string,
+    id: number
+  }

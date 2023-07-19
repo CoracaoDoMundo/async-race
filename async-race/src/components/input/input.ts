@@ -2,7 +2,7 @@ import './input.scss';
 import { createElement } from '../../utilities/service-functions';
 
 class TextInput {
-  private input: HTMLInputElement;
+  public input: HTMLInputElement;
 
   constructor(container: HTMLDivElement, state?: boolean) {
     this.input = createElement('input', ['input'], container);

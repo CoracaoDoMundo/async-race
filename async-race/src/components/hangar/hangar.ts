@@ -46,7 +46,7 @@ class Hangar {
       this.paginationLine,
       'Page'
     );
-    this.pageNum = createElement('h5', ['pageNum'], this.paginationLine, '#');
+    this.pageNum = createElement('h5', ['pageNum'], this.paginationLine, '# 1');
     this.balloonBlocks = createBalloonBlocks(this.hangarBlock);
     this.paginationButtonsBlock = createElement(
       'div',
@@ -61,15 +61,19 @@ class Hangar {
   fillBalloonBlocks() {
     this.controller.getGarageObject().then((obj) => {
       const length = Object.keys(obj).length;
-      console.log('length:', length);
       let i = 0;
       while (i < length) {
         const name = Object.values(obj)[i].name;
         const color = Object.values(obj)[i].color;
-        const block = new BalloonBlock(this.balloonBlocks[i], name, color);
+        const id = Object.values(obj)[i].id;
+        const block = new BalloonBlock(this.balloonBlocks[i], name, color, id);
         i += 1;
       }
     });
+  }
+
+  createNewBalloon() {
+
   }
 }
 
