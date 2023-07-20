@@ -35,7 +35,6 @@ class Controller {
   }
 
   createNewBalloon(data: BalloonData) {
-    // console.log(2);
     const balloon = async () => {
       const resp = await fetch(`${this.url}/garage`, {
         method: 'POST',
@@ -53,16 +52,13 @@ class Controller {
   }
 
   postNewBalloon(data: BalloonData) {
-    // console.log(1);
     const balloon = async () => {
       const res = await this.createNewBalloon(data);
-      console.log('res:', res);
     };
     balloon();
   }
 
   deleteBalloon(id: number) {
-    console.log(1);
     const balloon = async (id: number) => {
       const resp = await fetch(`${this.url}/garage/${id}`, {
         method: 'DELETE',

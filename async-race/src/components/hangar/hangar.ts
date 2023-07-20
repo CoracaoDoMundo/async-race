@@ -71,10 +71,6 @@ class Hangar {
       }
     });
   }
-
-  createNewBalloon() {
-
-  }
 }
 
 export default Hangar;

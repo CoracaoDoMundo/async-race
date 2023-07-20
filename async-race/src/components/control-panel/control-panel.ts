@@ -57,14 +57,20 @@ class Controls {
       let name: string;
       let color: string;
       let id: number;
+      let index: number;
       let data: BalloonData;
       name = this.inputCreate.input.value;
       color = this.inputColorCreate.colorInput.value;
       this.controller.getGarageObject().then((obj) => {
-        id = Object.keys(obj).length + 1;
-        data = { name, color, id };
-        console.log('data:', data);
-        this.controller.postNewBalloon(data);
+        const arr: number[] = Object.values(obj)
+          .map((el) => el.id)
+          .sort((a, b) => a - b);
+        index = arr[arr.length - 1] + 1;
+        this.controller.getBalloonInfo(index).then((obj) => {
+          id = Object.values(obj)[Object.values(obj).length - 1] + 1;
+          data = { name, color, id };
+          this.controller.postNewBalloon(data);
+        });
       });
     });
   }
