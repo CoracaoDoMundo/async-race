@@ -1,9 +1,11 @@
 import './balloon.scss';
 
-import { DAttribute, FillAttribute } from '../../utilities/types';
+import {
+  DAttribute,
+  FillAttribute,
+} from '../../../../../../../utilities/types';
 
 class Balloon {
-
   draw(container: HTMLDivElement, color: string): void {
     const balloon: SVGSVGElement = document.createElementNS(
       'http://www.w3.org/2000/svg',

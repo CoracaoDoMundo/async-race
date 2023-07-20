@@ -1,4 +1,4 @@
-import { createElement } from '../../utilities/service-functions';
+import { createElement } from '../../../../../../../utilities/service-functions';
 
 class Ribbon {
   draw(container: HTMLDivElement) {

@@ -1,5 +1,5 @@
 import './input.scss';
-import { createElement } from '../../utilities/service-functions';
+import { createElement } from '../../../../../../utilities/service-functions';
 
 class TextInput {
   public input: HTMLInputElement;

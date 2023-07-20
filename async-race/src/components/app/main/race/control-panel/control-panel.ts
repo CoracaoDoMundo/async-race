@@ -1,10 +1,10 @@
 import './control-panel.scss';
-import { createElement } from '../../utilities/service-functions';
-import TextInput from '../input/input';
-import ColorInput from '../color-input/color-input';
-import Button from '../button/button';
-import Controller from '../../utilities/server-requests';
-import { BalloonData } from '../../utilities/types';
+import { createElement } from '../../../../../utilities/service-functions';
+import TextInput from './input/input';
+import ColorInput from './color-input/color-input';
+import Button from '../../button/button';
+import Controller from '../../../../../utilities/server-requests';
+import { BalloonData } from '../../../../../utilities/types';
 
 class Controls {
   private controlBlock: HTMLDivElement;
@@ -72,6 +72,7 @@ class Controls {
           this.controller.postNewBalloon(data);
         });
       });
+      this.inputCreate.input.value = '';
     });
   }
 }

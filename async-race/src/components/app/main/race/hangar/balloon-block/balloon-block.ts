@@ -1,9 +1,9 @@
 import './balloon-block.scss';
-import { createElement } from '../../utilities/service-functions';
-import Button from '../button/button';
-import Balloon from '../balloon/balloon';
-import Ribbon from '../ribbon/ribbon';
-import Controller from '../../utilities/server-requests';
+import { createElement } from '../../../../../../utilities/service-functions';
+import Button from '../../../button/button';
+import Balloon from './balloon/balloon';
+import Ribbon from './ribbon/ribbon';
+import Controller from '../../../../../../utilities/server-requests';
 
 class BalloonBlock {
   private buttonsNameBlock: HTMLDivElement;
@@ -20,7 +20,12 @@ class BalloonBlock {
   private trackLine: HTMLDivElement;
   private controller: Controller;
 
-  constructor(container: HTMLDivElement, name: string, color: string, id: number) {
+  constructor(
+    container: HTMLDivElement,
+    name: string,
+    color: string,
+    id: number
+  ) {
     this.controller = Controller.getInstance();
     this.buttonsNameBlock = createElement(
       'div',
@@ -40,7 +45,7 @@ class BalloonBlock {
     this.raceBlock = createElement('div', ['raceBlock'], container);
     this.upButton = new Button(this.raceBlock, 'Up');
     this.landButton = new Button(this.raceBlock, 'Land');
-    this.balloon = createElement('div', ['balloonContainer'], this.raceBlock)
+    this.balloon = createElement('div', ['balloonContainer'], this.raceBlock);
     this.balloonSvg = new Balloon();
     this.balloonSvg.draw(this.balloon, color);
     this.ribbon = createElement('div', ['ribbonContainer'], this.raceBlock);
@@ -51,7 +56,6 @@ class BalloonBlock {
 
   pushRemoveBtn(elem: Button) {
     elem.button.addEventListener('click', () => {
-      console.log('id:', elem.button.id);
       const id = Number(elem.button.id);
       this.controller.deleteBalloon(id);
     });

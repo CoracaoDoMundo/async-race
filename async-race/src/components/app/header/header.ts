@@ -1,6 +1,6 @@
 import './header.scss';
-import { createElement } from '../../utilities/service-functions';
-import Button from '../button/button';
+import { createElement } from '../../../utilities/service-functions';
+import Button from '../main/button/button';
 
 class Header {
   private header: HTMLDivElement;
@@ -21,7 +21,6 @@ class Header {
     this.garageBtn = new Button(this.buttonBlock, 'TO HANGAR');
     this.winnersBtn = new Button(this.buttonBlock, 'TO WINNERS');
   }
-
 }
 
 export default Header;
