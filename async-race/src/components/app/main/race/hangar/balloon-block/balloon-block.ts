@@ -8,7 +8,7 @@ import Controller from '../../../../../../utilities/server-requests';
 class BalloonBlock {
   private buttonsNameBlock: HTMLDivElement;
   private selectBtn: Button;
-  private removeBtn: Button;
+  public removeBtn: Button;
   private balloonName: HTMLSpanElement;
   private raceBlock: HTMLDivElement;
   private upButton: Button;
@@ -35,7 +35,7 @@ class BalloonBlock {
     this.selectBtn = new Button(this.buttonsNameBlock, 'SELECT');
     this.removeBtn = new Button(this.buttonsNameBlock, 'REMOVE');
     this.removeBtn.button.setAttribute('id', String(id));
-    this.pushRemoveBtn(this.removeBtn);
+    // this.pushRemoveBtn(this.removeBtn);
     this.balloonName = createElement(
       'span',
       ['balloonName'],
@@ -54,12 +54,12 @@ class BalloonBlock {
     this.trackLine = createElement('div', ['trackLine'], this.raceBlock);
   }
 
-  pushRemoveBtn(elem: Button) {
-    elem.button.addEventListener('click', () => {
-      const id = Number(elem.button.id);
-      this.controller.deleteBalloon(id);
-    });
-  }
+  // pushRemoveBtn(elem: Button) {
+  //   elem.button.addEventListener('click', () => {
+  //     const id = Number(elem.button.id);
+  //     this.controller.deleteBalloon(id);
+  //   });
+  // }
 }
 
 export default BalloonBlock;

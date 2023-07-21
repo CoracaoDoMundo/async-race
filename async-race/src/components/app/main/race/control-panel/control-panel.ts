@@ -11,11 +11,11 @@ class Controls {
   private inputCreateLine: HTMLDivElement;
   private inputUpdateLine: HTMLDivElement;
   private buttonsLine: HTMLDivElement;
-  private inputCreate: TextInput;
+  public inputCreate: TextInput;
   private inputUpdate: TextInput;
-  private inputColorCreate: ColorInput;
+  public inputColorCreate: ColorInput;
   private inputColorUpdate: ColorInput;
-  private createBtn: Button;
+  public createBtn: Button;
   private updateBtn: Button;
   private raceBtn: Button;
   private resetBtn: Button;
@@ -45,35 +45,10 @@ class Controls {
     this.inputColorCreate = new ColorInput(this.inputCreateLine, '#5900ff');
     this.inputColorUpdate = new ColorInput(this.inputUpdateLine, '#ff00a2');
     this.createBtn = new Button(this.inputCreateLine, 'CREATE');
-    this.pushCreateButton(this.createBtn);
     this.updateBtn = new Button(this.inputUpdateLine, 'UPDATE');
     this.raceBtn = new Button(this.buttonsLine, 'RACE');
     this.resetBtn = new Button(this.buttonsLine, 'RESET');
     this.generateBtn = new Button(this.buttonsLine, 'GENERATE BALLOONS');
-  }
-
-  pushCreateButton(elem: Button) {
-    elem.button.addEventListener('click', () => {
-      let name: string;
-      let color: string;
-      let id: number;
-      let index: number;
-      let data: BalloonData;
-      name = this.inputCreate.input.value;
-      color = this.inputColorCreate.colorInput.value;
-      this.controller.getGarageObject().then((obj) => {
-        const arr: number[] = Object.values(obj)
-          .map((el) => el.id)
-          .sort((a, b) => a - b);
-        index = arr[arr.length - 1] + 1;
-        this.controller.getBalloonInfo(index).then((obj) => {
-          id = Object.values(obj)[Object.values(obj).length - 1] + 1;
-          data = { name, color, id };
-          this.controller.postNewBalloon(data);
-        });
-      });
-      this.inputCreate.input.value = '';
-    });
   }
 }
 

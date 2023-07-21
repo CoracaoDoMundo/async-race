@@ -9,14 +9,15 @@ import BalloonBlock from './balloon-block/balloon-block';
 
 class Hangar {
   private controller: Controller;
-  private hangarBlock: HTMLDivElement;
+  public hangarBlock: HTMLDivElement;
   private headerLine: HTMLDivElement;
   private hangarHeader: HTMLHeadingElement;
   private balloonNum: HTMLHeadingElement;
   private paginationLine: HTMLDivElement;
   private pageText: HTMLHeadingElement;
   private pageNum: HTMLHeadingElement;
-  public balloonBlocks: HTMLDivElement[];
+  private balloonBlocksContainers: HTMLDivElement[];
+  public balloonBlocks: BalloonBlock[];
   private paginationButtonsBlock: HTMLDivElement;
   public prevBtn: Button;
   private nextBtn: Button;
@@ -48,7 +49,7 @@ class Hangar {
       'Page'
     );
     this.pageNum = createElement('h5', ['pageNum'], this.paginationLine, '# 1');
-    this.balloonBlocks = createBalloonBlocks(this.hangarBlock);
+    this.balloonBlocksContainers = createBalloonBlocks(this.hangarBlock);
     this.paginationButtonsBlock = createElement(
       'div',
       ['paginationButtonsBlock'],
@@ -56,27 +57,26 @@ class Hangar {
     );
     this.prevBtn = new Button(this.paginationButtonsBlock, 'PREV');
     this.nextBtn = new Button(this.paginationButtonsBlock, 'NEXT');
-    this.fillBalloonBlocks();
+    this.balloonBlocks = [];
   }
 
-  public static getInstance(): Hangar {
-    if (!Hangar.instance) {
-      Hangar.instance = new Hangar();
+  async fillBalloonBlocks() {
+    const obj = await this.controller.getGarageObject();
+    const length = Object.keys(obj).length;
+    let i = 0;
+    while (i < length) {
+      const name = Object.values(obj)[i].name;
+      const color = Object.values(obj)[i].color;
+      const id = Object.values(obj)[i].id;
+      let block = new BalloonBlock(this.balloonBlocksContainers[i], name, color, id);
+      this.balloonBlocks.push(block);
+      i += 1;
     }
-    return Hangar.instance;
   }
 
-  fillBalloonBlocks() {
-    this.controller.getGarageObject().then((obj) => {
-      const length = Object.keys(obj).length;
-      let i = 0;
-      while (i < length) {
-        const name = Object.values(obj)[i].name;
-        const color = Object.values(obj)[i].color;
-        const id = Object.values(obj)[i].id;
-        const block = new BalloonBlock(this.balloonBlocks[i], name, color, id);
-        i += 1;
-      }
+  cleanBalloonBlocks() {
+    this.balloonBlocksContainers.forEach((el) => {
+      el.innerHTML = '';
     });
   }
 }
