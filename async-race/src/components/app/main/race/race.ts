@@ -188,7 +188,7 @@ class Race {
         NameFirstPart[Math.floor(Math.random() * 11)] +
         ' ' +
         NameSecondPart[Math.floor(Math.random() * 11)],
-      color: BalloonColor[Math.floor(Math.random() * 11)],
+      color: BalloonColor[Math.floor(Math.random() * 25)],
       id: 0,
     };
     return data;
@@ -232,6 +232,7 @@ class Race {
           this.drawHangar();
         }
         this.hangar.updateBalloonsNum(this.hangar.balloonNum);
+        
         this.hangar.countPages();
       } catch (error) {
         console.log('Something went wrong!');

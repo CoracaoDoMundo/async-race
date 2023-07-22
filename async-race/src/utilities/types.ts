@@ -75,4 +75,18 @@ export enum BalloonColor {
   '#f5cd5f',
   '#000000',
   '#9cf7d0',
+  '#f705ab',
+  '#87570f',
+  '#fc9f12',
+  '#7a7a79',
+  '#a6c1f7',
+  '#bb9ffc',
+  '#033dfc',
+  '#03f7ff',
+  '#0054ad',
+  '#ad9100',
+  '#d7e854',
+  '#fce6a2',
+  '#fce4ca',
+  '#0dfc00'
 }

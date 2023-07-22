@@ -49,12 +49,12 @@ class Hangar {
       this.paginationLine,
       'Page'
     );
-    if (
-      localStorage.getItem('coracao_pageNum') !== null &&
-      localStorage.getItem('coracao_pageNum') !== undefined
-    ) {
-      this.pageNum = Number(localStorage.getItem('coracao_pageNum'));
-    }
+    // if (
+    //   localStorage.getItem('coracao_pageNum') !== null &&
+    //   localStorage.getItem('coracao_pageNum') !== undefined
+    // ) {
+    //   this.pageNum = Number(localStorage.getItem('coracao_pageNum'));
+    // }
     this.pageNumContainer = createElement(
       'h5',
       ['pageNumContainer'],
