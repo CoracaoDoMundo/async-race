@@ -19,7 +19,7 @@ class Controls {
   private updateBtn: Button;
   private raceBtn: Button;
   private resetBtn: Button;
-  private generateBtn: Button;
+  public generateBtn: Button;
   private controller: Controller;
 
   constructor() {
