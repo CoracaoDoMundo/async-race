@@ -16,7 +16,7 @@ class Controls {
   public inputColorCreate: ColorInput;
   private inputColorUpdate: ColorInput;
   public createBtn: Button;
-  private updateBtn: Button;
+  public updateBtn: Button;
   private raceBtn: Button;
   private resetBtn: Button;
   public generateBtn: Button;
@@ -43,9 +43,10 @@ class Controls {
     this.inputCreate = new TextInput(this.inputCreateLine);
     this.inputUpdate = new TextInput(this.inputUpdateLine, false);
     this.inputColorCreate = new ColorInput(this.inputCreateLine, '#5900ff');
-    this.inputColorUpdate = new ColorInput(this.inputUpdateLine, '#ff00a2');
+    this.inputColorUpdate = new ColorInput(this.inputUpdateLine, '#ff00a2', false);
     this.createBtn = new Button(this.inputCreateLine, 'CREATE');
     this.updateBtn = new Button(this.inputUpdateLine, 'UPDATE');
+    this.updateBtn.button.style.cursor = 'default';
     this.raceBtn = new Button(this.buttonsLine, 'RACE');
     this.resetBtn = new Button(this.buttonsLine, 'RESET');
     this.generateBtn = new Button(this.buttonsLine, 'GENERATE BALLOONS');
