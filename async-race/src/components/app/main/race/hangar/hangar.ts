@@ -15,7 +15,9 @@ class Hangar {
   public balloonNum: HTMLHeadingElement;
   private paginationLine: HTMLDivElement;
   private pageText: HTMLHeadingElement;
-  private pageNum: HTMLHeadingElement;
+  public pageNumContainer: HTMLHeadingElement;
+  public pageNum: string = '# 1';
+  public pagesQuantity: number = 1;
   private balloonBlocksContainers: HTMLDivElement[];
   public balloonBlocks: BalloonBlock[];
   private paginationButtonsBlock: HTMLDivElement;
@@ -46,7 +48,7 @@ class Hangar {
       this.paginationLine,
       'Page'
     );
-    this.pageNum = createElement('h5', ['pageNum'], this.paginationLine, '# 1');
+    this.pageNumContainer = createElement('h5', ['pageNumContainer'], this.paginationLine, this.pageNum);
     this.balloonBlocksContainers = createBalloonBlocks(this.hangarBlock);
     this.paginationButtonsBlock = createElement(
       'div',
@@ -56,25 +58,26 @@ class Hangar {
     this.prevBtn = new Button(this.paginationButtonsBlock, 'PREV');
     this.nextBtn = new Button(this.paginationButtonsBlock, 'NEXT');
     this.balloonBlocks = [];
+    this.countPages();
   }
 
   async fillBalloonBlocks() {
-    console.log(7);
     const obj = await this.controller.getGarageObject();
-    // console.log('obj_hangar:', obj);
     const length = Object.keys(obj).length;
-    // console.log('length:', length);
     let i = 0;
     while (i < length && i < 7) {
       const name = Object.values(obj)[i].name;
       const color = Object.values(obj)[i].color;
       const id = Object.values(obj)[i].id;
-      // console.log('data:', name, color, id);
       let block = new BalloonBlock(this.balloonBlocksContainers[i], name, color, id);
       this.balloonBlocks.push(block);
-      // console.log('this.balloonBlocks:', this.balloonBlocks);
       i += 1;
     }
+  }
+
+  async countPages() {
+    const obj = await this.controller.getGarageObject();
+    this.pagesQuantity = Math.ceil(Object.keys(obj).length / 7);
   }
 
   updateBalloonsNum(elem: HTMLHeadingElement) {

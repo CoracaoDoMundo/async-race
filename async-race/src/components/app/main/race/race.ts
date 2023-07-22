@@ -1,7 +1,12 @@
 import Controls from './control-panel/control-panel';
 import Hangar from './hangar/hangar';
 import Button from '../button/button';
-import { BalloonData } from '../../../../utilities/types';
+import {
+  BalloonData,
+  NameFirstPart,
+  NameSecondPart,
+  BalloonColor,
+} from '../../../../utilities/types';
 import Controller from '../../../../utilities/server-requests';
 import BalloonBlock from './hangar/balloon-block/balloon-block';
 
@@ -57,6 +62,7 @@ class Race {
           this.drawHangar();
         }
         this.hangar.updateBalloonsNum(this.hangar.balloonNum);
+        this.hangar.countPages();
       } catch (error) {
         console.log('Something went wrong!');
       }
@@ -72,7 +78,10 @@ class Race {
         .getGarageObject()
         .then(() => this.hangar.cleanBalloonBlocks())
         .then(() => this.drawHangar())
-        .then(() => this.hangar.updateBalloonsNum(this.hangar.balloonNum));
+        .then(() => {
+          this.hangar.updateBalloonsNum(this.hangar.balloonNum);
+          this.hangar.countPages();
+        });
     });
   }
 

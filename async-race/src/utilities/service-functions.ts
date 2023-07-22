@@ -29,9 +29,4 @@ const createBalloonBlocks = (container:HTMLDivElement): HTMLDivElement[] => {
   return arr;
 };
 
-// const findLastIndexValue = (obj: []): number => {
-//   let res = Object.values(obj).map((el) => el.id).sort((a, b) => a - b);
-//   return res;
-// }
-
 export { createElement, createBalloonBlocks };
