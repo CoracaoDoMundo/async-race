@@ -8,8 +8,8 @@ class Button {
 
   constructor(container: HTMLDivElement, name: string) {
     this.button = createElement('div', ['button'], container);
-    if (name === 'UPDATE') {
-      this.button.classList.add('updateButton');
+    if (name === 'UPDATE' || name === 'RESET') {
+      this.button.classList.add('updateButton', 'inactive');
     }
     this.buttonInner = createElement('div', ['buttonInner'], this.button);
     this.text = createElement('span', ['buttonText'], this.buttonInner, name);

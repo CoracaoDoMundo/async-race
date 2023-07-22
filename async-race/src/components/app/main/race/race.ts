@@ -91,7 +91,7 @@ class Race {
             'disabled',
             ''
           );
-          this.controls.updateBtn.button.style.cursor = 'default';
+          this.controls.updateBtn.button.classList.add('inactive');
           const updatedGarageObj = await this.controller.getGarageObject();
           this.hangar.cleanBalloonBlocks();
           this.drawHangar();
@@ -139,7 +139,7 @@ class Race {
         this.controls.inputColorUpdate.colorInput.value =
           Object.values(balloonInfo)[1];
       }
-      this.controls.updateBtn.button.style.cursor = 'pointer';
+      this.controls.updateBtn.button.classList.remove('inactive');
     });
   }
 

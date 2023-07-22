@@ -33,8 +33,17 @@
   }
 }
 
-// .updateButton:hover {
-//   .buttonInner {
-//     box-shadow: none;
-//   }
-// }
+.inactive {
+  background-color: #2301419a;
+  cursor: default;
+}
+
+.inactive:active {
+  box-shadow: 2px 3px 0px 0px $font-color;
+}
+
+.inactive:hover {
+  .buttonInner {
+    box-shadow: none;
+  }
+}
