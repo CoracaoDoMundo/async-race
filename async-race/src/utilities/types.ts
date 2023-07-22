@@ -32,7 +32,7 @@ export enum FillAttribute {
 export type BalloonData = {
   name: string;
   color: string;
-  id: number;
+  id?: number;
 };
 
 export enum NameFirstPart {

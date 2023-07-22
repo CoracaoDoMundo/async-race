@@ -12,9 +12,9 @@ class Controls {
   private inputUpdateLine: HTMLDivElement;
   private buttonsLine: HTMLDivElement;
   public inputCreate: TextInput;
-  private inputUpdate: TextInput;
+  public inputUpdate: TextInput;
   public inputColorCreate: ColorInput;
-  private inputColorUpdate: ColorInput;
+  public inputColorUpdate: ColorInput;
   public createBtn: Button;
   public updateBtn: Button;
   private raceBtn: Button;

@@ -18,6 +18,7 @@ class Race {
   constructor() {
     this.controls = new Controls();
     this.addListenerOnCreateButton(this.controls.createBtn);
+    this.addListenerOnUpdateButton(this.controls.updateBtn);
     this.pushGenerateBalloonsButton(this.controls.generateBtn);
     this.hangar = new Hangar();
     this.pushPreviousPaginationButton(this.hangar.prevBtn);
@@ -29,6 +30,8 @@ class Race {
   async drawHangar() {
     await this.hangar.fillBalloonBlocks(this.hangar.pageNum);
     this.addListenerOnRemoveButton(this.hangar.balloonBlocks);
+    this.addListenerOnSelectButton(this.hangar.balloonBlocks);
+    this.hangar.balloonBlocks = [];
   }
 
   async pushCreateButton(elem: Button) {
@@ -70,8 +73,41 @@ class Race {
     this.pushCreateButton(btn);
   }
 
+  pushUpdateButton(elem: Button) {
+    elem.button.addEventListener('click', async () => {
+      let name: string;
+      let color: string;
+      let data: BalloonData;
+      name = this.controls.inputUpdate.input.value;
+      color = this.controls.inputColorUpdate.colorInput.value;
+
+      try {
+        data = { name, color };
+        if (typeof this.hangar.selected === 'number') {
+          await this.controller.postUpdatedBalloon(this.hangar.selected, data);
+          this.controls.inputUpdate.input.value = '';
+          this.controls.inputUpdate.input.setAttribute('disabled', '');
+          this.controls.inputColorUpdate.colorInput.setAttribute(
+            'disabled',
+            ''
+          );
+          this.controls.updateBtn.button.style.cursor = 'default';
+          const updatedGarageObj = await this.controller.getGarageObject();
+          this.hangar.cleanBalloonBlocks();
+          this.drawHangar();
+          this.hangar.selected = null;
+        }
+      } catch (error) {
+        console.log('Something went wrong!');
+      }
+    });
+  }
+
+  addListenerOnUpdateButton(btn: Button) {
+    this.pushUpdateButton(btn);
+  }
+
   pushRemoveBtn(elem: Button) {
-    this.hangar.balloonBlocks = [];
     elem.button.addEventListener('click', () => {
       const id = Number(elem.button.id);
       this.controller.deleteBalloon(id);
@@ -88,6 +124,27 @@ class Race {
 
   addListenerOnRemoveButton(arr: BalloonBlock[]) {
     arr.forEach((elem) => this.pushRemoveBtn(elem.removeBtn));
+  }
+
+  pushSelectBtn(elem: Button) {
+    elem.button.addEventListener('click', async (event) => {
+      this.hangar.selected = Number(elem.button.id);
+      this.controls.inputUpdate.input.removeAttribute('disabled');
+      if (this.hangar.selected !== null) {
+        const balloonInfo = await this.controller.getBalloonInfo(
+          this.hangar.selected
+        );
+        this.controls.inputUpdate.input.value = Object.values(balloonInfo)[0];
+        this.controls.inputColorUpdate.colorInput.removeAttribute('disabled');
+        this.controls.inputColorUpdate.colorInput.value =
+          Object.values(balloonInfo)[1];
+      }
+      this.controls.updateBtn.button.style.cursor = 'pointer';
+    });
+  }
+
+  addListenerOnSelectButton(arr: BalloonBlock[]) {
+    arr.forEach((elem) => this.pushSelectBtn(elem.selectBtn));
   }
 
   pushNextPaginationButton(elem: Button) {

@@ -7,7 +7,7 @@ import Controller from '../../../../../../utilities/server-requests';
 
 class BalloonBlock {
   private buttonsNameBlock: HTMLDivElement;
-  private selectBtn: Button;
+  public selectBtn: Button;
   public removeBtn: Button;
   private balloonName: HTMLSpanElement;
   private raceBlock: HTMLDivElement;
@@ -33,6 +33,7 @@ class BalloonBlock {
       container
     );
     this.selectBtn = new Button(this.buttonsNameBlock, 'SELECT');
+    this.selectBtn.button.setAttribute('id', String(id));
     this.removeBtn = new Button(this.buttonsNameBlock, 'REMOVE');
     this.removeBtn.button.setAttribute('id', String(id));
     this.balloonName = createElement(

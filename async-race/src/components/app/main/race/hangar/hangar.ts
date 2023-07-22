@@ -20,6 +20,7 @@ class Hangar {
   public pagesQuantity: number = 1;
   private balloonBlocksContainers: HTMLDivElement[];
   public balloonBlocks: BalloonBlock[];
+  public selected: number | null = null;
   private paginationButtonsBlock: HTMLDivElement;
   public prevBtn: Button;
   public nextBtn: Button;

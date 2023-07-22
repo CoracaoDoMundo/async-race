@@ -69,6 +69,29 @@ class Controller {
     };
     del();
   }
+
+  updateBalloon(id: number, data: BalloonData) {
+    const balloon = async () => {
+      const resp = await fetch(`${this.url}/garage/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: data.name,
+          color: data.color
+        }),
+      });
+    };
+    balloon();
+  }
+
+  postUpdatedBalloon(id: number, data: BalloonData) {
+    const balloon = async () => {
+      const res = await this.updateBalloon(id, data);
+    };
+    balloon();
+  }
 }
 
 export default Controller;
