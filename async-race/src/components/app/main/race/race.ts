@@ -24,7 +24,7 @@ class Race {
   }
 
   async drawHangar() {
-    await this.hangar.fillBalloonBlocks();
+    await this.hangar.fillBalloonBlocks(this.hangar.pageNum);
     this.addListenerOnRemoveButton(this.hangar.balloonBlocks);
   }
 
@@ -55,9 +55,7 @@ class Race {
         await this.controller.postNewBalloon(data);
         this.controls.inputCreate.input.value = '';
         const updatedGarageObj = await this.controller.getGarageObject();
-        // console.log('Object.values(updatedGarageObj).length:', Object.values(updatedGarageObj).length);
-        if (Object.values(updatedGarageObj).length <= 7) {
-          // ЗДЕСЬ ДОБАВИТЬ ПРО НОМЕР СТРАНИЦЫ, КОГДА БУДЕТ ПАГИНАЦИЯ
+        if (this.hangar.pageNum === this.hangar.pagesQuantity) {
           this.hangar.cleanBalloonBlocks();
           this.drawHangar();
         }

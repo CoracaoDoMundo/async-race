@@ -16,7 +16,7 @@ class Hangar {
   private paginationLine: HTMLDivElement;
   private pageText: HTMLHeadingElement;
   public pageNumContainer: HTMLHeadingElement;
-  public pageNum: string = '# 1';
+  public pageNum: number = 1;
   public pagesQuantity: number = 1;
   private balloonBlocksContainers: HTMLDivElement[];
   public balloonBlocks: BalloonBlock[];
@@ -48,7 +48,18 @@ class Hangar {
       this.paginationLine,
       'Page'
     );
-    this.pageNumContainer = createElement('h5', ['pageNumContainer'], this.paginationLine, this.pageNum);
+    if (
+      localStorage.getItem('coracao_pageNum') !== null &&
+      localStorage.getItem('coracao_pageNum') !== undefined
+    ) {
+      this.pageNum = Number(localStorage.getItem('coracao_pageNum'));
+    }
+    this.pageNumContainer = createElement(
+      'h5',
+      ['pageNumContainer'],
+      this.paginationLine,
+      `# ${this.pageNum}`
+    );
     this.balloonBlocksContainers = createBalloonBlocks(this.hangarBlock);
     this.paginationButtonsBlock = createElement(
       'div',
@@ -56,22 +67,31 @@ class Hangar {
       this.hangarBlock
     );
     this.prevBtn = new Button(this.paginationButtonsBlock, 'PREV');
+    this.pushPreviousPaginationButton(this.prevBtn);
     this.nextBtn = new Button(this.paginationButtonsBlock, 'NEXT');
+    this.pushNextPaginationButton(this.nextBtn);
     this.balloonBlocks = [];
     this.countPages();
   }
 
-  async fillBalloonBlocks() {
+  async fillBalloonBlocks(page: number) {
     const obj = await this.controller.getGarageObject();
     const length = Object.keys(obj).length;
-    let i = 0;
-    while (i < length && i < 7) {
+    let i = 0 + (page - 1) * 7;
+    let k = 0;
+    while (i < length && k < 7) {
       const name = Object.values(obj)[i].name;
       const color = Object.values(obj)[i].color;
       const id = Object.values(obj)[i].id;
-      let block = new BalloonBlock(this.balloonBlocksContainers[i], name, color, id);
+      let block = new BalloonBlock(
+        this.balloonBlocksContainers[k],
+        name,
+        color,
+        id
+      );
       this.balloonBlocks.push(block);
       i += 1;
+      k += 1;
     }
   }
 
@@ -87,9 +107,32 @@ class Hangar {
   }
 
   cleanBalloonBlocks() {
-    console.log(5)
     this.balloonBlocksContainers.forEach((el) => {
       el.innerHTML = '';
+    });
+  }
+
+  pushNextPaginationButton(elem: Button) {
+    elem.button.addEventListener('click', () => {
+      if (this.pagesQuantity > 1 && this.pageNum < this.pagesQuantity) {
+        this.pageNum += 1;
+        localStorage.setItem('coracao_pageNum', `${this.pageNum}`);
+        this.pageNumContainer.textContent = `# ${this.pageNum}`;
+        this.cleanBalloonBlocks();
+        this.fillBalloonBlocks(this.pageNum);
+      }
+    });
+  }
+
+  pushPreviousPaginationButton(elem: Button) {
+    elem.button.addEventListener('click', () => {
+      if (this.pagesQuantity > 1 && this.pageNum > 1) {
+        this.pageNum -= 1;
+        localStorage.setItem('coracao_pageNum', `${this.pageNum}`);
+        this.pageNumContainer.textContent = `# ${this.pageNum}`;
+        this.cleanBalloonBlocks();
+        this.fillBalloonBlocks(this.pageNum);
+      }
     });
   }
 }
