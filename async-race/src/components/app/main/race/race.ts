@@ -27,8 +27,8 @@ class Race {
     this.pushCreateButton(btn);
   }
 
-  pushCreateButton(elem: Button) {
-    elem.button.addEventListener('click', () => {
+  async pushCreateButton(elem: Button) {
+    elem.button.addEventListener('click', async () => {
       let name: string;
       let color: string;
       let id: number;
@@ -36,33 +36,43 @@ class Race {
       let data: BalloonData;
       name = this.controls.inputCreate.input.value;
       color = this.controls.inputColorCreate.colorInput.value;
-      this.controller
-        .getGarageObject()
-        .then((obj) => {
-          const arr: number[] = Object.values(obj)
-            .map((el) => el.id)
-            .sort((a, b) => a - b);
-          index = arr[arr.length - 1] + 1;
-          this.controller.getBalloonInfo(index).then((obj) => {
-            id = Object.values(obj)[Object.values(obj).length - 1] + 1;
-            data = { name, color, id };
-            this.controller.postNewBalloon(data);
-          });
-          this.controls.inputCreate.input.value = '';
-        })
-        .then(() => {
-          this.controller
-            .getGarageObject()
-            .then(() => this.hangar.cleanBalloonBlocks())
-            .then(() => this.hangar.fillBalloonBlocks());
-        });
+
+      try {
+        const obj = await this.controller.getGarageObject();
+        const arr: number[] = Object.values(obj)
+          .map((el) => el.id)
+          .sort((a, b) => a - b);
+        index = arr[arr.length - 1] + 1;
+        const balloonInfo = await this.controller.getBalloonInfo(index);
+        id =
+          Object.values(balloonInfo)[Object.values(balloonInfo).length - 1] + 1;
+        data = { name, color, id };
+        await this.controller.postNewBalloon(data);
+        this.controls.inputCreate.input.value = '';
+        const updatedGarageObj = await this.controller.getGarageObject();
+        // console.log('Object.values(updatedGarageObj).length:', Object.values(updatedGarageObj).length);
+        if (Object.values(updatedGarageObj).length <= 7) {
+          // ЗДЕСЬ ДОБАВИТЬ ПРО НОМЕР СТРАНИЦЫ, КОГДА БУДЕТ ПАГИНАЦИЯ
+          this.hangar.cleanBalloonBlocks();
+          this.drawHangar();
+        }
+        this.hangar.updateBalloonsNum(this.hangar.balloonNum);
+      } catch (error) {
+        console.log('Something went wrong!');
+      }
     });
   }
 
   pushRemoveBtn(elem: Button) {
+    this.hangar.balloonBlocks = [];
     elem.button.addEventListener('click', () => {
       const id = Number(elem.button.id);
       this.controller.deleteBalloon(id);
+      this.controller
+        .getGarageObject()
+        .then(() => this.hangar.cleanBalloonBlocks())
+        .then(() => this.drawHangar())
+        .then(() => this.hangar.updateBalloonsNum(this.hangar.balloonNum));
     });
   }
 

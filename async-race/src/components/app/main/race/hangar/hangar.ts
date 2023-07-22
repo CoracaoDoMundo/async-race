@@ -12,7 +12,7 @@ class Hangar {
   public hangarBlock: HTMLDivElement;
   private headerLine: HTMLDivElement;
   private hangarHeader: HTMLHeadingElement;
-  private balloonNum: HTMLHeadingElement;
+  public balloonNum: HTMLHeadingElement;
   private paginationLine: HTMLDivElement;
   private pageText: HTMLHeadingElement;
   private pageNum: HTMLHeadingElement;
@@ -34,9 +34,7 @@ class Hangar {
       'Hangar'
     );
     this.balloonNum = createElement('h3', ['balloonsNum'], this.headerLine);
-    this.controller.getGarageObject().then((obj) => {
-      this.balloonNum.innerText = `(${Object.keys(obj).length})`;
-    });
+    this.updateBalloonsNum(this.balloonNum);
     this.paginationLine = createElement(
       'div',
       ['paginationLine'],
@@ -61,20 +59,32 @@ class Hangar {
   }
 
   async fillBalloonBlocks() {
+    console.log(7);
     const obj = await this.controller.getGarageObject();
+    // console.log('obj_hangar:', obj);
     const length = Object.keys(obj).length;
+    // console.log('length:', length);
     let i = 0;
-    while (i < length) {
+    while (i < length && i < 7) {
       const name = Object.values(obj)[i].name;
       const color = Object.values(obj)[i].color;
       const id = Object.values(obj)[i].id;
+      // console.log('data:', name, color, id);
       let block = new BalloonBlock(this.balloonBlocksContainers[i], name, color, id);
       this.balloonBlocks.push(block);
+      // console.log('this.balloonBlocks:', this.balloonBlocks);
       i += 1;
     }
   }
 
+  updateBalloonsNum(elem: HTMLHeadingElement) {
+    this.controller.getGarageObject().then((obj) => {
+      elem.innerText = `(${Object.keys(obj).length})`;
+    });
+  }
+
   cleanBalloonBlocks() {
+    console.log(5)
     this.balloonBlocksContainers.forEach((el) => {
       el.innerHTML = '';
     });
