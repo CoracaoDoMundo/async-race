@@ -22,7 +22,7 @@ class Hangar {
   public balloonBlocks: BalloonBlock[];
   private paginationButtonsBlock: HTMLDivElement;
   public prevBtn: Button;
-  private nextBtn: Button;
+  public nextBtn: Button;
   private static instance: Hangar;
 
   constructor() {
@@ -67,9 +67,7 @@ class Hangar {
       this.hangarBlock
     );
     this.prevBtn = new Button(this.paginationButtonsBlock, 'PREV');
-    this.pushPreviousPaginationButton(this.prevBtn);
     this.nextBtn = new Button(this.paginationButtonsBlock, 'NEXT');
-    this.pushNextPaginationButton(this.nextBtn);
     this.balloonBlocks = [];
     this.countPages();
   }
@@ -109,30 +107,6 @@ class Hangar {
   cleanBalloonBlocks() {
     this.balloonBlocksContainers.forEach((el) => {
       el.innerHTML = '';
-    });
-  }
-
-  pushNextPaginationButton(elem: Button) {
-    elem.button.addEventListener('click', () => {
-      if (this.pagesQuantity > 1 && this.pageNum < this.pagesQuantity) {
-        this.pageNum += 1;
-        localStorage.setItem('coracao_pageNum', `${this.pageNum}`);
-        this.pageNumContainer.textContent = `# ${this.pageNum}`;
-        this.cleanBalloonBlocks();
-        this.fillBalloonBlocks(this.pageNum);
-      }
-    });
-  }
-
-  pushPreviousPaginationButton(elem: Button) {
-    elem.button.addEventListener('click', () => {
-      if (this.pagesQuantity > 1 && this.pageNum > 1) {
-        this.pageNum -= 1;
-        localStorage.setItem('coracao_pageNum', `${this.pageNum}`);
-        this.pageNumContainer.textContent = `# ${this.pageNum}`;
-        this.cleanBalloonBlocks();
-        this.fillBalloonBlocks(this.pageNum);
-      }
     });
   }
 }

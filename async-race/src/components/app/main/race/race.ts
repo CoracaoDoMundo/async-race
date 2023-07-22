@@ -19,6 +19,8 @@ class Race {
     this.controls = new Controls();
     this.addListenerOnCreateButton(this.controls.createBtn);
     this.hangar = new Hangar();
+    this.pushPreviousPaginationButton(this.hangar.prevBtn);
+    this.pushNextPaginationButton(this.hangar.nextBtn);
     this.drawHangar();
     this.controller = Controller.getInstance();
   }
@@ -85,6 +87,30 @@ class Race {
 
   addListenerOnRemoveButton(arr: BalloonBlock[]) {
     arr.forEach((elem) => this.pushRemoveBtn(elem.removeBtn));
+  }
+
+  pushNextPaginationButton(elem: Button) {
+    elem.button.addEventListener('click', () => {
+      if (this.hangar.pagesQuantity > 1 && this.hangar.pageNum < this.hangar.pagesQuantity) {
+        this.hangar.pageNum += 1;
+        localStorage.setItem('coracao_pageNum', `${this.hangar.pageNum}`);
+        this.hangar.pageNumContainer.textContent = `# ${this.hangar.pageNum}`;
+        this.hangar.cleanBalloonBlocks();
+        this.drawHangar();
+      }
+    });
+  }
+
+  pushPreviousPaginationButton(elem: Button) {
+    elem.button.addEventListener('click', () => {
+      if (this.hangar.pagesQuantity > 1 && this.hangar.pageNum > 1) {
+        this.hangar.pageNum -= 1;
+        localStorage.setItem('coracao_pageNum', `${this.hangar.pageNum}`);
+        this.hangar.pageNumContainer.textContent = `# ${this.hangar.pageNum}`;
+        this.hangar.cleanBalloonBlocks();
+        this.drawHangar();
+      }
+    });
   }
 }
 
