@@ -153,11 +153,15 @@ class Race {
         this.hangar.pagesQuantity > 1 &&
         this.hangar.pageNum < this.hangar.pagesQuantity
       ) {
+        this.hangar.prevBtn.button.classList.remove('inactive');
         this.hangar.pageNum += 1;
         localStorage.setItem('coracao_pageNum', `${this.hangar.pageNum}`);
         this.hangar.pageNumContainer.textContent = `# ${this.hangar.pageNum}`;
         this.hangar.cleanBalloonBlocks();
         this.drawHangar();
+        if (this.hangar.pageNum === this.hangar.pagesQuantity) {
+          this.hangar.nextBtn.button.classList.add('inactive');
+        }
       }
     });
   }
@@ -165,11 +169,15 @@ class Race {
   pushPreviousPaginationButton(elem: Button) {
     elem.button.addEventListener('click', () => {
       if (this.hangar.pagesQuantity > 1 && this.hangar.pageNum > 1) {
+        this.hangar.nextBtn.button.classList.remove('inactive');
         this.hangar.pageNum -= 1;
         localStorage.setItem('coracao_pageNum', `${this.hangar.pageNum}`);
         this.hangar.pageNumContainer.textContent = `# ${this.hangar.pageNum}`;
         this.hangar.cleanBalloonBlocks();
         this.drawHangar();
+        if (this.hangar.pageNum === 1) {
+          this.hangar.prevBtn.button.classList.add('inactive');
+        }
       }
     });
   }

@@ -68,6 +68,9 @@ class Hangar {
       this.hangarBlock
     );
     this.prevBtn = new Button(this.paginationButtonsBlock, 'PREV');
+    if (this.pageNum === 1) {
+      this.prevBtn.button.classList.add('inactive');
+    }
     this.nextBtn = new Button(this.paginationButtonsBlock, 'NEXT');
     this.balloonBlocks = [];
     this.countPages();
@@ -97,6 +100,9 @@ class Hangar {
   async countPages() {
     const obj = await this.controller.getGarageObject();
     this.pagesQuantity = Math.ceil(Object.keys(obj).length / 7);
+    if (this.pageNum === this.pagesQuantity) {
+      this.nextBtn.button.classList.add('inactive');
+    }
   }
 
   updateBalloonsNum(elem: HTMLHeadingElement) {
