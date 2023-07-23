@@ -29,4 +29,8 @@ const createBalloonBlocks = (container:HTMLDivElement): HTMLDivElement[] => {
   return arr;
 };
 
-export { createElement, createBalloonBlocks };
+const moveBalloon = (elem: SVGElement) => {
+
+}
+
+export { createElement, createBalloonBlocks, moveBalloon };

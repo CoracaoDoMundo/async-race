@@ -6,14 +6,20 @@ import {
 } from '../../../../../../../utilities/types';
 
 class Balloon {
-  draw(container: HTMLDivElement, color: string): void {
-    const balloon: SVGSVGElement = document.createElementNS(
+  public balloon: SVGElement;
+
+  constructor(id?: number) {
+    this.balloon = document.createElementNS(
       'http://www.w3.org/2000/svg',
       'svg'
     );
-    balloon.setAttribute('viewBox', '37.98 9.97 63.31 78.2');
-    balloon.setAttribute('xml:space', 'preserve');
-    balloon.classList.add('balloon');
+    this.balloon.setAttribute('id', String(id));
+  }
+
+  draw(container: HTMLDivElement, color: string): void {
+    this.balloon.setAttribute('viewBox', '37.98 9.97 63.31 78.2');
+    this.balloon.setAttribute('xml:space', 'preserve');
+    this.balloon.classList.add('balloon');
     const gBlock: SVGGraphicsElement = document.createElementNS(
       'http://www.w3.org/2000/svg',
       'g'
@@ -42,9 +48,9 @@ class Balloon {
       }
       secondGBlock.append(path);
     }
-    balloon.append(gBlock);
+    this.balloon.append(gBlock);
     gBlock.append(secondGBlock);
-    container.append(balloon);
+    container.append(this.balloon);
   }
 }
 

@@ -33,6 +33,7 @@ class Race {
     this.addListenerOnRemoveButton(this.hangar.balloonBlocks);
     this.addListenerOnSelectButton(this.hangar.balloonBlocks);
     this.addListenerOnUpButton(this.hangar.balloonBlocks);
+    this.addListenerOnLandButton(this.hangar.balloonBlocks);
     this.hangar.balloonBlocks = [];
   }
 
@@ -93,7 +94,8 @@ class Race {
             'disabled',
             ''
           );
-          this.controls.updateBtn.button.classList.add('inactive');
+          this.toggleInactiveStatusForBtn(this.controls.updateBtn.button, 'inactive');
+          // this.controls.updateBtn.button.classList.add('inactive');
           const updatedGarageObj = await this.controller.getGarageObject();
           this.hangar.cleanBalloonBlocks();
           this.drawHangar();
@@ -141,7 +143,8 @@ class Race {
         this.controls.inputColorUpdate.colorInput.value =
           Object.values(balloonInfo)[1];
       }
-      this.controls.updateBtn.button.classList.remove('inactive');
+      // this.controls.updateBtn.button.classList.remove('inactive');
+      this.toggleInactiveStatusForBtn(this.controls.updateBtn.button, 'active');
     });
   }
 
@@ -249,19 +252,23 @@ class Race {
           id: Number(elem.button.id),
           status: 'started',
         };
+        console.log('data before start/stop:', data);
         const startResponse = await this.controller.startStopRace(data);
         if (startResponse) {
           const stopBtn = elem.button.nextSibling
             ? elem.button.nextSibling
             : null;
           if (stopBtn instanceof HTMLDivElement) {
-            stopBtn.classList.remove('inactive');
-            elem.button.classList.add('inactive');
+            this.toggleInactiveStatusForBtn(stopBtn, 'active');
+            this.toggleInactiveStatusForBtn(elem.button, 'inactive');
           }
           data.status = 'drive';
-          // console.log('data:', data);
-          const driveResponse = await this.controller.switchBalloonEngineToDrive(data);
+          console.log('data before drive:', data);
+          const driveResponse =
+            await this.controller.switchBalloonEngineToDrive(data);
           // console.log('driveResponse:', driveResponse);
+          // ЗДЕСЬ ЗАПУСКАЮ АНИМАЦИЮ ЭЛЕМЕНТА НА ФИНИШ
+          
         }
       }
     });
@@ -269,6 +276,39 @@ class Race {
 
   addListenerOnUpButton(arr: BalloonBlock[]): void {
     arr.forEach((elem): void => this.pushUpButton(elem.upButton));
+  }
+
+  pushLandButton(elem: Button): void {
+    elem.button.addEventListener('click', async (): Promise<void> => {
+      if (!elem.button.classList.contains('inactive')) {
+        let data: QueryParams = {
+          id: Number(elem.button.id),
+          status: 'stopped',
+        };
+        const endResponse = await this.controller.startStopRace(data);
+        if (endResponse) {
+          const startBtn = elem.button.previousSibling
+            ? elem.button.previousSibling
+            : null;
+          if (startBtn instanceof HTMLDivElement) {
+            this.toggleInactiveStatusForBtn(startBtn, 'active');
+            this.toggleInactiveStatusForBtn(elem.button, 'inactive');
+          }
+          // ЗДЕСЬ ДОБАВЛЯЮ АНИМАЦИЮ ЭЛЕМЕНТА ОБРАТНО НА НАЧАЛЬНОЕ МЕСТО
+        }
+      }
+    });
+  }
+
+  addListenerOnLandButton(arr: BalloonBlock[]): void {
+    arr.forEach((elem): void => this.pushLandButton(elem.landButton));
+  }
+
+  toggleInactiveStatusForBtn(
+    button: HTMLDivElement,
+    status: 'active' | 'inactive'
+  ) {
+    button.classList.toggle('inactive');
   }
 }
 

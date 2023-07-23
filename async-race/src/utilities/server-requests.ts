@@ -103,10 +103,10 @@ class Controller {
       const resp = await fetch(`${this.url}/engine${params}`, {
         method: 'PATCH',
       });
-      // console.log('resp:', resp);
+      console.log('resp_start/stop:', resp);
       try {
         const body = await resp.json();
-        // console.log('body:', body);
+        console.log('body_start/stop:', body);
         return body;
       } catch (error) {
         switch (resp.status) {
@@ -128,15 +128,15 @@ class Controller {
   switchBalloonEngineToDrive(
     data: QueryParams
   ): Promise<{ success: boolean } | void> {
-    const race = async (): Promise<{ success: boolean } | void> => {
+    const race = async (): Promise<{ success: boolean } | void > => {
       const params = this.generateQueryString(data);
       const resp = await fetch(`${this.url}/engine${params}`, {
         method: 'PATCH',
       });
-      // console.log('resp:', resp);
+      console.log('resp_drive:', resp);
       try {
         const body = await resp.json();
-        // console.log('body:', body);
+        console.log('drive_result:', body);
         return body;
       } catch (error) {
         switch (resp.status) {
@@ -144,6 +144,7 @@ class Controller {
             console.log(
               `Balloon has been landed suddenly. It's burner was broken down.`
             );
+            // ЗДЕСЬ НУЖНО ДОБАВИТЬ ОСТАНОВКУ АНИМАЦИИ, А ДЛЯ ЭТОГО ПЕРЕДАТЬ ЭЛЕМЕНТ В МЕТОД
             break;
           case 400:
             console.log('Wrong parameters for start of the moving');

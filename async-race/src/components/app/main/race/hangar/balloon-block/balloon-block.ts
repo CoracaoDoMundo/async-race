@@ -12,7 +12,7 @@ class BalloonBlock {
   private balloonName: HTMLSpanElement;
   private raceBlock: HTMLDivElement;
   public upButton: Button;
-  private landButton: Button;
+  public landButton: Button;
   private balloon: HTMLDivElement;
   private balloonSvg: Balloon;
   private ribbon: HTMLDivElement;
@@ -44,7 +44,7 @@ class BalloonBlock {
     this.upButton = new Button(this.raceBlock, 'Up', id);
     this.landButton = new Button(this.raceBlock, 'Land', id);
     this.balloon = createElement('div', ['balloonContainer'], this.raceBlock);
-    this.balloonSvg = new Balloon();
+    this.balloonSvg = new Balloon(id);
     this.balloonSvg.draw(this.balloon, color);
     this.ribbon = createElement('div', ['ribbonContainer'], this.raceBlock);
     this.ribbonSvg = new Ribbon();
