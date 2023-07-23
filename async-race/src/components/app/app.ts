@@ -12,7 +12,7 @@ class App {
     this.main = new Main();
   }
 
-  start() {}
+  start(): void {}
 }
 
 export default App;

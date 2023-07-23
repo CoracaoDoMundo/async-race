@@ -34,8 +34,8 @@ class Controller {
     return res;
   }
 
-  createNewBalloon(data: BalloonData) {
-    const balloon = async () => {
+  createNewBalloon(data: BalloonData): void {
+    const balloon = async (): Promise<void> => {
       const resp = await fetch(`${this.url}/garage`, {
         method: 'POST',
         headers: {
@@ -51,27 +51,27 @@ class Controller {
     balloon();
   }
 
-  postNewBalloon(data: BalloonData) {
-    const balloon = async () => {
+  postNewBalloon(data: BalloonData): void {
+    const balloon = async (): Promise<void> => {
       const res = await this.createNewBalloon(data);
     };
     balloon();
   }
 
-  deleteBalloon(id: number) {
-    const balloon = async (id: number) => {
+  deleteBalloon(id: number): void {
+    const balloon = async (id: number): Promise<void> => {
       const resp = await fetch(`${this.url}/garage/${id}`, {
         method: 'DELETE',
       });
     };
-    const del = async () => {
+    const del = async (): Promise<void> => {
       const res = await balloon(id);
     };
     del();
   }
 
-  updateBalloon(id: number, data: BalloonData) {
-    const balloon = async () => {
+  updateBalloon(id: number, data: BalloonData): void {
+    const balloon = async (): Promise<void> => {
       const resp = await fetch(`${this.url}/garage/${id}`, {
         method: 'PUT',
         headers: {
@@ -79,15 +79,15 @@ class Controller {
         },
         body: JSON.stringify({
           name: data.name,
-          color: data.color
+          color: data.color,
         }),
       });
     };
     balloon();
   }
 
-  postUpdatedBalloon(id: number, data: BalloonData) {
-    const balloon = async () => {
+  postUpdatedBalloon(id: number, data: BalloonData): void {
+    const balloon = async (): Promise<void> => {
       const res = await this.updateBalloon(id, data);
     };
     balloon();

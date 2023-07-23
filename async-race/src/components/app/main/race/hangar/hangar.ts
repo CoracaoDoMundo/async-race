@@ -76,7 +76,7 @@ class Hangar {
     this.countPages();
   }
 
-  async fillBalloonBlocks(page: number) {
+  async fillBalloonBlocks(page: number): Promise<void> {
     const obj = await this.controller.getGarageObject();
     const length = Object.keys(obj).length;
     let i = 0 + (page - 1) * 7;
@@ -97,7 +97,7 @@ class Hangar {
     }
   }
 
-  async countPages() {
+  async countPages(): Promise<void> {
     const obj = await this.controller.getGarageObject();
     this.pagesQuantity = Math.ceil(Object.keys(obj).length / 7);
     if (this.pageNum === this.pagesQuantity) {
@@ -105,13 +105,13 @@ class Hangar {
     }
   }
 
-  updateBalloonsNum(elem: HTMLHeadingElement) {
+  updateBalloonsNum(elem: HTMLHeadingElement): void {
     this.controller.getGarageObject().then((obj) => {
       elem.innerText = `(${Object.keys(obj).length})`;
     });
   }
 
-  cleanBalloonBlocks() {
+  cleanBalloonBlocks(): void {
     this.balloonBlocksContainers.forEach((el) => {
       el.innerHTML = '';
     });
