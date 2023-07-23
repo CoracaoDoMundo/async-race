@@ -268,12 +268,9 @@ class Race {
           }
           data.status = 'drive';
           console.log('data before drive:', data);
-          const driveResponse =
-            await this.controller.switchBalloonEngineToDrive(data);
-          // console.log('driveResponse:', driveResponse);
-          // ЗДЕСЬ ЗАПУСКАЮ АНИМАЦИЮ ЭЛЕМЕНТА НА ФИНИШ
           let animatedBalloon: SVGElement;
           let parentContainer: HTMLDivElement;
+          let timer: NodeJS.Timer | undefined;
           this.hangar.balloonBlocks.map((el) => {
             if (data.id === Number(el.balloonSvg.balloon.id)) {
               animatedBalloon = el.balloonSvg.balloon;
@@ -285,13 +282,18 @@ class Race {
                 parentContainer =
                   el.balloonSvg.balloon.parentElement.parentElement;
               }
-              moveBalloon(animatedBalloon, parentContainer);
+              timer = moveBalloon(
+                animatedBalloon,
+                parentContainer,
+                startResponse.velocity
+              );
+              console.log('timer:', timer);
             }
           });
-          // console.log(
-          //   'svg balloon:',
-          //   this.hangar.balloonBlocks.map((el) => el.balloonSvg.balloon.id)
-          // );
+          if (timer) {
+            const driveResponse =
+              await this.controller.switchBalloonEngineToDrive(data, timer);
+          }
         }
       }
     });

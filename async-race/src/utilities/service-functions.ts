@@ -18,45 +18,47 @@ const createElement = <T extends HTMLElement>(
   return element;
 };
 
-const createBalloonBlocks = (container:HTMLDivElement): HTMLDivElement[] => {
+const createBalloonBlocks = (container: HTMLDivElement): HTMLDivElement[] => {
   let arr: HTMLDivElement[] = [];
   let i = 0;
   while (i < 7) {
-    const block:HTMLDivElement = createElement('div', ['balloonBlock'], container);
+    const block: HTMLDivElement = createElement(
+      'div',
+      ['balloonBlock'],
+      container
+    );
     arr.push(block);
     i += 1;
   }
   return arr;
 };
 
-const moveBalloon = (elem: SVGElement, container: HTMLDivElement) => {
+const moveBalloon = (
+  elem: SVGElement,
+  container: HTMLDivElement,
+  speed: number
+) => {
   if (elem.parentElement) {
+    let animationId: number | null;
     elem.classList.remove('animatedBalloon');
     let currentPlace = elem.parentElement.offsetLeft;
-    console.log('currentPlace:', currentPlace);
     const endPlace = container.clientWidth - 80;
-    console.log('document:', document.documentElement.clientWidth);
-    console.log('container:', container.clientWidth);
-    let move = () => {
-      const interId = setInterval(() => {
-        currentPlace += 10;
-        if (currentPlace > endPlace) {
-          clearInterval(interId);
-          // elem.classList.add('animatedBalloon');
-        }
-        elem.style.transform = `translateX(${currentPlace}px)`;
-      }, 16)
-    }
-    move();
+    const time = (endPlace - currentPlace) / speed;
+    console.log('time:', time);
+    const framesQuantity = time * 60;
+    const shift = (endPlace - currentPlace) / framesQuantity;
+    elem.classList.remove('animatedBalloon');
+    let move = setInterval(() => {
+      currentPlace += shift;
+      if (currentPlace > endPlace) {
+        clearInterval(move);
+      }
+      elem.style.transform = `translateX(${currentPlace}px)`;
+    }, 16);
+    return move;
   }
-}
+};
 
-const pauseBalloonMove = () => {
-
-}
-
-const moveBalloonOnStart = () => {
-
-}
+const moveBalloonOnStart = () => {};
 
 export { createElement, createBalloonBlocks, moveBalloon };

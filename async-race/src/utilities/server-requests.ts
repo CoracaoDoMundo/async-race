@@ -126,7 +126,7 @@ class Controller {
   }
 
   switchBalloonEngineToDrive(
-    data: QueryParams
+    data: QueryParams, timer:NodeJS.Timer
   ): Promise<{ success: boolean } | void> {
     const race = async (): Promise<{ success: boolean } | void > => {
       const params = this.generateQueryString(data);
@@ -144,7 +144,7 @@ class Controller {
             console.log(
               `Balloon has been landed suddenly. It's burner was broken down.`
             );
-            // ЗДЕСЬ НУЖНО ДОБАВИТЬ ОСТАНОВКУ АНИМАЦИИ, А ДЛЯ ЭТОГО ПЕРЕДАТЬ ЭЛЕМЕНТ В МЕТОД
+            clearInterval(timer);
             break;
           case 400:
             console.log('Wrong parameters for start of the moving');
