@@ -11,7 +11,7 @@ class BalloonBlock {
   public removeBtn: Button;
   private balloonName: HTMLSpanElement;
   private raceBlock: HTMLDivElement;
-  private upButton: Button;
+  public upButton: Button;
   private landButton: Button;
   private balloon: HTMLDivElement;
   private balloonSvg: Balloon;
@@ -32,10 +32,8 @@ class BalloonBlock {
       ['buttonsNameBlock'],
       container
     );
-    this.selectBtn = new Button(this.buttonsNameBlock, 'SELECT');
-    this.selectBtn.button.setAttribute('id', String(id));
-    this.removeBtn = new Button(this.buttonsNameBlock, 'REMOVE');
-    this.removeBtn.button.setAttribute('id', String(id));
+    this.selectBtn = new Button(this.buttonsNameBlock, 'SELECT', id);
+    this.removeBtn = new Button(this.buttonsNameBlock, 'REMOVE', id);
     this.balloonName = createElement(
       'span',
       ['balloonName'],
@@ -43,8 +41,8 @@ class BalloonBlock {
       `${name}`
     );
     this.raceBlock = createElement('div', ['raceBlock'], container);
-    this.upButton = new Button(this.raceBlock, 'Up');
-    this.landButton = new Button(this.raceBlock, 'Land');
+    this.upButton = new Button(this.raceBlock, 'Up', id);
+    this.landButton = new Button(this.raceBlock, 'Land', id);
     this.balloon = createElement('div', ['balloonContainer'], this.raceBlock);
     this.balloonSvg = new Balloon();
     this.balloonSvg.draw(this.balloon, color);

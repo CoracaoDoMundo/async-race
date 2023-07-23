@@ -31,6 +31,7 @@ class Race {
     await this.hangar.fillBalloonBlocks(this.hangar.pageNum);
     this.addListenerOnRemoveButton(this.hangar.balloonBlocks);
     this.addListenerOnSelectButton(this.hangar.balloonBlocks);
+    this.addListenerOnUpButton(this.hangar.balloonBlocks);
     this.hangar.balloonBlocks = [];
   }
 
@@ -238,6 +239,16 @@ class Race {
         console.log('Something went wrong!');
       }
     });
+  }
+
+  pushUpButton(elem: Button): void {
+    elem.button.addEventListener('click', (): void => {
+
+    });
+  }
+
+  addListenerOnUpButton(arr: BalloonBlock[]): void {
+    arr.forEach((elem): void => this.pushUpButton(elem.upButton));
   }
 }
 

@@ -88,5 +88,10 @@ export enum BalloonColor {
   '#d7e854',
   '#fce6a2',
   '#fce4ca',
-  '#0dfc00'
+  '#0dfc00',
 }
+
+export type QueryParams = {
+  id: number;
+  status: 'started' | 'stopped' | 'drive';
+};

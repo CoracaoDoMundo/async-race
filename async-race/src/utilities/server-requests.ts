@@ -1,5 +1,5 @@
 import { createElement } from './service-functions';
-import { BalloonData } from './types';
+import { BalloonData, QueryParams } from './types';
 
 class Controller {
   private static instance: Controller;
@@ -91,6 +91,21 @@ class Controller {
       const res = await this.updateBalloon(id, data);
     };
     balloon();
+  }
+
+  generateQueryString(data: QueryParams): string {
+    return `?id=${data.id}&status=${data.status}`;
+  }
+
+  startStopRace(data: QueryParams) {
+    const race = async (): Promise<void> => {
+      const params = this.generateQueryString(data);
+      const resp = await fetch(`${this.url}/engine${params}`, {
+        method: 'PATCH',
+      });
+      console.log('resp:', resp);
+    };
+    race();
   }
 }
 
