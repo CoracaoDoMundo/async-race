@@ -41,13 +41,13 @@ const moveBalloon = (
   if (elem.parentElement) {
     let animationId: number | null;
     elem.classList.remove('animatedBalloon');
+    elem.setAttribute('air', 'true');
     let currentPlace = elem.parentElement.offsetLeft;
     const endPlace = container.clientWidth - 80;
     const time = (endPlace - currentPlace) / speed;
     console.log('time:', time);
     const framesQuantity = time * 60;
     const shift = (endPlace - currentPlace) / framesQuantity;
-    elem.classList.remove('animatedBalloon');
     let move = setInterval(() => {
       currentPlace += shift;
       if (currentPlace > endPlace) {
@@ -59,6 +59,12 @@ const moveBalloon = (
   }
 };
 
-const moveBalloonOnStart = () => {};
+const moveBalloonOnStart = (elem: SVGElement) => {
+  if (elem.getAttribute('air') === 'true') {
+    elem.removeAttribute('air');
+    elem.style.transform = `translateX(0px)`;
+    elem.classList.add('animatedBalloon');
+  }
+};
 
-export { createElement, createBalloonBlocks, moveBalloon };
+export { createElement, createBalloonBlocks, moveBalloon, moveBalloonOnStart };

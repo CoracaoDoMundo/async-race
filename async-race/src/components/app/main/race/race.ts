@@ -10,7 +10,10 @@ import {
 } from '../../../../utilities/types';
 import Controller from '../../../../utilities/server-requests';
 import BalloonBlock from './hangar/balloon-block/balloon-block';
-import { moveBalloon } from '../../../../utilities/service-functions';
+import {
+  moveBalloon,
+  moveBalloonOnStart,
+} from '../../../../utilities/service-functions';
 
 class Race {
   private controls: Controls;
@@ -319,7 +322,14 @@ class Race {
             this.toggleInactiveStatusForBtn(startBtn, 'active');
             this.toggleInactiveStatusForBtn(elem.button, 'inactive');
           }
-          // ЗДЕСЬ ДОБАВЛЯЮ АНИМАЦИЮ ЭЛЕМЕНТА ОБРАТНО НА НАЧАЛЬНОЕ МЕСТО
+
+          let animatedBalloon: SVGElement;
+          this.hangar.balloonBlocks.map((el) => {
+            if (data.id === Number(el.balloonSvg.balloon.id)) {
+              animatedBalloon = el.balloonSvg.balloon;
+              moveBalloonOnStart(animatedBalloon);
+            }
+          });
         }
       }
     });
