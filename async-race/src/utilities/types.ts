@@ -95,3 +95,8 @@ export type QueryParams = {
   id: number;
   status: 'started' | 'stopped' | 'drive';
 };
+
+export type StartRaceData = {
+  velocity: number;
+  distance: number;
+};

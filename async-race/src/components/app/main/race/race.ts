@@ -6,6 +6,7 @@ import {
   NameFirstPart,
   NameSecondPart,
   BalloonColor,
+  QueryParams,
 } from '../../../../utilities/types';
 import Controller from '../../../../utilities/server-requests';
 import BalloonBlock from './hangar/balloon-block/balloon-block';
@@ -242,8 +243,24 @@ class Race {
   }
 
   pushUpButton(elem: Button): void {
-    elem.button.addEventListener('click', (): void => {
-
+    elem.button.addEventListener('click', async (): Promise<void> => {
+      if (!elem.button.classList.contains('inactive')) {
+        const data: QueryParams = {
+          id: Number(elem.button.id),
+          status: 'started',
+        };
+        const startResponse = await this.controller.startStopRace(data);
+        if (startResponse) {
+          const stopBtn = elem.button.nextSibling
+            ? elem.button.nextSibling
+            : null;
+          if (stopBtn instanceof HTMLDivElement) {
+            stopBtn.classList.remove('inactive');
+            elem.button.classList.add('inactive');
+          }
+        }
+      }
+      // console.log('startResponse:', startResponse);
     });
   }
 

@@ -1,5 +1,5 @@
 import { createElement } from './service-functions';
-import { BalloonData, QueryParams } from './types';
+import { BalloonData, QueryParams, StartRaceData } from './types';
 
 class Controller {
   private static instance: Controller;
@@ -97,15 +97,29 @@ class Controller {
     return `?id=${data.id}&status=${data.status}`;
   }
 
-  startStopRace(data: QueryParams) {
-    const race = async (): Promise<void> => {
+  startStopRace(data: QueryParams): Promise<StartRaceData | void> {
+    const race = async (): Promise<StartRaceData | void> => {
       const params = this.generateQueryString(data);
       const resp = await fetch(`${this.url}/engine${params}`, {
         method: 'PATCH',
       });
-      console.log('resp:', resp);
+      // console.log('resp:', resp);
+      try {
+        const body = await resp.json();
+        console.log('body:', body);
+        return body;
+      } catch (error) {
+        if (resp.status === 404) {
+          console.log('Car with such id was not found in the garage');
+        } else if (resp.status === 400) {
+          console.log('Wrong parameters for start of the moving');
+        } else {
+          console.log('Something went wrong!');
+        }
+      }
     };
-    race();
+    const result = race();
+    return result;
   }
 }
 
