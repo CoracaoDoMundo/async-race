@@ -245,7 +245,7 @@ class Race {
   pushUpButton(elem: Button): void {
     elem.button.addEventListener('click', async (): Promise<void> => {
       if (!elem.button.classList.contains('inactive')) {
-        const data: QueryParams = {
+        let data: QueryParams = {
           id: Number(elem.button.id),
           status: 'started',
         };
@@ -258,9 +258,12 @@ class Race {
             stopBtn.classList.remove('inactive');
             elem.button.classList.add('inactive');
           }
+          data.status = 'drive';
+          // console.log('data:', data);
+          const driveResponse = await this.controller.switchBalloonEngineToDrive(data);
+          // console.log('driveResponse:', driveResponse);
         }
       }
-      // console.log('startResponse:', startResponse);
     });
   }
 

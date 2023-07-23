@@ -106,7 +106,7 @@ class Controller {
       // console.log('resp:', resp);
       try {
         const body = await resp.json();
-        console.log('body:', body);
+        // console.log('body:', body);
         return body;
       } catch (error) {
         switch (resp.status) {
@@ -125,8 +125,10 @@ class Controller {
     return result;
   }
 
-  switchBalloonEngineToDrive(data: QueryParams) {
-    const race = async () => {
+  switchBalloonEngineToDrive(
+    data: QueryParams
+  ): Promise<{ success: boolean } | void> {
+    const race = async (): Promise<{ success: boolean } | void> => {
       const params = this.generateQueryString(data);
       const resp = await fetch(`${this.url}/engine${params}`, {
         method: 'PATCH',
@@ -134,7 +136,7 @@ class Controller {
       // console.log('resp:', resp);
       try {
         const body = await resp.json();
-        console.log('body:', body);
+        // console.log('body:', body);
         return body;
       } catch (error) {
         switch (resp.status) {
