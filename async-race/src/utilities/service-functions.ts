@@ -45,7 +45,7 @@ const moveBalloon = (
     let currentPlace = elem.parentElement.offsetLeft;
     const endPlace = container.clientWidth - 80;
     const time = (endPlace - currentPlace) / speed;
-    console.log('time:', time);
+    // console.log('time:', time);
     const framesQuantity = time * 60;
     const shift = (endPlace - currentPlace) / framesQuantity;
     let move = setInterval(() => {

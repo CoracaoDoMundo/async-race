@@ -17,8 +17,8 @@ class Controls {
   public inputColorUpdate: ColorInput;
   public createBtn: Button;
   public updateBtn: Button;
-  private raceBtn: Button;
-  private resetBtn: Button;
+  public raceBtn: Button;
+  public resetBtn: Button;
   public generateBtn: Button;
   private controller: Controller;
 

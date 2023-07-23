@@ -9,7 +9,7 @@ class BalloonBlock {
   private buttonsNameBlock: HTMLDivElement;
   public selectBtn: Button;
   public removeBtn: Button;
-  private balloonName: HTMLSpanElement;
+  public balloonName: HTMLSpanElement;
   private raceBlock: HTMLDivElement;
   public upButton: Button;
   public landButton: Button;
@@ -40,6 +40,7 @@ class BalloonBlock {
       this.buttonsNameBlock,
       `${name}`
     );
+    this.balloonName.setAttribute('id', String(id));
     this.raceBlock = createElement('div', ['raceBlock'], container);
     this.upButton = new Button(this.raceBlock, 'Up', id);
     this.landButton = new Button(this.raceBlock, 'Land', id);

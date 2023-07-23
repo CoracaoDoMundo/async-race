@@ -97,16 +97,14 @@ class Controller {
     return `?id=${data.id}&status=${data.status}`;
   }
 
-  startStopRace(data: QueryParams): Promise<StartRaceData | void> {
+  startStopBurner(data: QueryParams): Promise<StartRaceData | void> {
     const race = async (): Promise<StartRaceData | void> => {
       const params = this.generateQueryString(data);
       const resp = await fetch(`${this.url}/engine${params}`, {
         method: 'PATCH',
       });
-      console.log('resp_start/stop:', resp);
       try {
         const body = await resp.json();
-        console.log('body_start/stop:', body);
         return body;
       } catch (error) {
         switch (resp.status) {
@@ -125,46 +123,50 @@ class Controller {
     return result;
   }
 
-  switchBalloonEngineToDrive(
-    data: QueryParams, timer:NodeJS.Timer
-  ): Promise<{ success: boolean } | void> {
-    const race = async (): Promise<{ success: boolean } | void > => {
-      const params = this.generateQueryString(data);
-      const resp = await fetch(`${this.url}/engine${params}`, {
-        method: 'PATCH',
-      });
-      console.log('resp_drive:', resp);
-      try {
-        const body = await resp.json();
-        console.log('drive_result:', body);
-        return body;
-      } catch (error) {
-        switch (resp.status) {
-          case 500:
-            console.log(
-              `Balloon has been landed suddenly. It's burner was broken down.`
-            );
-            clearInterval(timer);
-            break;
-          case 400:
-            console.log('Wrong parameters for start of the moving');
-            break;
-          case 404:
-            console.log(
-              'Burner parameters for balloon with such id was not found in the hangar. Have you tried to set burner status to "started" before?'
-            );
-            break;
-          case 429:
-            console.log(
-              `Flight already in progress. You can't run flight for the same balloon twice while it's not stopped.`
-            );
-            break;
-          default:
-            console.log('Something went wrong!');
-        }
+  async race(data: QueryParams, timer: NodeJS.Timer): Promise<{ resp: Response, balloonId: number } | undefined > {
+    const params = this.generateQueryString(data);
+    const resp = await fetch(`${this.url}/engine${params}`, {
+      method: 'PATCH',
+    });
+    const balloonId = data.id;
+    // console.log('resp_drive:', resp);
+    try {
+      const body = await resp.json();
+      // console.log('resp:', resp);
+      return { resp, balloonId }
+    } catch (error) {
+      switch (resp.status) {
+        case 500:
+          console.log(
+            `Balloon has been landed suddenly. It's burner was broken down.`
+          );
+          clearInterval(timer);
+          break;
+        case 400:
+          console.log('Wrong parameters for start of the moving');
+          break;
+        case 404:
+          console.log(
+            'Burner parameters for balloon with such id was not found in the hangar. Have you tried to set burner status to "started" before?'
+          );
+          break;
+        case 429:
+          console.log(
+            `Flight already in progress. You can't run flight for the same balloon twice while it's not stopped.`
+          );
+          break;
+        default:
+          console.log('Something went wrong!');
       }
-    };
-    const result = race();
+    }
+  }
+
+  switchBalloonEngineToDrive(
+    data: QueryParams,
+    timer: NodeJS.Timer
+  ): Promise<{ resp: Response, balloonId: number } | undefined > {
+    const result = this.race(data, timer);
+    console.log('result:', result);
     return result;
   }
 }
