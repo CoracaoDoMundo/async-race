@@ -109,12 +109,55 @@ class Controller {
         console.log('body:', body);
         return body;
       } catch (error) {
-        if (resp.status === 404) {
-          console.log('Car with such id was not found in the garage');
-        } else if (resp.status === 400) {
-          console.log('Wrong parameters for start of the moving');
-        } else {
-          console.log('Something went wrong!');
+        switch (resp.status) {
+          case 404:
+            console.log('Balloon with such id was not found in the hangar');
+            break;
+          case 400:
+            console.log('Wrong parameters for start of the moving');
+            break;
+          default:
+            console.log('Something went wrong!');
+        }
+      }
+    };
+    const result = race();
+    return result;
+  }
+
+  switchBalloonEngineToDrive(data: QueryParams) {
+    const race = async () => {
+      const params = this.generateQueryString(data);
+      const resp = await fetch(`${this.url}/engine${params}`, {
+        method: 'PATCH',
+      });
+      // console.log('resp:', resp);
+      try {
+        const body = await resp.json();
+        console.log('body:', body);
+        return body;
+      } catch (error) {
+        switch (resp.status) {
+          case 500:
+            console.log(
+              `Balloon has been landed suddenly. It's burner was broken down.`
+            );
+            break;
+          case 400:
+            console.log('Wrong parameters for start of the moving');
+            break;
+          case 404:
+            console.log(
+              'Burner parameters for balloon with such id was not found in the hangar. Have you tried to set burner status to "started" before?'
+            );
+            break;
+          case 429:
+            console.log(
+              `Flight already in progress. You can't run flight for the same balloon twice while it's not stopped.`
+            );
+            break;
+          default:
+            console.log('Something went wrong!');
         }
       }
     };
