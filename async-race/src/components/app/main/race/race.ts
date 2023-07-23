@@ -10,6 +10,7 @@ import {
 } from '../../../../utilities/types';
 import Controller from '../../../../utilities/server-requests';
 import BalloonBlock from './hangar/balloon-block/balloon-block';
+import { moveBalloon } from '../../../../utilities/service-functions';
 
 class Race {
   private controls: Controls;
@@ -29,12 +30,12 @@ class Race {
   }
 
   async drawHangar(): Promise<void> {
+    this.hangar.balloonBlocks = [];
     await this.hangar.fillBalloonBlocks(this.hangar.pageNum);
     this.addListenerOnRemoveButton(this.hangar.balloonBlocks);
     this.addListenerOnSelectButton(this.hangar.balloonBlocks);
     this.addListenerOnUpButton(this.hangar.balloonBlocks);
     this.addListenerOnLandButton(this.hangar.balloonBlocks);
-    this.hangar.balloonBlocks = [];
   }
 
   async pushCreateButton(elem: Button): Promise<void> {
@@ -94,7 +95,10 @@ class Race {
             'disabled',
             ''
           );
-          this.toggleInactiveStatusForBtn(this.controls.updateBtn.button, 'inactive');
+          this.toggleInactiveStatusForBtn(
+            this.controls.updateBtn.button,
+            'inactive'
+          );
           // this.controls.updateBtn.button.classList.add('inactive');
           const updatedGarageObj = await this.controller.getGarageObject();
           this.hangar.cleanBalloonBlocks();
@@ -237,7 +241,7 @@ class Race {
           this.drawHangar();
         }
         this.hangar.updateBalloonsNum(this.hangar.balloonNum);
-
+        this.hangar.nextBtn.button.classList.remove('inactive');
         this.hangar.countPages();
       } catch (error) {
         console.log('Something went wrong!');
@@ -268,7 +272,26 @@ class Race {
             await this.controller.switchBalloonEngineToDrive(data);
           // console.log('driveResponse:', driveResponse);
           // ЗДЕСЬ ЗАПУСКАЮ АНИМАЦИЮ ЭЛЕМЕНТА НА ФИНИШ
-          
+          let animatedBalloon: SVGElement;
+          let parentContainer: HTMLDivElement;
+          this.hangar.balloonBlocks.map((el) => {
+            if (data.id === Number(el.balloonSvg.balloon.id)) {
+              animatedBalloon = el.balloonSvg.balloon;
+              if (
+                el.balloonSvg.balloon.parentElement instanceof HTMLDivElement &&
+                el.balloonSvg.balloon.parentElement.parentElement instanceof
+                  HTMLDivElement
+              ) {
+                parentContainer =
+                  el.balloonSvg.balloon.parentElement.parentElement;
+              }
+              moveBalloon(animatedBalloon, parentContainer);
+            }
+          });
+          // console.log(
+          //   'svg balloon:',
+          //   this.hangar.balloonBlocks.map((el) => el.balloonSvg.balloon.id)
+          // );
         }
       }
     });

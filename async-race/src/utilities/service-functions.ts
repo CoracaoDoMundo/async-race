@@ -29,7 +29,33 @@ const createBalloonBlocks = (container:HTMLDivElement): HTMLDivElement[] => {
   return arr;
 };
 
-const moveBalloon = (elem: SVGElement) => {
+const moveBalloon = (elem: SVGElement, container: HTMLDivElement) => {
+  if (elem.parentElement) {
+    elem.classList.remove('animatedBalloon');
+    let currentPlace = elem.parentElement.offsetLeft;
+    console.log('currentPlace:', currentPlace);
+    const endPlace = container.clientWidth - 80;
+    console.log('document:', document.documentElement.clientWidth);
+    console.log('container:', container.clientWidth);
+    let move = () => {
+      const interId = setInterval(() => {
+        currentPlace += 10;
+        if (currentPlace > endPlace) {
+          clearInterval(interId);
+          // elem.classList.add('animatedBalloon');
+        }
+        elem.style.transform = `translateX(${currentPlace}px)`;
+      }, 16)
+    }
+    move();
+  }
+}
+
+const pauseBalloonMove = () => {
+
+}
+
+const moveBalloonOnStart = () => {
 
 }
 

@@ -14,7 +14,7 @@ class BalloonBlock {
   public upButton: Button;
   public landButton: Button;
   private balloon: HTMLDivElement;
-  private balloonSvg: Balloon;
+  public balloonSvg: Balloon;
   private ribbon: HTMLDivElement;
   private ribbonSvg: Ribbon;
   private trackLine: HTMLDivElement;

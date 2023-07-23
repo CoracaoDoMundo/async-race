@@ -3,6 +3,10 @@
 .balloon {
   width: 100%;
   height: 100%;
+  // animation: soar-animation 4s ease infinite;
+}
+
+.animatedBalloon {
   animation: soar-animation 4s ease infinite;
 }
 
