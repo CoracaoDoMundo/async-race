@@ -109,3 +109,11 @@ export type StartRaceData = {
   velocity: number;
   distance: number;
 };
+
+export enum columnNames {
+  'Number',
+  'Balloon',
+  'Name',
+  'Wins',
+  'Best time (sec)',
+}

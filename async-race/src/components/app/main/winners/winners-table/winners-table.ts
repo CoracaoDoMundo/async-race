@@ -1,6 +1,8 @@
 import './winners-table.scss';
 import { createElement } from '../../../../../utilities/service-functions';
 import Controller from '../../../../../utilities/server-requests';
+import Button from '../../button/button';
+import { columnNames } from '../../../../../utilities/types';
 
 class WinnersTable {
   private controller: Controller;
@@ -13,6 +15,10 @@ class WinnersTable {
   public pageNumContainer: HTMLHeadingElement;
   public pageNum: number = 1;
   public pagesQuantity: number = 1;
+  private winnersTableBlock: HTMLDivElement;
+  private paginationButtonsBlock: HTMLDivElement;
+  public prevBtn: Button;
+  public nextBtn: Button;
 
   constructor() {
     this.controller = Controller.getInstance();
@@ -43,7 +49,45 @@ class WinnersTable {
       this.paginationLine,
       `# ${this.pageNum}`
     );
+    this.winnersTableBlock = createElement(
+      'div',
+      ['winnersTableBlock'],
+      this.winnersBlock
+    );
+    this.drawTableHeadline(this.winnersTableBlock);
+
+    this.paginationButtonsBlock = createElement(
+      'div',
+      ['paginationButtonsBlock'],
+      this.winnersBlock
+    );
+    this.prevBtn = new Button(this.paginationButtonsBlock, 'PREV');
+    if (this.pageNum === 1) {
+      this.prevBtn.button.classList.add('inactive');
+    }
+    this.nextBtn = new Button(this.paginationButtonsBlock, 'NEXT');
     this.countPages();
+    if (this.pagesQuantity < 2) {
+      this.nextBtn.button.classList.add('inactive');
+    }
+  }
+
+  drawTableHeadline(container: HTMLDivElement) {
+    let i = 0;
+    while (i < 5) {
+      const columnNameBlock = createElement(
+        'div',
+        ['columnNameBlock', 'tableHeadline', 'cell'],
+        container
+      );
+      const columnName = createElement(
+        'div',
+        ['columnName'],
+        columnNameBlock,
+        columnNames[i]
+      );
+      i += 1;
+    }
   }
 
   async countPages(): Promise<void> {

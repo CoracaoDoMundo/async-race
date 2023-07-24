@@ -1,3 +1,18 @@
 @import '../../../app.scss';
-@import '../../../main/race/hangar/hangar.scss'
+@import '../../../main/race/hangar/hangar.scss';
 
+.winnersTableBlock {
+  display: grid;
+  grid-template-columns: 10% 10% 20% 5% 20%;
+  grid-template-rows: auto;
+}
+
+.cell {
+  border: 1px solid $font-color;
+  text-align: center;
+  color: $font-color;
+}
+
+.tableHeadline {
+  background-color: $table-header-color;
+}
