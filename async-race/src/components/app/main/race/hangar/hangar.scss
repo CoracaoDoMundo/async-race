@@ -1,6 +1,7 @@
 @import '../../../app.scss';
 
-.hangarBlock {
+.hangarBlock,
+.winnersBlock {
   display: flex;
   flex-direction: column;
   padding: 0 3%;
@@ -15,7 +16,9 @@
 }
 
 .hangarHeader,
-.balloonsNum {
+.winnersHeader,
+.balloonsNum,
+.winnersNum {
   margin: 0.5rem 0;
 }
 

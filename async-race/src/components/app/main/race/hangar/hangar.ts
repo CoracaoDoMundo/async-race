@@ -11,7 +11,7 @@ class Hangar {
   private controller: Controller;
   public hangarBlock: HTMLDivElement;
   private headerLine: HTMLDivElement;
-  private hangarHeader: HTMLHeadingElement;
+  private header: HTMLHeadingElement;
   public balloonNum: HTMLHeadingElement;
   private paginationLine: HTMLDivElement;
   private pageText: HTMLHeadingElement;
@@ -30,7 +30,7 @@ class Hangar {
     this.controller = Controller.getInstance();
     this.hangarBlock = createElement('div', ['hangarBlock'], document.body);
     this.headerLine = createElement('div', ['headerLine'], this.hangarBlock);
-    this.hangarHeader = createElement(
+    this.header = createElement(
       'h3',
       ['hangarHeader'],
       this.headerLine,
@@ -99,7 +99,8 @@ class Hangar {
 
   async countPages(): Promise<void> {
     const obj = await this.controller.getGarageObject();
-    this.pagesQuantity = Math.ceil(Object.keys(obj).length / 7);
+    const itemsOnPage = 7;
+    this.pagesQuantity = Math.ceil(Object.keys(obj).length / itemsOnPage);
     if (this.pageNum === this.pagesQuantity) {
       this.nextBtn.button.classList.add('inactive');
     }
