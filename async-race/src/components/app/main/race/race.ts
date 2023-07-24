@@ -6,7 +6,7 @@ import {
   NameFirstPart,
   NameSecondPart,
   BalloonColor,
-  QueryParams,
+  QueryBurnerParams,
 } from '../../../../utilities/types';
 import Controller from '../../../../utilities/server-requests';
 import BalloonBlock from './hangar/balloon-block/balloon-block';
@@ -260,7 +260,7 @@ class Race {
 
   async pushUpButton(elem: HTMLDivElement) /*: Promise<void>*/ {
     if (!elem.classList.contains('inactive')) {
-      let data: QueryParams = {
+      let data: QueryBurnerParams = {
         id: Number(elem.id),
         status: 'started',
       };
@@ -319,7 +319,7 @@ class Race {
 
   async pushLandButton(elem: HTMLDivElement): Promise<void> {
     if (!elem.classList.contains('inactive')) {
-      let data: QueryParams = {
+      let data: QueryBurnerParams = {
         id: Number(elem.id),
         status: 'stopped',
       };

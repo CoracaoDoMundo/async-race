@@ -91,9 +91,16 @@ export enum BalloonColor {
   '#0dfc00',
 }
 
-export type QueryParams = {
+export type QueryBurnerParams = {
   id: number;
   status: 'started' | 'stopped' | 'drive';
+};
+
+export type QueryWinnersParams = {
+  page: number;
+  limit?: number;
+  sort?: 'id' | 'wins' | 'time';
+  order?: 'ASC' | 'DESC';
 };
 
 export type StartRaceData = {

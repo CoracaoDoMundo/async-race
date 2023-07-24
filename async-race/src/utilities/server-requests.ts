@@ -1,5 +1,5 @@
 import { createElement } from './service-functions';
-import { BalloonData, QueryParams, StartRaceData } from './types';
+import { BalloonData, QueryBurnerParams, StartRaceData } from './types';
 
 class Controller {
   private static instance: Controller;
@@ -93,11 +93,11 @@ class Controller {
     balloon();
   }
 
-  generateQueryString(data: QueryParams): string {
+  generateQueryString(data: QueryBurnerParams): string {
     return `?id=${data.id}&status=${data.status}`;
   }
 
-  startStopBurner(data: QueryParams): Promise<StartRaceData | void> {
+  startStopBurner(data: QueryBurnerParams): Promise<StartRaceData | void> {
     const race = async (): Promise<StartRaceData | void> => {
       const params = this.generateQueryString(data);
       const resp = await fetch(`${this.url}/engine${params}`, {
@@ -123,7 +123,10 @@ class Controller {
     return result;
   }
 
-  async race(data: QueryParams, timer: NodeJS.Timer): Promise<{ resp: Response, balloonId: number } | undefined > {
+  async race(
+    data: QueryBurnerParams,
+    timer: NodeJS.Timer
+  ): Promise<{ resp: Response; balloonId: number } | undefined> {
     const params = this.generateQueryString(data);
     const resp = await fetch(`${this.url}/engine${params}`, {
       method: 'PATCH',
@@ -133,7 +136,7 @@ class Controller {
     try {
       const body = await resp.json();
       // console.log('resp:', resp);
-      return { resp, balloonId }
+      return { resp, balloonId };
     } catch (error) {
       switch (resp.status) {
         case 500:
@@ -162,12 +165,23 @@ class Controller {
   }
 
   switchBalloonEngineToDrive(
-    data: QueryParams,
+    data: QueryBurnerParams,
     timer: NodeJS.Timer
-  ): Promise<{ resp: Response, balloonId: number } | undefined > {
+  ): Promise<{ resp: Response; balloonId: number } | undefined> {
     const result = this.race(data, timer);
     console.log('result:', result);
     return result;
+  }
+
+  async getWinners(
+    page: number,
+    sort?: 'id' | 'wins' | 'time',
+    order?: 'ASC' | 'DESC',
+    limit?: number
+  ) {
+    const data = await fetch(`${this.url}/winners`);
+    const body = await data.json();
+    return body;
   }
 }
 
