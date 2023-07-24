@@ -3,14 +3,18 @@
 
 .winnersTableBlock {
   display: grid;
-  grid-template-columns: 10% 10% 20% 5% 20%;
+  grid-template-columns: 10% 8% 20% 5% 20%;
   grid-template-rows: auto;
 }
 
 .cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid $font-color;
-  text-align: center;
   color: $font-color;
+  max-height: 1.5rem;
+  padding: 0.3em 0;
 }
 
 .tableHeadline {

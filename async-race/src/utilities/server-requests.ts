@@ -202,7 +202,7 @@ class Controller {
         method: 'GET',
       });
       const body = await winners.json();
-      console.log('winners:', body);
+      // console.log('winners:', body);
       return body;
     } catch {
       console.log('Wrong winners request!');

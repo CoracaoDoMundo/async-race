@@ -3,6 +3,7 @@ import { createElement } from '../../../../../utilities/service-functions';
 import Controller from '../../../../../utilities/server-requests';
 import Button from '../../button/button';
 import { columnNames } from '../../../../../utilities/types';
+import Balloon from '../../race/hangar/balloon-block/balloon/balloon';
 
 class WinnersTable {
   private controller: Controller;
@@ -55,6 +56,7 @@ class WinnersTable {
       this.winnersBlock
     );
     this.drawTableHeadline(this.winnersTableBlock);
+    this.fillTable(this.pageNum, this.winnersTableBlock);
 
     this.paginationButtonsBlock = createElement(
       'div',
@@ -81,10 +83,90 @@ class WinnersTable {
         container
       );
       const columnName = createElement(
-        'div',
+        'span',
         ['columnName'],
         columnNameBlock,
         columnNames[i]
+      );
+      i += 1;
+    }
+  }
+
+  async fillTable(page: number, container: HTMLDivElement) {
+    const itemsOnPage = 10;
+    const data = {
+      page: page,
+      limit: 10,
+    };
+    const obj = await this.controller.getWinners(data);
+    const length = Object.values(obj).length;
+    let color: string = '#fafafa';
+    let name: string = '';
+    let wins: number = 1;
+    let time: number;
+    let i = 0 + (page - 1) * itemsOnPage;
+    while (i < itemsOnPage && i < length) {
+      const numContainer: HTMLDivElement = createElement(
+        'div',
+        ['numContainer', 'cell'],
+        container
+      );
+      const num: HTMLSpanElement = createElement(
+        'span',
+        ['num'],
+        numContainer,
+        `${(i + 1) * page}`
+      );
+      const balloonContainer: HTMLDivElement = createElement(
+        'div',
+        ['balloonContainer', 'cell'],
+        container
+      );
+      const balloon = new Balloon();
+      if (obj[i].color) {
+        color = obj[i].color;
+      }
+      balloon.draw(balloonContainer, color);
+      balloon.balloon.classList.remove('animatedBalloon');
+      const nameContainer: HTMLDivElement = createElement(
+        'div',
+        ['nameContainer', 'cell'],
+        container
+      );
+      if (obj[i].name) {
+        name = obj[i].name;
+      }
+      const winnerName: HTMLSpanElement = createElement(
+        'span',
+        ['winnerName'],
+        nameContainer,
+        `${name}`
+      );
+      const winsNumContainer: HTMLDivElement = createElement(
+        'div',
+        ['winsNumContainer', 'cell'],
+        container
+      );
+      if (obj[i].wins) {
+        wins = obj[i].wins;
+      }
+      const winsNum: HTMLSpanElement = createElement(
+        'span',
+        ['winsNum'],
+        winsNumContainer,
+        `${wins}`
+      );
+      const bestTimeContainer: HTMLDivElement = createElement(
+        'div',
+        ['bestTimeContainer', 'cell'],
+        container
+      );
+      time = obj[i].time;
+      const bestTime: HTMLSpanElement = createElement(
+        'span',
+        ['bestTime'],
+        bestTimeContainer,
+        `${time}`
       );
       i += 1;
     }
