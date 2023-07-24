@@ -377,11 +377,14 @@ class Race {
           .then((result: { resp: Response; balloonId: number } | undefined) => {
             if (result) {
               const { resp, balloonId } = result;
-              console.log('id:', balloonId);
-              const winnerName = this.hangar.balloonBlocks.filter((el) => {
-                el.balloonName.id === String(balloonId);
+              // console.log('id:', balloonId);
+              let winnerName: string;
+              this.hangar.balloonBlocks.forEach((el) => {
+                if (Number(el.balloonName.id) === balloonId) {
+                  winnerName = el.balloonName.innerText;
+                  console.log('winnerName:', winnerName);
+                };
               });
-              console.log('winnerName:', winnerName);
             } else {
               // console.log('Unfortunately, there is no winner!');
             }
