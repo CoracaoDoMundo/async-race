@@ -27,6 +27,11 @@
   margin: 0 0 0.5rem;
 }
 
+.balloonBlocksContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .balloonBlock {
   display: flex;
   flex-direction: column;

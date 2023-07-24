@@ -9,7 +9,7 @@ class App {
 
   constructor() {
     this.header = new Header();
-    this.main = new Main();
+    this.main = new Main(this.header.hangarBtn, this.header.winnersBtn);
   }
 
   start(): void {}

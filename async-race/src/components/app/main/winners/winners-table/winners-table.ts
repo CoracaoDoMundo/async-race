@@ -1,5 +1,8 @@
 import './winners-table.scss';
-import { createElement } from '../../../../../utilities/service-functions';
+import {
+  createElement,
+  insertElement,
+} from '../../../../../utilities/service-functions';
 import Controller from '../../../../../utilities/server-requests';
 import Button from '../../button/button';
 import { columnNames } from '../../../../../utilities/types';
@@ -7,67 +10,58 @@ import Balloon from '../../race/hangar/balloon-block/balloon/balloon';
 
 class WinnersTable {
   private controller: Controller;
-  public winnersBlock: HTMLDivElement;
-  private headerLine: HTMLDivElement;
-  private header: HTMLHeadingElement;
-  public winnersNum: HTMLHeadingElement;
-  private paginationLine: HTMLDivElement;
-  private pageText: HTMLHeadingElement;
-  public pageNumContainer: HTMLHeadingElement;
+  public winnersBlock: HTMLDivElement = document.createElement('div');
+  private headerLine: HTMLDivElement = document.createElement('div');
+  private header: HTMLHeadingElement = document.createElement('h3');
+  public winnersNum: HTMLHeadingElement = document.createElement('h3');
+  private paginationLine: HTMLDivElement = document.createElement('div');
+  private pageText: HTMLHeadingElement = document.createElement('h5');
+  public pageNumContainer: HTMLHeadingElement = document.createElement('h5');
   public pageNum: number = 1;
   public pagesQuantity: number = 1;
-  private winnersTableBlock: HTMLDivElement;
-  private paginationButtonsBlock: HTMLDivElement;
-  public prevBtn: Button;
-  public nextBtn: Button;
+  private winnersTableBlock: HTMLDivElement = document.createElement('div');
+  private paginationButtonsBlock: HTMLDivElement =
+    document.createElement('div');
+  public prevBtn: Button = new Button(this.paginationButtonsBlock, 'PREV');
+  public nextBtn: Button = new Button(this.paginationButtonsBlock, 'NEXT');
+  private restartQuantity: number = 0;
 
   constructor() {
     this.controller = Controller.getInstance();
-    this.winnersBlock = createElement('div', ['winnersBlock'], document.body);
-    this.headerLine = createElement('div', ['headerLine'], this.winnersBlock);
-    this.header = createElement(
-      'h3',
-      ['winnersHeader'],
-      this.headerLine,
-      'Winners'
-    );
-    this.winnersNum = createElement('h3', ['balloonsNum'], this.headerLine);
+  }
+
+  draw() {
+    insertElement(this.winnersBlock, ['winnersBlock'], document.body);
+    insertElement(this.headerLine, ['headerLine'], this.winnersBlock);
+    insertElement(this.header, ['winnersHeader'], this.headerLine, 'Winners');
+    insertElement(this.winnersNum, ['balloonsNum'], this.headerLine);
     this.updateWinnersNum(this.winnersNum);
-    this.paginationLine = createElement(
-      'div',
-      ['paginationLine'],
-      this.winnersBlock
-    );
-    this.pageText = createElement(
-      'h5',
-      ['pageText'],
-      this.paginationLine,
-      'Page'
-    );
-    this.pageNumContainer = createElement(
-      'h5',
+    insertElement(this.paginationLine, ['paginationLine'], this.winnersBlock);
+    insertElement(this.pageText, ['pageText'], this.paginationLine, 'Page');
+    insertElement(
+      this.pageNumContainer,
       ['pageNumContainer'],
       this.paginationLine,
       `# ${this.pageNum}`
     );
-    this.winnersTableBlock = createElement(
-      'div',
+    insertElement(
+      this.winnersTableBlock,
       ['winnersTableBlock'],
       this.winnersBlock
     );
-    this.drawTableHeadline(this.winnersTableBlock);
-    this.fillTable(this.pageNum, this.winnersTableBlock);
+    if (this.restartQuantity === 0) {
+      this.drawTableHeadline(this.winnersTableBlock);
+      this.fillTable(this.pageNum, this.winnersTableBlock);
+    }
 
-    this.paginationButtonsBlock = createElement(
-      'div',
+    insertElement(
+      this.paginationButtonsBlock,
       ['paginationButtonsBlock'],
       this.winnersBlock
     );
-    this.prevBtn = new Button(this.paginationButtonsBlock, 'PREV');
     if (this.pageNum === 1) {
       this.prevBtn.button.classList.add('inactive');
     }
-    this.nextBtn = new Button(this.paginationButtonsBlock, 'NEXT');
     this.countPages();
     if (this.pagesQuantity < 2) {
       this.nextBtn.button.classList.add('inactive');
@@ -75,6 +69,7 @@ class WinnersTable {
   }
 
   drawTableHeadline(container: HTMLDivElement) {
+    this.restartQuantity = 1;
     let i = 0;
     while (i < 5) {
       const columnNameBlock = createElement(

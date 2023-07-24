@@ -9,6 +9,15 @@ class Winners {
     this.controller = Controller.getInstance();
     this.winnersTable = new WinnersTable();
   }
+
+  draw() {
+    this.winnersTable.draw();
+  }
+
+  removeContentWhileChangePage() {
+    // this.winnersTable.winnersBlock.innerHTML = '';
+    this.winnersTable.winnersBlock.remove();
+  }
 }
 
 export default Winners;

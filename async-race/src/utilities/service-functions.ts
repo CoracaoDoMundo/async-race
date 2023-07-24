@@ -18,6 +18,24 @@ const createElement = <T extends HTMLElement>(
   return element;
 };
 
+const insertElement = <T extends HTMLElement>(
+  element: HTMLElement,
+  classNames: string[],
+  parentNode: HTMLElement,
+  text?: string,
+  place?: string
+): void => {
+  element.classList.add(...classNames);
+  if (text) {
+    element.textContent = text;
+  }
+  if (place === 'before') {
+    parentNode.prepend(element);
+  } else {
+    parentNode.append(element);
+  }
+};
+
 const createBalloonBlocks = (container: HTMLDivElement): HTMLDivElement[] => {
   let arr: HTMLDivElement[] = [];
   let i = 0;
@@ -45,7 +63,6 @@ const moveBalloon = (
     let currentPlace = elem.parentElement.offsetLeft;
     const endPlace = container.clientWidth - 80;
     const time = (endPlace - currentPlace) / speed;
-    // console.log('time:', time);
     const framesQuantity = time * 60;
     const shift = (endPlace - currentPlace) / framesQuantity;
     let move = setInterval(() => {
@@ -67,4 +84,4 @@ const moveBalloonOnStart = (elem: SVGElement) => {
   }
 };
 
-export { createElement, createBalloonBlocks, moveBalloon, moveBalloonOnStart };
+export { createElement, createBalloonBlocks, moveBalloon, moveBalloonOnStart, insertElement };

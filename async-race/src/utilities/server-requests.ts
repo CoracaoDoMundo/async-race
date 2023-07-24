@@ -1,4 +1,3 @@
-import { createElement } from './service-functions';
 import {
   BalloonData,
   QueryBurnerParams,
@@ -188,7 +187,7 @@ class Controller {
     timer: NodeJS.Timer
   ): Promise<{ resp: Response; balloonId: number } | undefined> {
     const result = this.race(data, timer);
-    console.log('result:', result);
+    // console.log('result:', result);
     return result;
   }
 
@@ -202,7 +201,6 @@ class Controller {
         method: 'GET',
       });
       const body = await winners.json();
-      // console.log('winners:', body);
       return body;
     } catch {
       console.log('Wrong winners request!');

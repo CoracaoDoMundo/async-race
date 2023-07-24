@@ -16,22 +16,37 @@ import {
 } from '../../../../utilities/service-functions';
 
 class Race {
-  private controls: Controls;
+  public controls: Controls;
   private controller: Controller;
-  private hangar: Hangar;
+  public hangar: Hangar;
 
   constructor() {
     this.controls = new Controls();
+    this.hangar = new Hangar();
+    this.drawHangar();
+    this.addListeners();
+    this.controller = Controller.getInstance();
+  }
+
+  draw() {
+    this.controls.draw();
+    this.hangar.draw();
+  }
+
+  addListeners() {
+    this.pushPreviousPaginationButton(this.hangar.prevBtn);
+    this.pushNextPaginationButton(this.hangar.nextBtn);
     this.addListenerOnCreateButton(this.controls.createBtn);
     this.addListenerOnUpdateButton(this.controls.updateBtn);
     this.pushGenerateBalloonsButton(this.controls.generateBtn);
     this.pushRaceButton(this.controls.raceBtn);
     this.pushResetButton(this.controls.resetBtn);
-    this.hangar = new Hangar();
-    this.pushPreviousPaginationButton(this.hangar.prevBtn);
-    this.pushNextPaginationButton(this.hangar.nextBtn);
-    this.drawHangar();
-    this.controller = Controller.getInstance();
+  }
+
+  removeContentWhileChangePage() {
+    this.controls.controlBlock.remove();
+    this.hangar.hangarBlock.remove();
+    this.hangar.balloonBlocksContainer.remove();
   }
 
   async drawHangar(): Promise<void> {
@@ -279,7 +294,7 @@ class Race {
         let animatedBalloon: SVGElement;
         let parentContainer: HTMLDivElement;
         let timer: NodeJS.Timer | undefined;
-        this.hangar.balloonBlocks.map((el) => {
+        this.hangar.balloonBlocks.forEach((el) => {
           if (data.id === Number(el.balloonSvg.balloon.id)) {
             animatedBalloon = el.balloonSvg.balloon;
             if (
@@ -302,7 +317,7 @@ class Race {
             data,
             timer
           );
-          console.log('driveResponse:', driveResponse);
+          // console.log('driveResponse:', driveResponse);
           return driveResponse;
         }
       }
@@ -332,7 +347,7 @@ class Race {
         }
 
         let animatedBalloon: SVGElement;
-        this.hangar.balloonBlocks.map((el) => {
+        this.hangar.balloonBlocks.forEach((el) => {
           if (data.id === Number(el.balloonSvg.balloon.id)) {
             animatedBalloon = el.balloonSvg.balloon;
             moveBalloonOnStart(animatedBalloon);
@@ -365,13 +380,13 @@ class Race {
         const promisesArr = this.hangar.balloonBlocks.map(async (el) => {
           let prom: { resp: Response; balloonId: number } | undefined =
             await this.pushUpButton(el.upButton.button);
-          console.log('prom:', prom);
+          // console.log('prom:', prom);
           this.controls.resetBtn.button.classList.remove('inactive');
           return prom;
         });
         const responses = await Promise.all(promisesArr);
         const alternative = await Promise.race(promisesArr);
-        console.log('alternative:', alternative);
+        // console.log('alternative:', alternative);
         // НЕКОРРЕКТНАЯ РАБОТА ОПРЕДЕЛЕНИЯ ПОБЕДИТЕЛЯ!!! NEED TO BE FIXED!
         Promise.race(responses)
           .then((result: { resp: Response; balloonId: number } | undefined) => {

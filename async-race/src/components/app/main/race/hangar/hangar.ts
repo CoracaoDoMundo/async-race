@@ -1,7 +1,7 @@
 import './hangar.scss';
 import {
-  createElement,
   createBalloonBlocks,
+  insertElement,
 } from '../../../../../utilities/service-functions';
 import Controller from '../../../../../utilities/server-requests';
 import Button from '../../button/button';
@@ -9,70 +9,62 @@ import BalloonBlock from './balloon-block/balloon-block';
 
 class Hangar {
   private controller: Controller;
-  public hangarBlock: HTMLDivElement;
-  private headerLine: HTMLDivElement;
-  private header: HTMLHeadingElement;
-  public balloonNum: HTMLHeadingElement;
-  private paginationLine: HTMLDivElement;
-  private pageText: HTMLHeadingElement;
-  public pageNumContainer: HTMLHeadingElement;
+  public hangarBlock: HTMLDivElement = document.createElement('div');
+  private headerLine: HTMLDivElement = document.createElement('div');
+  private header: HTMLHeadingElement = document.createElement('h3');
+  public balloonNum: HTMLHeadingElement = document.createElement('h3');
+  private paginationLine: HTMLDivElement = document.createElement('div');
+  private pageText: HTMLHeadingElement = document.createElement('h5');
+  public pageNumContainer: HTMLHeadingElement = document.createElement('h5');
   public pageNum: number = 1;
   public pagesQuantity: number = 1;
-  private balloonBlocksContainers: HTMLDivElement[];
-  public balloonBlocks: BalloonBlock[];
+  public balloonBlocksContainer: HTMLDivElement = document.createElement('div');
+  public balloonBlocksContainers: HTMLDivElement[] = [];
+  public balloonBlocks: BalloonBlock[] = [];
   public selected: number | null = null;
-  private paginationButtonsBlock: HTMLDivElement;
-  public prevBtn: Button;
-  public nextBtn: Button;
-  private static instance: Hangar;
+  private paginationButtonsBlock: HTMLDivElement =
+    document.createElement('div');
+  public prevBtn: Button = new Button(this.paginationButtonsBlock, 'PREV');
+  public nextBtn: Button = new Button(this.paginationButtonsBlock, 'NEXT');
+  private restartQuantity: number = 0;
 
   constructor() {
     this.controller = Controller.getInstance();
-    this.hangarBlock = createElement('div', ['hangarBlock'], document.body);
-    this.headerLine = createElement('div', ['headerLine'], this.hangarBlock);
-    this.header = createElement(
-      'h3',
-      ['hangarHeader'],
-      this.headerLine,
-      'Hangar'
-    );
-    this.balloonNum = createElement('h3', ['balloonsNum'], this.headerLine);
+  }
+
+  draw() {
+    insertElement(this.hangarBlock, ['hangarBlock'], document.body);
+    insertElement(this.headerLine, ['headerLine'], this.hangarBlock);
+    insertElement(this.header, ['hangarHeader'], this.headerLine, 'Hangar');
+    insertElement(this.balloonNum, ['balloonsNum'], this.headerLine);
     this.updateBalloonsNum(this.balloonNum);
-    this.paginationLine = createElement(
-      'div',
-      ['paginationLine'],
-      this.hangarBlock
-    );
-    this.pageText = createElement(
-      'h5',
-      ['pageText'],
-      this.paginationLine,
-      'Page'
-    );
-    // if (
-    //   localStorage.getItem('coracao_pageNum') !== null &&
-    //   localStorage.getItem('coracao_pageNum') !== undefined
-    // ) {
-    //   this.pageNum = Number(localStorage.getItem('coracao_pageNum'));
-    // }
-    this.pageNumContainer = createElement(
-      'h5',
+    insertElement(this.paginationLine, ['paginationLine'], this.hangarBlock);
+    insertElement(this.pageText, ['pageText'], this.paginationLine, 'Page');
+    insertElement(
+      this.pageNumContainer,
       ['pageNumContainer'],
       this.paginationLine,
       `# ${this.pageNum}`
     );
-    this.balloonBlocksContainers = createBalloonBlocks(this.hangarBlock);
-    this.paginationButtonsBlock = createElement(
-      'div',
+    insertElement(
+      this.balloonBlocksContainer,
+      ['balloonBlocksContainer'],
+      this.hangarBlock
+    );
+    if (this.restartQuantity === 0) {
+      this.restartQuantity = 1;
+      this.balloonBlocksContainers = createBalloonBlocks(
+        this.balloonBlocksContainer
+      );
+    }
+    insertElement(
+      this.paginationButtonsBlock,
       ['paginationButtonsBlock'],
       this.hangarBlock
     );
-    this.prevBtn = new Button(this.paginationButtonsBlock, 'PREV');
     if (this.pageNum === 1) {
       this.prevBtn.button.classList.add('inactive');
     }
-    this.nextBtn = new Button(this.paginationButtonsBlock, 'NEXT');
-    this.balloonBlocks = [];
     this.countPages();
   }
 
@@ -103,6 +95,8 @@ class Hangar {
     this.pagesQuantity = Math.ceil(Object.keys(obj).length / itemsOnPage);
     if (this.pageNum === this.pagesQuantity) {
       this.nextBtn.button.classList.add('inactive');
+    } else if (this.pagesQuantity > 1 && this.pageNum !== this.pagesQuantity) {
+      this.nextBtn.button.classList.remove('inactive');
     }
   }
 
