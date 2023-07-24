@@ -1,5 +1,11 @@
 import { createElement } from './service-functions';
-import { BalloonData, QueryBurnerParams, StartRaceData, QueryWinnersParams, QueryParams } from './types';
+import {
+  BalloonData,
+  QueryBurnerParams,
+  StartRaceData,
+  QueryWinnersParams,
+  QueryParams,
+} from './types';
 
 class Controller {
   private static instance: Controller;
@@ -186,15 +192,21 @@ class Controller {
     return result;
   }
 
-  async getWinners(
-    page: number,
-    sort?: 'id' | 'wins' | 'time',
-    order?: 'ASC' | 'DESC',
-    limit?: number
-  ) {
-    const data = await fetch(`${this.url}/winners`);
-    const body = await data.json();
-    return body;
+  async getWinners(data?: QueryWinnersParams) {
+    try {
+      let params: string = '';
+      if (data) {
+        params = this.generateQueryString(data);
+      }
+      const winners = await fetch(`${this.url}/winners${params}`, {
+        method: 'GET',
+      });
+      const body = await winners.json();
+      console.log('winners:', body);
+      return body;
+    } catch {
+      console.log('Wrong winners request!');
+    }
   }
 }
 
