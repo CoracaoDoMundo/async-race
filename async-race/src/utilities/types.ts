@@ -97,11 +97,13 @@ export type QueryBurnerParams = {
 };
 
 export type QueryWinnersParams = {
-  page: number;
+  page?: number;
   limit?: number;
   sort?: 'id' | 'wins' | 'time';
   order?: 'ASC' | 'DESC';
 };
+
+export type QueryParams = QueryBurnerParams | QueryWinnersParams;
 
 export type StartRaceData = {
   velocity: number;

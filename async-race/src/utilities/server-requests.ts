@@ -1,5 +1,5 @@
 import { createElement } from './service-functions';
-import { BalloonData, QueryBurnerParams, StartRaceData } from './types';
+import { BalloonData, QueryBurnerParams, StartRaceData, QueryWinnersParams, QueryParams } from './types';
 
 class Controller {
   private static instance: Controller;
@@ -93,8 +93,21 @@ class Controller {
     balloon();
   }
 
-  generateQueryString(data: QueryBurnerParams): string {
-    return `?id=${data.id}&status=${data.status}`;
+  generateQueryString(data: QueryParams): string {
+    // console.log('typeof:', typeof data);
+    let result = '?';
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key)) {
+        // console.log('key:', key);
+        const value = String(data[key as keyof QueryParams]);
+        if (result === '?') {
+          result = result + `${key}=${value}`;
+        } else {
+          result = result + `&${key}=${value}`;
+        }
+      }
+    }
+    return result;
   }
 
   startStopBurner(data: QueryBurnerParams): Promise<StartRaceData | void> {
