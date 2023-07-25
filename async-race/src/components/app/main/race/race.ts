@@ -144,6 +144,7 @@ class Race {
         .then(() => {
           this.hangar.updateBalloonsNum(this.hangar.balloonNum);
           this.hangar.countPages();
+          this.controller.deleteWinner(id);
           this.controls.raceBtn.button.classList.remove('inactive');
           this.controls.resetBtn.button.classList.add('inactive');
         });
