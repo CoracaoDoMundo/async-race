@@ -118,6 +118,14 @@ export enum columnNames {
   'Best time (sec)',
 }
 
+export type winnerInfo = {
+  wins: number;
+  time: number;
+  id: number;
+  name: string;
+  color: string | null;
+}
+
 export type winnerRespond = {
   id: number,
   wins: number,
@@ -125,16 +133,3 @@ export type winnerRespond = {
   name: string,
   color: string,
 }
-
-export type winnerInfo = {
-  id: number;
-  name: string;
-  color: string;
-  time: number;
-};
-
-export type winnerUpdateInfo = {
-  id: number;
-  wins: number;
-  time: number;
-};

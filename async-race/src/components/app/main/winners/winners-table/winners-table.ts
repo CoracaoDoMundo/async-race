@@ -119,7 +119,7 @@ class WinnersTable {
           container
         );
         const balloon = new Balloon();
-        if (obj[i].color === undefined) {
+        if (obj[i].color !== undefined) {
           color = obj[i].color;
         }
         balloon.draw(balloonContainer, color);
@@ -129,7 +129,7 @@ class WinnersTable {
           ['nameContainer', 'cell'],
           container
         );
-        if (obj[i].name) {
+        if (obj[i].name !== undefined) {
           name = obj[i].name;
         }
         const winnerName: HTMLSpanElement = createElement(
@@ -174,8 +174,10 @@ class WinnersTable {
     const itemsOnPage = 10;
     if (obj instanceof Object) {
       this.pagesQuantity = Math.ceil(Object.keys(obj).length / itemsOnPage);
-      if (this.pageNum === this.pagesQuantity) {
-        //   this.nextBtn.button.classList.add('inactive');
+      if (this.pageNum !== this.pagesQuantity && this.pagesQuantity > 1) {
+        this.nextBtn.button.classList.remove('inactive');
+      } else if (this.pageNum === this.pagesQuantity) {
+        this.nextBtn.button.classList.add('inactive');
       }
     }
   }

@@ -4,9 +4,10 @@ import {
   StartRaceData,
   QueryWinnersParams,
   QueryParams,
+  // winnerInfo,
+  // winnerUpdateInfo,
   winnerInfo,
-  winnerUpdateInfo,
-  winnerRespond
+  winnerRespond,
 } from './types';
 
 class Controller {
@@ -145,7 +146,8 @@ class Controller {
   async race(
     data: QueryBurnerParams,
     timer: NodeJS.Timer,
-    velocity: number
+    velocity: number,
+    isRace: boolean
   ): Promise<
     { resp: Response; balloonId: number; velocity: number } | undefined
   > {
@@ -154,21 +156,25 @@ class Controller {
       method: 'PATCH',
     });
     const balloonId = data.id;
-    // console.log('resp_drive:', resp);
     try {
       const body = await resp.json();
-      // console.log('resp:', resp);
       return { resp, balloonId, velocity };
     } catch (error) {
       switch (resp.status) {
         case 500:
           clearInterval(timer);
-          console.log(
-            `Balloon has been landed suddenly. It's burner was broken down.`
-          );
-          throw new Error(
-            'Balloon has been landed suddenly. Its burner was broken down.'
-          );
+          if (isRace === true) {
+            console.log(
+              `Balloon has been landed suddenly. It's burner was broken down.`
+            );
+            throw new Error(
+              `Balloon has been landed suddenly. It's burner was broken down.`
+            );
+          } else {
+            console.log(
+              `Balloon has been landed suddenly. It's burner was broken down.`
+            );
+          }
           break;
         case 400:
           console.log('Wrong parameters for start of the moving');
@@ -192,12 +198,13 @@ class Controller {
   switchBalloonEngineToDrive(
     data: QueryBurnerParams,
     timer: NodeJS.Timer,
-    velocity: number
+    velocity: number,
+    isRace: boolean
   ): Promise<
     { resp: Response; balloonId: number; velocity: number } | undefined
   > {
     return new Promise((resolve, reject) => {
-      this.race(data, timer, velocity)
+      this.race(data, timer, velocity, isRace)
         .then((resp) => {
           resolve(resp);
         })
@@ -207,7 +214,9 @@ class Controller {
     });
   }
 
-  async getWinners(data?: QueryWinnersParams): Promise<Array<winnerRespond> | undefined> {
+  async getWinners(
+    data?: QueryWinnersParams
+  ): Promise<Array<winnerRespond> | undefined> {
     try {
       let params: string = '';
       if (data) {
@@ -235,7 +244,11 @@ class Controller {
     }
   }
 
-  async createWinner(data: winnerInfo): Promise<void> {
+  async createWinner(data: winnerInfo, wins?: number): Promise<void> {
+    let currentWins: number = 1;
+    if (wins) {
+      currentWins = wins;
+    }
     const resp = await fetch(`${this.url}/winners`, {
       method: 'POST',
       headers: {
@@ -243,7 +256,7 @@ class Controller {
       },
       body: JSON.stringify({
         id: data.id,
-        wins: 1,
+        wins: data.wins,
         name: data.name,
         color: data.color,
         time: data.time,
@@ -251,17 +264,37 @@ class Controller {
     });
   }
 
-  async updateWinner(data: winnerUpdateInfo): Promise<void> {
-    const resp = await fetch(`${this.url}/winners/${data.id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        wins: data.wins,
-        time: data.time,
-      }),
-    });
+  // async updateWinner(data: winnerRespond): Promise<void> {
+  //   console.log(3);
+  //   const winner = async (): Promise<void> => {
+  //     await fetch(`${this.url}/winners/${data.id}`, {
+  //       method: 'PATCH',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         wins: data.wins,
+  //         time: data.time,
+  //       }),
+  //     });
+  //   };
+  //   winner();
+  // }
+
+  async chooseUpdateOrCreateUser(id: number, data: winnerInfo) {
+    const winner = await this.getWinner(id);
+    let wins: number;
+    if (winner instanceof Object) {
+      if (Object.keys(winner).length === 0) {
+        if (data) {
+          this.createWinner(data);
+        }
+      } else {
+        await this.deleteWinner(data.id);
+        wins = winner.wins + 1;
+        this.createWinner(data, wins);
+      }
+    }
   }
 
   async deleteWinner(id: number): Promise<void> {

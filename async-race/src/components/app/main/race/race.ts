@@ -13,7 +13,7 @@ import BalloonBlock from './hangar/balloon-block/balloon-block';
 import {
   moveBalloon,
   moveBalloonOnStart,
-  createWinnerAnnounce
+  createWinnerAnnounce,
 } from '../../../../utilities/service-functions';
 
 class Race {
@@ -273,7 +273,8 @@ class Race {
   }
 
   async pushUpButton(
-    elem: HTMLDivElement
+    elem: HTMLDivElement,
+    isRace: boolean
   ): Promise<
     { resp: Response; balloonId: number; velocity: number } | undefined
   > {
@@ -284,7 +285,6 @@ class Race {
       };
       const startResponse = await this.controller.startStopBurner(data);
       if (startResponse) {
-        // console.log('el id:', data.id,'startResponse:', startResponse);
         const stopBtn = elem.nextSibling ? elem.nextSibling : null;
         if (stopBtn instanceof HTMLDivElement) {
           stopBtn.classList.remove('inactive');
@@ -316,9 +316,9 @@ class Race {
           let driveResponse = await this.controller.switchBalloonEngineToDrive(
             data,
             timer,
-            startResponse.velocity
+            startResponse.velocity,
+            isRace
           );
-          // console.log('el id:', data.id, 'driveResponse:', driveResponse);
           return driveResponse;
         }
       }
@@ -328,7 +328,7 @@ class Race {
   addListenerOnUpButton(arr: BalloonBlock[]): void {
     arr.forEach((elem): void => {
       elem.upButton.button.addEventListener('click', () => {
-        this.pushUpButton(elem.upButton.button);
+        this.pushUpButton(elem.upButton.button, false);
       });
     });
   }
@@ -375,8 +375,7 @@ class Race {
         const promisesArr = this.hangar.balloonBlocks.map(async (el) => {
           let prom:
             | { resp: Response; balloonId: number; velocity: number }
-            | undefined = await this.pushUpButton(el.upButton.button);
-          // console.log('return drive func:', prom);
+            | undefined = await this.pushUpButton(el.upButton.button, true);
           this.controls.resetBtn.button.classList.remove('inactive');
           return prom;
         });
@@ -384,21 +383,31 @@ class Race {
 
         if (winnerPromise) {
           const { resp, balloonId, velocity } = winnerPromise;
-          console.log('id:', balloonId);
           let winnerName: string;
-          let time: number;
-          this.hangar.balloonBlocks.forEach((el) => {
+          let winnerTime: number;
+          let winnerColor: string | null;
+          this.hangar.balloonBlocks.forEach(async (el) => {
             if (Number(el.balloonName.id) === balloonId) {
               winnerName = el.balloonName.innerText;
-              console.log('WINNER:', winnerName);
-              time =
+              winnerTime =
                 (this.hangar.balloonBlocksContainer.clientWidth -
                   16.6 -
                   14.6 -
                   4.8) /
                 velocity;
-              console.log('time:', time.toFixed(2));
-              createWinnerAnnounce(document.body, winnerName, String(time.toFixed(2)));
+              winnerColor = el.balloonSvg.balloon.getAttribute('color');
+              createWinnerAnnounce(
+                document.body,
+                winnerName,
+                String(winnerTime.toFixed(2))
+              );
+              this.controller.chooseUpdateOrCreateUser(balloonId, {
+                wins: 1,
+                time: Number(winnerTime.toFixed(2)),
+                id: balloonId,
+                name: winnerName,
+                color: winnerColor,
+              });
             }
           });
         } else {

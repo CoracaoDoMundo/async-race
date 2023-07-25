@@ -48,6 +48,7 @@ class Balloon {
       }
       secondGBlock.append(path);
     }
+    this.balloon.setAttribute('color', color);
     this.balloon.append(gBlock);
     gBlock.append(secondGBlock);
     container.append(this.balloon);
