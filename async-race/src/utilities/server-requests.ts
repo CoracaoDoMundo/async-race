@@ -244,11 +244,17 @@ class Controller {
     }
   }
 
-  async createWinner(data: winnerInfo, wins?: number): Promise<void> {
-    let currentWins: number = 1;
+  async createWinner(data: winnerInfo, wins?: number, bestTime?: number): Promise<void> {
+    let currentWins: number;
+    let currentBestTime: number = data.time;
     if (wins) {
       currentWins = wins;
+    } else {
+      currentWins = 1;
     }
+    if (bestTime && bestTime < data.time) {
+      currentBestTime = bestTime;
+    } 
     const resp = await fetch(`${this.url}/winners`, {
       method: 'POST',
       headers: {
@@ -256,35 +262,21 @@ class Controller {
       },
       body: JSON.stringify({
         id: data.id,
-        wins: data.wins,
+        wins: currentWins,
         name: data.name,
         color: data.color,
-        time: data.time,
+        time: currentBestTime,
       }),
     });
   }
 
-  // async updateWinner(data: winnerRespond): Promise<void> {
-  //   console.log(3);
-  //   const winner = async (): Promise<void> => {
-  //     await fetch(`${this.url}/winners/${data.id}`, {
-  //       method: 'PATCH',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({
-  //         wins: data.wins,
-  //         time: data.time,
-  //       }),
-  //     });
-  //   };
-  //   winner();
-  // }
-
   async chooseUpdateOrCreateUser(id: number, data: winnerInfo) {
     const winner = await this.getWinner(id);
     let wins: number;
+    let time: number;
     if (winner instanceof Object) {
+      console.log('winner.wins:', winner.wins);
+      console.log('winner.time:', winner.time);
       if (Object.keys(winner).length === 0) {
         if (data) {
           this.createWinner(data);
@@ -292,7 +284,9 @@ class Controller {
       } else {
         await this.deleteWinner(data.id);
         wins = winner.wins + 1;
-        this.createWinner(data, wins);
+        time = winner.time;
+        console.log('wins:', wins);
+        this.createWinner(data, wins, time);
       }
     }
   }

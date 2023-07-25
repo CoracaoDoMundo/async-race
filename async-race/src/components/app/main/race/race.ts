@@ -183,7 +183,6 @@ class Race {
       ) {
         this.hangar.prevBtn.button.classList.remove('inactive');
         this.hangar.pageNum += 1;
-        localStorage.setItem('coracao_pageNum', `${this.hangar.pageNum}`);
         this.hangar.pageNumContainer.textContent = `# ${this.hangar.pageNum}`;
         this.hangar.cleanBalloonBlocks();
         this.drawHangar();
@@ -201,7 +200,6 @@ class Race {
       if (this.hangar.pagesQuantity > 1 && this.hangar.pageNum > 1) {
         this.hangar.nextBtn.button.classList.remove('inactive');
         this.hangar.pageNum -= 1;
-        localStorage.setItem('coracao_pageNum', `${this.hangar.pageNum}`);
         this.hangar.pageNumContainer.textContent = `# ${this.hangar.pageNum}`;
         this.hangar.cleanBalloonBlocks();
         this.drawHangar();

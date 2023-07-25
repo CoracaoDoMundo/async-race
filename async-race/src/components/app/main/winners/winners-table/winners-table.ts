@@ -19,7 +19,7 @@ class WinnersTable {
   public pageNumContainer: HTMLHeadingElement = document.createElement('h5');
   public pageNum: number = 1;
   public pagesQuantity: number = 1;
-  private winnersTableBlock: HTMLDivElement = document.createElement('div');
+  public winnersTableBlock: HTMLDivElement = document.createElement('div');
   private paginationButtonsBlock: HTMLDivElement =
     document.createElement('div');
   public prevBtn: Button = new Button(this.paginationButtonsBlock, 'PREV');
@@ -101,7 +101,7 @@ class WinnersTable {
       let wins: number = 1;
       let time: number;
       let i = 0 + (page - 1) * itemsOnPage;
-      while (i < itemsOnPage && i < length) {
+      while (i < (itemsOnPage * page) && i < length) {
         const numContainer: HTMLDivElement = createElement(
           'div',
           ['numContainer', 'cell'],
@@ -111,7 +111,7 @@ class WinnersTable {
           'span',
           ['num'],
           numContainer,
-          `${(i + 1) * page}`
+          `${i + 1}`
         );
         const balloonContainer: HTMLDivElement = createElement(
           'div',

@@ -63,8 +63,6 @@ const moveBalloon = (
     let currentPlace = elem.parentElement.offsetLeft;
     const endPlace = container.clientWidth - 80;
     const time = (endPlace - currentPlace) / speed;
-    // console.log('elem.id:', elem.id);
-    // console.log('time:',  time.toFixed(2));
     const framesQuantity = time * 60;
     const shift = (endPlace - currentPlace) / framesQuantity;
     let move = setInterval(() => {
@@ -86,17 +84,17 @@ const moveBalloonOnStart = (elem: SVGElement) => {
   }
 };
 
-const createWinnerAnnounce = (container: HTMLElement, name: string, time: string) => {
+const createWinnerAnnounce = (container: HTMLElement, name: string, time: string): void => {
   if (name === '') {
     name = 'no name';
   }
   const announceInfo = `The winner is ${name} balloon for ${time} seconds!`;
-  const announceCover = createElement(
+  const announceCover: HTMLDivElement = createElement(
     'div',
     ['announceCover'],
     container
   );
-  const announceWindow = createElement(
+  const announceWindow: HTMLDivElement = createElement(
     'div',
     ['announceWindow'],
     announceCover,
@@ -104,6 +102,7 @@ const createWinnerAnnounce = (container: HTMLElement, name: string, time: string
   );
 
   announceCover.addEventListener('click', () => announceCover.remove());
+
 }
 
 export { createElement, createBalloonBlocks, moveBalloon, moveBalloonOnStart, insertElement, createWinnerAnnounce };
