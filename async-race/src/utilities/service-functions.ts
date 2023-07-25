@@ -86,4 +86,24 @@ const moveBalloonOnStart = (elem: SVGElement) => {
   }
 };
 
-export { createElement, createBalloonBlocks, moveBalloon, moveBalloonOnStart, insertElement };
+const createWinnerAnnounce = (container: HTMLElement, name: string, time: string) => {
+  if (name === '') {
+    name = 'no name';
+  }
+  const announceInfo = `The winner is ${name} balloon for ${time} seconds!`;
+  const announceCover = createElement(
+    'div',
+    ['announceCover'],
+    container
+  );
+  const announceWindow = createElement(
+    'div',
+    ['announceWindow'],
+    announceCover,
+    announceInfo
+  );
+
+  announceCover.addEventListener('click', () => announceCover.remove());
+}
+
+export { createElement, createBalloonBlocks, moveBalloon, moveBalloonOnStart, insertElement, createWinnerAnnounce };

@@ -13,6 +13,7 @@ import BalloonBlock from './hangar/balloon-block/balloon-block';
 import {
   moveBalloon,
   moveBalloonOnStart,
+  createWinnerAnnounce
 } from '../../../../utilities/service-functions';
 
 class Race {
@@ -29,7 +30,7 @@ class Race {
   }
 
   draw() {
-    // alert('Привет! Я тут немного воюю с промисами для определения победителя гонки, поэтому буду очень признательна, если вернешься для проверки работы в среду. Заранее спасибо!')
+    // alert('Привет! Я тут немного воюю с сохранинем данных в winners, поэтому буду очень признательна, если вернешься для проверки работы в среду. Заранее спасибо!')
     this.controls.draw();
     this.hangar.draw();
   }
@@ -271,24 +272,25 @@ class Race {
     });
   }
 
-  async pushUpButton(elem: HTMLDivElement) /*: Promise<void>*/ {
+  async pushUpButton(
+    elem: HTMLDivElement
+  ): Promise<
+    { resp: Response; balloonId: number; velocity: number } | undefined
+  > {
     if (!elem.classList.contains('inactive')) {
       let data: QueryBurnerParams = {
         id: Number(elem.id),
         status: 'started',
       };
-      // console.log('data before start/stop:', data);
-      // let driveResponse: Promise<{ success: boolean } | void>;
       const startResponse = await this.controller.startStopBurner(data);
       if (startResponse) {
-        // console.log('startResponse:', startResponse);
+        // console.log('el id:', data.id,'startResponse:', startResponse);
         const stopBtn = elem.nextSibling ? elem.nextSibling : null;
         if (stopBtn instanceof HTMLDivElement) {
           stopBtn.classList.remove('inactive');
           elem.classList.add('inactive');
         }
         data.status = 'drive';
-        // console.log('data before drive:', data);
         let animatedBalloon: SVGElement;
         let parentContainer: HTMLDivElement;
         let timer: NodeJS.Timer | undefined;
@@ -316,7 +318,7 @@ class Race {
             timer,
             startResponse.velocity
           );
-          // console.log('driveResponse:', driveResponse);
+          // console.log('el id:', data.id, 'driveResponse:', driveResponse);
           return driveResponse;
         }
       }
@@ -371,16 +373,14 @@ class Race {
       if (!elem.button.classList.contains('inactive')) {
         elem.button.classList.add('inactive');
         const promisesArr = this.hangar.balloonBlocks.map(async (el) => {
-          let prom: { resp: Response; balloonId: number; velocity: number } | undefined =
-            await this.pushUpButton(el.upButton.button);
+          let prom:
+            | { resp: Response; balloonId: number; velocity: number }
+            | undefined = await this.pushUpButton(el.upButton.button);
           // console.log('return drive func:', prom);
           this.controls.resetBtn.button.classList.remove('inactive');
           return prom;
         });
-        // console.log('promisesArr:', promisesArr);
-
         const winnerPromise = await Promise.any(promisesArr);
-        // console.log('winnerPromise:', winnerPromise);
 
         if (winnerPromise) {
           const { resp, balloonId, velocity } = winnerPromise;
@@ -391,12 +391,18 @@ class Race {
             if (Number(el.balloonName.id) === balloonId) {
               winnerName = el.balloonName.innerText;
               console.log('WINNER:', winnerName);
-              time = (this.hangar.balloonBlocksContainer.clientWidth - 16.6 - 14.6 - 4.8) / velocity;
-              // console.log('time:', time.toFixed(2));
+              time =
+                (this.hangar.balloonBlocksContainer.clientWidth -
+                  16.6 -
+                  14.6 -
+                  4.8) /
+                velocity;
+              console.log('time:', time.toFixed(2));
+              createWinnerAnnounce(document.body, winnerName, String(time.toFixed(2)));
             }
           });
-        // } else {
-        //   console.log('Unfortunately, there is no winner!');
+        } else {
+          console.log('Unfortunately, there is no winner!');
         }
       }
     });

@@ -145,7 +145,9 @@ class Controller {
     data: QueryBurnerParams,
     timer: NodeJS.Timer,
     velocity: number
-  ): Promise<{ resp: Response; balloonId: number; velocity: number } | undefined> {
+  ): Promise<
+    { resp: Response; balloonId: number; velocity: number } | undefined
+  > {
     const params = this.generateQueryString(data);
     const resp = await fetch(`${this.url}/engine${params}`, {
       method: 'PATCH',
@@ -159,10 +161,13 @@ class Controller {
     } catch (error) {
       switch (resp.status) {
         case 500:
+          clearInterval(timer);
           console.log(
             `Balloon has been landed suddenly. It's burner was broken down.`
           );
-          clearInterval(timer);
+          throw new Error(
+            'Balloon has been landed suddenly. Its burner was broken down.'
+          );
           break;
         case 400:
           console.log('Wrong parameters for start of the moving');
@@ -187,10 +192,18 @@ class Controller {
     data: QueryBurnerParams,
     timer: NodeJS.Timer,
     velocity: number
-  ): Promise<{ resp: Response; balloonId: number; velocity: number } | undefined> {
-    const result = this.race(data, timer, velocity);
-    // console.log('result:', result);
-    return result;
+  ): Promise<
+    { resp: Response; balloonId: number; velocity: number } | undefined
+  > {
+    return new Promise((resolve, reject) => {
+      this.race(data, timer, velocity)
+        .then((resp) => {
+          resolve(resp);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   }
 
   async getWinners(data?: QueryWinnersParams) {
