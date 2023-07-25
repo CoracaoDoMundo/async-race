@@ -17,6 +17,8 @@ class Winners {
   removeContentWhileChangePage() {
     this.winnersTable.winnersBlock.remove();
   }
+
+  
 }
 
 export default Winners;

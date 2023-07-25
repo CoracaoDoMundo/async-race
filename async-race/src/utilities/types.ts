@@ -117,3 +117,24 @@ export enum columnNames {
   'Wins',
   'Best time (sec)',
 }
+
+export type winnerRespond = {
+  id: number,
+  wins: number,
+  time: number
+  name: string,
+  color: string,
+}
+
+export type winnerInfo = {
+  id: number;
+  name: string;
+  color: string;
+  time: number;
+};
+
+export type winnerUpdateInfo = {
+  id: number;
+  wins: number;
+  time: number;
+};

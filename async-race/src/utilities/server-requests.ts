@@ -4,6 +4,9 @@ import {
   StartRaceData,
   QueryWinnersParams,
   QueryParams,
+  winnerInfo,
+  winnerUpdateInfo,
+  winnerRespond
 } from './types';
 
 class Controller {
@@ -99,11 +102,9 @@ class Controller {
   }
 
   generateQueryString(data: QueryParams): string {
-    // console.log('typeof:', typeof data);
     let result = '?';
     for (const key in data) {
       if (Object.prototype.hasOwnProperty.call(data, key)) {
-        // console.log('key:', key);
         const value = String(data[key as keyof QueryParams]);
         if (result === '?') {
           result = result + `${key}=${value}`;
@@ -206,7 +207,7 @@ class Controller {
     });
   }
 
-  async getWinners(data?: QueryWinnersParams) {
+  async getWinners(data?: QueryWinnersParams): Promise<Array<winnerRespond> | undefined> {
     try {
       let params: string = '';
       if (data) {
@@ -220,6 +221,53 @@ class Controller {
     } catch {
       console.log('Wrong winners request!');
     }
+  }
+
+  async getWinner(id: number): Promise<winnerRespond | undefined> {
+    try {
+      const winner = await fetch(`${this.url}/winners/${id}`, {
+        method: 'GET',
+      });
+      const body = await winner.json();
+      return body;
+    } catch {
+      console.log('Wrong winners request!');
+    }
+  }
+
+  async createWinner(data: winnerInfo): Promise<void> {
+    const resp = await fetch(`${this.url}/winners`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: data.id,
+        wins: 1,
+        name: data.name,
+        color: data.color,
+        time: data.time,
+      }),
+    });
+  }
+
+  async updateWinner(data: winnerUpdateInfo): Promise<void> {
+    const resp = await fetch(`${this.url}/winners/${data.id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        wins: data.wins,
+        time: data.time,
+      }),
+    });
+  }
+
+  async deleteWinner(id: number): Promise<void> {
+    const resp = await fetch(`${this.url}/winners/${id}`, {
+      method: 'DELETE',
+    });
   }
 }
 

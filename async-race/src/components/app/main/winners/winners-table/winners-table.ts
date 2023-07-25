@@ -94,91 +94,97 @@ class WinnersTable {
       limit: 10,
     };
     const obj = await this.controller.getWinners(data);
-    const length = Object.values(obj).length;
-    let color: string = '#fafafa';
-    let name: string = '';
-    let wins: number = 1;
-    let time: number;
-    let i = 0 + (page - 1) * itemsOnPage;
-    while (i < itemsOnPage && i < length) {
-      const numContainer: HTMLDivElement = createElement(
-        'div',
-        ['numContainer', 'cell'],
-        container
-      );
-      const num: HTMLSpanElement = createElement(
-        'span',
-        ['num'],
-        numContainer,
-        `${(i + 1) * page}`
-      );
-      const balloonContainer: HTMLDivElement = createElement(
-        'div',
-        ['balloonContainer', 'cell'],
-        container
-      );
-      const balloon = new Balloon();
-      if (obj[i].color) {
-        color = obj[i].color;
+    if (Array.isArray(obj)) {
+      const length = Object.values(obj).length;
+      let color: string = '#fafafa';
+      let name: string = '';
+      let wins: number = 1;
+      let time: number;
+      let i = 0 + (page - 1) * itemsOnPage;
+      while (i < itemsOnPage && i < length) {
+        const numContainer: HTMLDivElement = createElement(
+          'div',
+          ['numContainer', 'cell'],
+          container
+        );
+        const num: HTMLSpanElement = createElement(
+          'span',
+          ['num'],
+          numContainer,
+          `${(i + 1) * page}`
+        );
+        const balloonContainer: HTMLDivElement = createElement(
+          'div',
+          ['balloonContainer', 'cell'],
+          container
+        );
+        const balloon = new Balloon();
+        if (obj[i].color === undefined) {
+          color = obj[i].color;
+        }
+        balloon.draw(balloonContainer, color);
+        balloon.balloon.classList.remove('animatedBalloon');
+        const nameContainer: HTMLDivElement = createElement(
+          'div',
+          ['nameContainer', 'cell'],
+          container
+        );
+        if (obj[i].name) {
+          name = obj[i].name;
+        }
+        const winnerName: HTMLSpanElement = createElement(
+          'span',
+          ['winnerName'],
+          nameContainer,
+          `${name}`
+        );
+        const winsNumContainer: HTMLDivElement = createElement(
+          'div',
+          ['winsNumContainer', 'cell'],
+          container
+        );
+        if (obj[i].wins) {
+          wins = obj[i].wins;
+        }
+        const winsNum: HTMLSpanElement = createElement(
+          'span',
+          ['winsNum'],
+          winsNumContainer,
+          `${wins}`
+        );
+        const bestTimeContainer: HTMLDivElement = createElement(
+          'div',
+          ['bestTimeContainer', 'cell'],
+          container
+        );
+        time = obj[i].time;
+        const bestTime: HTMLSpanElement = createElement(
+          'span',
+          ['bestTime'],
+          bestTimeContainer,
+          `${time}`
+        );
+        i += 1;
       }
-      balloon.draw(balloonContainer, color);
-      balloon.balloon.classList.remove('animatedBalloon');
-      const nameContainer: HTMLDivElement = createElement(
-        'div',
-        ['nameContainer', 'cell'],
-        container
-      );
-      if (obj[i].name) {
-        name = obj[i].name;
-      }
-      const winnerName: HTMLSpanElement = createElement(
-        'span',
-        ['winnerName'],
-        nameContainer,
-        `${name}`
-      );
-      const winsNumContainer: HTMLDivElement = createElement(
-        'div',
-        ['winsNumContainer', 'cell'],
-        container
-      );
-      if (obj[i].wins) {
-        wins = obj[i].wins;
-      }
-      const winsNum: HTMLSpanElement = createElement(
-        'span',
-        ['winsNum'],
-        winsNumContainer,
-        `${wins}`
-      );
-      const bestTimeContainer: HTMLDivElement = createElement(
-        'div',
-        ['bestTimeContainer', 'cell'],
-        container
-      );
-      time = obj[i].time;
-      const bestTime: HTMLSpanElement = createElement(
-        'span',
-        ['bestTime'],
-        bestTimeContainer,
-        `${time}`
-      );
-      i += 1;
     }
   }
 
   async countPages(): Promise<void> {
     const obj = await this.controller.getWinners();
     const itemsOnPage = 10;
-    this.pagesQuantity = Math.ceil(Object.keys(obj).length / itemsOnPage);
-    if (this.pageNum === this.pagesQuantity) {
-      //   this.nextBtn.button.classList.add('inactive');
+    if (obj instanceof Object) {
+      this.pagesQuantity = Math.ceil(Object.keys(obj).length / itemsOnPage);
+      if (this.pageNum === this.pagesQuantity) {
+        //   this.nextBtn.button.classList.add('inactive');
+      }
     }
   }
 
   updateWinnersNum(elem: HTMLHeadingElement): void {
     this.controller.getWinners().then((obj) => {
-      elem.innerText = `(${Object.keys(obj).length})`;
+      if (obj instanceof Object) {
+        elem.innerText = `(${Object.keys(obj).length})`;
+      }
     });
   }
 }
