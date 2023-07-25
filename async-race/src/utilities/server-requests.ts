@@ -275,8 +275,6 @@ class Controller {
     let wins: number;
     let time: number;
     if (winner instanceof Object) {
-      console.log('winner.wins:', winner.wins);
-      console.log('winner.time:', winner.time);
       if (Object.keys(winner).length === 0) {
         if (data) {
           this.createWinner(data);
@@ -285,7 +283,6 @@ class Controller {
         await this.deleteWinner(data.id);
         wins = winner.wins + 1;
         time = winner.time;
-        console.log('wins:', wins);
         this.createWinner(data, wins, time);
       }
     }

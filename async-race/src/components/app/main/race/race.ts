@@ -378,39 +378,42 @@ class Race {
           this.controls.resetBtn.button.classList.remove('inactive');
           return prom;
         });
-        const winnerPromise = await Promise.any(promisesArr);
+        try {
+          const winnerPromise = await Promise.any(promisesArr);
 
-        if (winnerPromise) {
-          const { resp, balloonId, velocity } = winnerPromise;
-          let winnerName: string;
-          let winnerTime: number;
-          let winnerColor: string | null;
-          this.hangar.balloonBlocks.forEach(async (el) => {
-            if (Number(el.balloonName.id) === balloonId) {
-              winnerName = el.balloonName.innerText;
-              winnerTime =
-                (this.hangar.balloonBlocksContainer.clientWidth -
-                  16.6 -
-                  14.6 -
-                  4.8) /
-                velocity;
-              winnerColor = el.balloonSvg.balloon.getAttribute('color');
-              createWinnerAnnounce(
-                document.body,
-                winnerName,
-                String(winnerTime.toFixed(2))
-              );
-              this.controller.chooseUpdateOrCreateUser(balloonId, {
-                wins: 1,
-                time: Number(winnerTime.toFixed(2)),
-                id: balloonId,
-                name: winnerName,
-                color: winnerColor,
-              });
-            }
-          });
-        } else {
+          if (winnerPromise) {
+            const { resp, balloonId, velocity } = winnerPromise;
+            let winnerName: string;
+            let winnerTime: number;
+            let winnerColor: string | null;
+            this.hangar.balloonBlocks.forEach(async (el) => {
+              if (Number(el.balloonName.id) === balloonId) {
+                winnerName = el.balloonName.innerText;
+                winnerTime =
+                  (this.hangar.balloonBlocksContainer.clientWidth -
+                    16.6 -
+                    14.6 -
+                    4.8) /
+                  velocity;
+                winnerColor = el.balloonSvg.balloon.getAttribute('color');
+                createWinnerAnnounce(
+                  document.body,
+                  winnerName,
+                  String(winnerTime.toFixed(2))
+                );
+                this.controller.chooseUpdateOrCreateUser(balloonId, {
+                  wins: 1,
+                  time: Number(winnerTime.toFixed(2)),
+                  id: balloonId,
+                  name: winnerName,
+                  color: winnerColor,
+                });
+              }
+            });
+          }
+        } catch {
           console.log('Unfortunately, there is no winner!');
+          this.controls.resetBtn.button.classList.remove('inactive');
         }
       }
     });
