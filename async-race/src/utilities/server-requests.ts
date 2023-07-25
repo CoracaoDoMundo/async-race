@@ -143,8 +143,9 @@ class Controller {
 
   async race(
     data: QueryBurnerParams,
-    timer: NodeJS.Timer
-  ): Promise<{ resp: Response; balloonId: number } | undefined> {
+    timer: NodeJS.Timer,
+    velocity: number
+  ): Promise<{ resp: Response; balloonId: number; velocity: number } | undefined> {
     const params = this.generateQueryString(data);
     const resp = await fetch(`${this.url}/engine${params}`, {
       method: 'PATCH',
@@ -154,7 +155,7 @@ class Controller {
     try {
       const body = await resp.json();
       // console.log('resp:', resp);
-      return { resp, balloonId };
+      return { resp, balloonId, velocity };
     } catch (error) {
       switch (resp.status) {
         case 500:
@@ -184,9 +185,10 @@ class Controller {
 
   switchBalloonEngineToDrive(
     data: QueryBurnerParams,
-    timer: NodeJS.Timer
-  ): Promise<{ resp: Response; balloonId: number } | undefined> {
-    const result = this.race(data, timer);
+    timer: NodeJS.Timer,
+    velocity: number
+  ): Promise<{ resp: Response; balloonId: number; velocity: number } | undefined> {
+    const result = this.race(data, timer, velocity);
     // console.log('result:', result);
     return result;
   }

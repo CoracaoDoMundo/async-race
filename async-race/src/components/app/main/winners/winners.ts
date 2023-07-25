@@ -15,7 +15,6 @@ class Winners {
   }
 
   removeContentWhileChangePage() {
-    // this.winnersTable.winnersBlock.innerHTML = '';
     this.winnersTable.winnersBlock.remove();
   }
 }

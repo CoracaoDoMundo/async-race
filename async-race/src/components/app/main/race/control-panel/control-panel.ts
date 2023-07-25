@@ -42,7 +42,6 @@ class Controls {
     insertElement(this.inputCreateLine, ['inputsLine'], this.controlBlock);
     insertElement(this.inputUpdateLine, ['inputsLine'], this.controlBlock);
     insertElement(this.buttonsLine, ['buttonsBlock'], this.controlBlock);
-    this.updateBtn.button.style.cursor = 'default';
   }
 }
 

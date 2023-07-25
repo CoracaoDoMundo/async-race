@@ -29,6 +29,7 @@ class Race {
   }
 
   draw() {
+    // alert('Привет! Я тут немного воюю с промисами для определения победителя гонки, поэтому буду очень признательна, если вернешься для проверки работы в среду. Заранее спасибо!')
     this.controls.draw();
     this.hangar.draw();
   }
@@ -115,11 +116,7 @@ class Race {
             'disabled',
             ''
           );
-          this.toggleInactiveStatusForBtn(
-            this.controls.updateBtn.button,
-            'inactive'
-          );
-          // this.controls.updateBtn.button.classList.add('inactive');
+          this.controls.updateBtn.button.classList.add('inactive');
           const updatedGarageObj = await this.controller.getGarageObject();
           this.hangar.cleanBalloonBlocks();
           this.drawHangar();
@@ -146,6 +143,8 @@ class Race {
         .then(() => {
           this.hangar.updateBalloonsNum(this.hangar.balloonNum);
           this.hangar.countPages();
+          this.controls.raceBtn.button.classList.remove('inactive');
+          this.controls.resetBtn.button.classList.add('inactive');
         });
     });
   }
@@ -167,8 +166,7 @@ class Race {
         this.controls.inputColorUpdate.colorInput.value =
           Object.values(balloonInfo)[1];
       }
-      // this.controls.updateBtn.button.classList.remove('inactive');
-      this.toggleInactiveStatusForBtn(this.controls.updateBtn.button, 'active');
+      this.controls.updateBtn.button.classList.remove('inactive');
     });
   }
 
@@ -282,12 +280,12 @@ class Race {
       // console.log('data before start/stop:', data);
       // let driveResponse: Promise<{ success: boolean } | void>;
       const startResponse = await this.controller.startStopBurner(data);
-      // console.log('startResponse:', startResponse);
       if (startResponse) {
+        // console.log('startResponse:', startResponse);
         const stopBtn = elem.nextSibling ? elem.nextSibling : null;
         if (stopBtn instanceof HTMLDivElement) {
-          this.toggleInactiveStatusForBtn(stopBtn, 'active');
-          this.toggleInactiveStatusForBtn(elem, 'inactive');
+          stopBtn.classList.remove('inactive');
+          elem.classList.add('inactive');
         }
         data.status = 'drive';
         // console.log('data before drive:', data);
@@ -315,7 +313,8 @@ class Race {
         if (timer) {
           let driveResponse = await this.controller.switchBalloonEngineToDrive(
             data,
-            timer
+            timer,
+            startResponse.velocity
           );
           // console.log('driveResponse:', driveResponse);
           return driveResponse;
@@ -342,8 +341,8 @@ class Race {
       if (endResponse) {
         const startBtn = elem.previousSibling ? elem.previousSibling : null;
         if (startBtn instanceof HTMLDivElement) {
-          this.toggleInactiveStatusForBtn(startBtn, 'active');
-          this.toggleInactiveStatusForBtn(elem, 'inactive');
+          startBtn.classList.remove('inactive');
+          elem.classList.add('inactive');
         }
 
         let animatedBalloon: SVGElement;
@@ -365,48 +364,40 @@ class Race {
     });
   }
 
-  toggleInactiveStatusForBtn(
-    button: HTMLDivElement,
-    status: 'active' | 'inactive'
-  ) {
-    button.classList.toggle('inactive');
-  }
-
   pushRaceButton(elem: Button): void {
     elem.button.addEventListener('click', async (): Promise<void> => {
-      let promises: (Response | undefined)[] = [];
+      let promises: ({ resp: Response; balloonId: number } | undefined)[] = [];
+
       if (!elem.button.classList.contains('inactive')) {
         elem.button.classList.add('inactive');
         const promisesArr = this.hangar.balloonBlocks.map(async (el) => {
-          let prom: { resp: Response; balloonId: number } | undefined =
+          let prom: { resp: Response; balloonId: number; velocity: number } | undefined =
             await this.pushUpButton(el.upButton.button);
-          // console.log('prom:', prom);
+          // console.log('return drive func:', prom);
           this.controls.resetBtn.button.classList.remove('inactive');
           return prom;
         });
-        const responses = await Promise.all(promisesArr);
-        const alternative = await Promise.race(promisesArr);
-        // console.log('alternative:', alternative);
-        // НЕКОРРЕКТНАЯ РАБОТА ОПРЕДЕЛЕНИЯ ПОБЕДИТЕЛЯ!!! NEED TO BE FIXED!
-        Promise.race(responses)
-          .then((result: { resp: Response; balloonId: number } | undefined) => {
-            if (result) {
-              const { resp, balloonId } = result;
-              // console.log('id:', balloonId);
-              let winnerName: string;
-              this.hangar.balloonBlocks.forEach((el) => {
-                if (Number(el.balloonName.id) === balloonId) {
-                  winnerName = el.balloonName.innerText;
-                  console.log('winnerName:', winnerName);
-                };
-              });
-            } else {
-              // console.log('Unfortunately, there is no winner!');
+        // console.log('promisesArr:', promisesArr);
+
+        const winnerPromise = await Promise.any(promisesArr);
+        // console.log('winnerPromise:', winnerPromise);
+
+        if (winnerPromise) {
+          const { resp, balloonId, velocity } = winnerPromise;
+          console.log('id:', balloonId);
+          let winnerName: string;
+          let time: number;
+          this.hangar.balloonBlocks.forEach((el) => {
+            if (Number(el.balloonName.id) === balloonId) {
+              winnerName = el.balloonName.innerText;
+              console.log('WINNER:', winnerName);
+              time = (this.hangar.balloonBlocksContainer.clientWidth - 16.6 - 14.6 - 4.8) / velocity;
+              // console.log('time:', time.toFixed(2));
             }
-          })
-          .catch((error: Error) => {
-            console.log('Something went wrong!');
           });
+        // } else {
+        //   console.log('Unfortunately, there is no winner!');
+        }
       }
     });
   }

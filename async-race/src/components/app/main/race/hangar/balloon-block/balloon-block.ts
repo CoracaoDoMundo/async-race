@@ -10,7 +10,7 @@ class BalloonBlock {
   public selectBtn: Button;
   public removeBtn: Button;
   public balloonName: HTMLSpanElement;
-  private raceBlock: HTMLDivElement;
+  public raceBlock: HTMLDivElement;
   public upButton: Button;
   public landButton: Button;
   private balloon: HTMLDivElement;

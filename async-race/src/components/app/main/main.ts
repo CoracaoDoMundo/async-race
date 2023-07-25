@@ -24,7 +24,6 @@ class Main {
 
     pushWinnersBtn(elem:Button) {
       this.race.removeContentWhileChangePage();
-      console.log(this.winners);
       this.winners.draw();
     }
 
