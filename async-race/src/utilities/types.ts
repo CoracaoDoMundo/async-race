@@ -99,7 +99,7 @@ export type QueryBurnerParams = {
 export type QueryWinnersParams = {
   page?: number;
   limit?: number;
-  sort?: 'id' | 'wins' | 'time';
+  sort?: 'wins' | 'time';
   order?: 'ASC' | 'DESC';
 };
 

@@ -5,7 +5,10 @@ import {
 } from '../../../../../utilities/service-functions';
 import Controller from '../../../../../utilities/server-requests';
 import Button from '../../button/button';
-import { columnNames } from '../../../../../utilities/types';
+import {
+  columnNames,
+  QueryWinnersParams,
+} from '../../../../../utilities/types';
 import Balloon from '../../race/hangar/balloon-block/balloon/balloon';
 
 class WinnersTable {
@@ -25,6 +28,8 @@ class WinnersTable {
   public prevBtn: Button = new Button(this.paginationButtonsBlock, 'PREV');
   public nextBtn: Button = new Button(this.paginationButtonsBlock, 'NEXT');
   private restartQuantity: number = 0;
+  private winsSort: 'ASC' | 'DESC' = 'ASC';
+  private timeSort: 'ASC' | 'DESC' = 'ASC';
 
   constructor() {
     this.controller = Controller.getInstance();
@@ -72,27 +77,79 @@ class WinnersTable {
     this.restartQuantity = 1;
     let i = 0;
     while (i < 5) {
-      const columnNameBlock = createElement(
+      const columnNameBlock: HTMLDivElement = createElement(
         'div',
         ['columnNameBlock', 'tableHeadline', 'cell'],
         container
       );
-      const columnName = createElement(
+      const columnName: HTMLSpanElement = createElement(
         'span',
         ['columnName'],
         columnNameBlock,
         columnNames[i]
       );
+      if (columnName.innerText === 'Wins') {
+        columnNameBlock.style.cursor = 'pointer';
+        columnNameBlock.addEventListener('click', () => {
+          this.addListenerForSort('wins', this.winsSort);
+        });
+      }
+
+      if (columnName.innerText === 'Best time (sec)') {
+        columnNameBlock.style.cursor = 'pointer';
+        columnNameBlock.addEventListener('click', () => {
+          this.addListenerForSort('time', this.timeSort);
+        });
+      }
       i += 1;
     }
   }
 
-  async fillTable(page: number, container: HTMLDivElement) {
+  addListenerForSort(column: 'wins' | 'time', flag: 'ASC' | 'DESC') {
+    let data: QueryWinnersParams;
+    this.winnersTableBlock.innerText = '';
+    if (flag === 'ASC') {
+      data = {
+        page: this.pageNum,
+        limit: 10,
+        sort: column,
+        order: 'ASC',
+      };
+      if (column === 'wins') {
+        this.winsSort = 'DESC';
+      } else if (column === 'time') {
+        this.timeSort = 'DESC';
+      }
+    } else {
+      data = {
+        page: this.pageNum,
+        limit: 10,
+        sort: column,
+        order: 'DESC',
+      };
+      if (column === 'wins') {
+        this.winsSort = 'ASC';
+      } else if (column === 'time') {
+        this.timeSort = 'ASC';
+      }
+    }
+    this.drawTableHeadline(this.winnersTableBlock);
+    this.fillTable(this.pageNum, this.winnersTableBlock, data);
+  }
+
+  async fillTable(
+    page: number,
+    container: HTMLDivElement,
+    dataToSort?: QueryWinnersParams
+  ) {
     const itemsOnPage = 10;
-    const data = {
+    let data: QueryWinnersParams = {
       page: page,
       limit: 10,
     };
+    if (dataToSort) {
+      data = dataToSort;
+    }
     const obj = await this.controller.getWinners(data);
     if (Array.isArray(obj)) {
       const length = Object.values(obj).length;
@@ -101,7 +158,7 @@ class WinnersTable {
       let wins: number = 1;
       let time: number;
       let i = 0 + (page - 1) * itemsOnPage;
-      while (i < (itemsOnPage * page) && i < length) {
+      while (i < itemsOnPage * page && i < length) {
         const numContainer: HTMLDivElement = createElement(
           'div',
           ['numContainer', 'cell'],

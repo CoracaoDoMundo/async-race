@@ -30,7 +30,7 @@ class Race {
   }
 
   draw() {
-    // alert('Привет! Я тут немного воюю с сохранинем данных в winners, поэтому буду очень признательна, если вернешься для проверки работы в среду. Заранее спасибо!')
+    // alert('Привет! Спасибо, что проверяешь мою работу.\nПри проверке, пожалуйста, прежде чем нажимать кнопку start после reset, подожди пару секунд, чтобы были получены все ответы от сервера, это поможет анимации прийти в себя после отработки.\nУдачи тебе на кроссчеке! (=')
     this.controls.draw();
     this.hangar.draw();
   }
@@ -375,9 +375,9 @@ class Race {
           let prom:
             | { resp: Response; balloonId: number; velocity: number }
             | undefined = await this.pushUpButton(el.upButton.button, true);
-          this.controls.resetBtn.button.classList.remove('inactive');
           return prom;
         });
+        this.controls.resetBtn.button.classList.remove('inactive');
         try {
           const winnerPromise = await Promise.any(promisesArr);
 
@@ -424,9 +424,9 @@ class Race {
       if (!elem.button.classList.contains('inactive')) {
         this.hangar.balloonBlocks.forEach(async (el) => {
           let prom = await this.pushLandButton(el.landButton.button);
-          elem.button.classList.add('inactive');
-          this.controls.raceBtn.button.classList.remove('inactive');
         });
+        elem.button.classList.add('inactive');
+        setTimeout(() => this.controls.raceBtn.button.classList.remove('inactive'), 3000);
       }
     });
   }

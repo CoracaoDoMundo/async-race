@@ -22,12 +22,12 @@ class Main {
     elem.button.addEventListener('click', () => func(elem));
   }
 
-  pushWinnersBtn(elem: Button) {
+  pushWinnersBtn() {
     this.race.removeContentWhileChangePage();
     this.winners.draw();
   }
 
-  pushHangarBtn(elem: Button) {
+  pushHangarBtn() {
     this.winners.removeContentWhileChangePage();
     this.race.controls.draw();
     this.race.hangar.draw();

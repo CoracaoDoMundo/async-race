@@ -4,8 +4,6 @@ import {
   StartRaceData,
   QueryWinnersParams,
   QueryParams,
-  // winnerInfo,
-  // winnerUpdateInfo,
   winnerInfo,
   winnerRespond,
 } from './types';
@@ -109,6 +107,8 @@ class Controller {
         const value = String(data[key as keyof QueryParams]);
         if (result === '?') {
           result = result + `${key}=${value}`;
+        } else if (key === 'sort' || key === 'order') {
+          result = result + `&_${key}=${value}`;
         } else {
           result = result + `&${key}=${value}`;
         }
@@ -244,7 +244,11 @@ class Controller {
     }
   }
 
-  async createWinner(data: winnerInfo, wins?: number, bestTime?: number): Promise<void> {
+  async createWinner(
+    data: winnerInfo,
+    wins?: number,
+    bestTime?: number
+  ): Promise<void> {
     let currentWins: number;
     let currentBestTime: number = data.time;
     if (wins) {
@@ -254,7 +258,7 @@ class Controller {
     }
     if (bestTime && bestTime < data.time) {
       currentBestTime = bestTime;
-    } 
+    }
     const resp = await fetch(`${this.url}/winners`, {
       method: 'POST',
       headers: {

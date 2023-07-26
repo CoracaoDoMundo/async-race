@@ -1,13 +1,11 @@
-import Controller from '../../../../utilities/server-requests';
 import WinnersTable from './winners-table/winners-table';
 import Button from '../button/button';
+import { QueryWinnersParams } from '../../../../utilities/types';
 
 class Winners {
-  private controller: Controller;
   public winnersTable: WinnersTable;
 
   constructor() {
-    this.controller = Controller.getInstance();
     this.winnersTable = new WinnersTable();
     this.pushNextPaginationButton(this.winnersTable.nextBtn);
     this.pushPreviousPaginationButton(this.winnersTable.prevBtn);
@@ -24,7 +22,10 @@ class Winners {
   refreshWinnersTable() {
     this.winnersTable.winnersTableBlock.innerHTML = '';
     this.winnersTable.drawTableHeadline(this.winnersTable.winnersTableBlock);
-    this.winnersTable.fillTable(this.winnersTable.pageNum, this.winnersTable.winnersTableBlock);
+    this.winnersTable.fillTable(
+      this.winnersTable.pageNum,
+      this.winnersTable.winnersTableBlock
+    );
   }
 
   pushNextPaginationButton(elem: Button): void {
@@ -33,6 +34,11 @@ class Winners {
         this.winnersTable.pagesQuantity > 1 &&
         this.winnersTable.pageNum < this.winnersTable.pagesQuantity
       ) {
+        const data: QueryWinnersParams = {
+          page: this.winnersTable.pageNum,
+          limit: 10,
+        };
+
         this.winnersTable.prevBtn.button.classList.remove('inactive');
         this.winnersTable.pageNum += 1;
         this.winnersTable.pageNumContainer.textContent = `# ${this.winnersTable.pageNum}`;
@@ -46,7 +52,10 @@ class Winners {
 
   pushPreviousPaginationButton(elem: Button): void {
     elem.button.addEventListener('click', (): void => {
-      if (this.winnersTable.pagesQuantity > 1 && this.winnersTable.pageNum > 1) {
+      if (
+        this.winnersTable.pagesQuantity > 1 &&
+        this.winnersTable.pageNum > 1
+      ) {
         this.winnersTable.nextBtn.button.classList.remove('inactive');
         this.winnersTable.pageNum -= 1;
         this.winnersTable.pageNumContainer.textContent = `# ${this.winnersTable.pageNum}`;
