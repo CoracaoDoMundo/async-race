@@ -75,7 +75,11 @@ class Race {
         const arr: number[] = Object.values(obj)
           .map((el) => el.id)
           .sort((a, b) => a - b);
-        index = arr[arr.length - 1] + 1;
+        if (arr.length === 0) {
+          index = 1;
+        } else {
+          index = arr[arr.length - 1];
+        }
         const balloonInfo = await this.controller.getBalloonInfo(index);
         id =
           Object.values(balloonInfo)[Object.values(balloonInfo).length - 1] + 1;
@@ -83,7 +87,10 @@ class Race {
         await this.controller.postNewBalloon(data);
         this.controls.inputCreate.input.value = '';
         const updatedGarageObj = await this.controller.getGarageObject();
-        if (this.hangar.pageNum === this.hangar.pagesQuantity) {
+        if (
+          this.hangar.pageNum === this.hangar.pagesQuantity ||
+          this.hangar.pagesQuantity === 0
+        ) {
           this.hangar.cleanBalloonBlocks();
           this.drawHangar();
         }
@@ -119,7 +126,7 @@ class Race {
           );
           this.controls.updateBtn.button.classList.add('inactive');
           const updatedGarageObj = await this.controller.getGarageObject();
-          this.hangar.cleanBalloonBlocks();
+          await this.hangar.cleanBalloonBlocks();
           this.drawHangar();
           this.hangar.selected = null;
         }
@@ -426,7 +433,10 @@ class Race {
           let prom = await this.pushLandButton(el.landButton.button);
         });
         elem.button.classList.add('inactive');
-        setTimeout(() => this.controls.raceBtn.button.classList.remove('inactive'), 3000);
+        setTimeout(
+          () => this.controls.raceBtn.button.classList.remove('inactive'),
+          3000
+        );
       }
     });
   }
