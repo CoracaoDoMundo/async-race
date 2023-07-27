@@ -8,6 +8,7 @@ import Button from '../../button/button';
 import {
   columnNames,
   QueryWinnersParams,
+  BalloonData,
 } from '../../../../../utilities/types';
 import Balloon from '../../race/hangar/balloon-block/balloon/balloon';
 
@@ -153,8 +154,6 @@ class WinnersTable {
     const obj = await this.controller.getWinners(data);
     if (Array.isArray(obj)) {
       const length = Object.values(obj).length;
-      let color: string = '#fafafa';
-      let name: string = '';
       let wins: number = 1;
       let time: number;
       let i = 0 + (page - 1) * itemsOnPage;
@@ -176,25 +175,26 @@ class WinnersTable {
           container
         );
         const balloon = new Balloon();
-        if (obj[i].color !== undefined) {
-          color = obj[i].color;
-        }
-        balloon.draw(balloonContainer, color);
+        this.controller.getBalloonInfo(obj[i].id).then((result) => {
+          const color: string = result.color;
+          balloon.draw(balloonContainer, color);
+        });
         balloon.balloon.classList.remove('animatedBalloon');
         const nameContainer: HTMLDivElement = createElement(
           'div',
           ['nameContainer', 'cell'],
           container
         );
-        if (obj[i].name !== undefined) {
-          name = obj[i].name;
-        }
-        const winnerName: HTMLSpanElement = createElement(
-          'span',
-          ['winnerName'],
-          nameContainer,
-          `${name}`
-        );
+        this.controller.getBalloonInfo(obj[i].id).then((result) => {
+          const winnerNameStr: string = result.name;
+          console.log('name:', winnerNameStr);
+          const winnerName: HTMLSpanElement = createElement(
+            'span',
+            ['winnerName'],
+            nameContainer,
+            winnerNameStr
+          );
+        });
         const winsNumContainer: HTMLDivElement = createElement(
           'div',
           ['winsNumContainer', 'cell'],
