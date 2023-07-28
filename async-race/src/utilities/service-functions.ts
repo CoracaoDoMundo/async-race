@@ -55,24 +55,23 @@ const moveBalloon = (
   elem: SVGElement,
   container: HTMLDivElement,
   speed: number
-) => {
+): NodeJS.Timer | undefined => {
   if (elem.parentElement) {
-    let animationId: number | null;
     elem.classList.remove('animatedBalloon');
     elem.setAttribute('air', 'true');
     let currentPlace = elem.parentElement.offsetLeft;
     const endPlace = container.clientWidth - 80;
-    const time = (endPlace - currentPlace) / speed;
+    const time: number = (endPlace - currentPlace) / speed;
     const framesQuantity = time * 60;
     const shift = (endPlace - currentPlace) / framesQuantity;
-    let move = setInterval(() => {
+    const intervalId = setInterval(() => {
       currentPlace += shift;
       if (currentPlace > endPlace) {
-        clearInterval(move);
+        clearInterval(intervalId);
       }
       elem.style.transform = `translateX(${currentPlace}px)`;
     }, 16);
-    return move;
+    return intervalId;
   }
 };
 

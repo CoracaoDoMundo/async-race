@@ -87,10 +87,6 @@ class Race {
           data = { name, color, id };
           await this.controller.postNewBalloon(data);
         });
-        // id =
-        //   Object.values(balloonInfo)[Object.values(balloonInfo).length - 1] + 1;
-        // data = { name, color, id };
-        // await this.controller.postNewBalloon(data);
         this.controls.inputCreate.input.value = '';
         const updatedGarageObj = await this.controller.getGarageObject();
         if (
@@ -179,10 +175,8 @@ class Race {
           this.controls.inputUpdate.input.value = result.name;
           this.controls.inputColorUpdate.colorInput.value = result.color;
         });
-        // this.controls.inputUpdate.input.value = Object.values(balloonInfo)[0];
         this.controls.inputColorUpdate.colorInput.removeAttribute('disabled');
-        // this.controls.inputColorUpdate.colorInput.value =
-        //   Object.values(balloonInfo)[1];
+
       }
       this.controls.updateBtn.button.classList.remove('inactive');
     });
@@ -273,10 +267,7 @@ class Race {
           }
           await this.controller.postNewBalloon(data);
           await this.createHundredOfBalloons(id);
-          // Object.values(balloonInfo)[Object.values(balloonInfo).length - 1] + 1;
         });
-        // id =
-        //   Object.values(balloonInfo)[Object.values(balloonInfo).length - 1] + 1;
 
         const updatedGarageObj = await this.controller.getGarageObject();
         if (this.hangar.pageNum === this.hangar.pagesQuantity) {
