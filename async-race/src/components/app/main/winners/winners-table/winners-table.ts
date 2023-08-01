@@ -7,8 +7,7 @@ import Controller from '../../../../../utilities/server-requests';
 import Button from '../../button/button';
 import {
   columnNames,
-  QueryWinnersParams,
-  BalloonData,
+  QueryWinnersParams
 } from '../../../../../utilities/types';
 import Balloon from '../../race/hangar/balloon-block/balloon/balloon';
 
@@ -36,7 +35,7 @@ class WinnersTable {
     this.controller = Controller.getInstance();
   }
 
-  draw() {
+  draw(): void {
     insertElement(this.winnersBlock, ['winnersBlock'], document.body);
     insertElement(this.headerLine, ['headerLine'], this.winnersBlock);
     insertElement(this.header, ['winnersHeader'], this.headerLine, 'Winners');
@@ -74,7 +73,7 @@ class WinnersTable {
     }
   }
 
-  drawTableHeadline(container: HTMLDivElement) {
+  drawTableHeadline(container: HTMLDivElement): void {
     this.restartQuantity = 1;
     let i = 0;
     while (i < 5) {

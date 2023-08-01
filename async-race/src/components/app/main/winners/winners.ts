@@ -1,6 +1,5 @@
 import WinnersTable from './winners-table/winners-table';
 import Button from '../button/button';
-import { QueryWinnersParams } from '../../../../utilities/types';
 
 class Winners {
   public winnersTable: WinnersTable;
@@ -11,15 +10,15 @@ class Winners {
     this.pushPreviousPaginationButton(this.winnersTable.prevBtn);
   }
 
-  draw() {
+  draw(): void {
     this.winnersTable.draw();
   }
 
-  removeContentWhileChangePage() {
+  removeContentWhileChangePage(): void {
     this.winnersTable.winnersBlock.remove();
   }
 
-  refreshWinnersTable() {
+  refreshWinnersTable(): void {
     this.winnersTable.winnersTableBlock.innerHTML = '';
     this.winnersTable.drawTableHeadline(this.winnersTable.winnersTableBlock);
     this.winnersTable.fillTable(
@@ -34,11 +33,6 @@ class Winners {
         this.winnersTable.pagesQuantity > 1 &&
         this.winnersTable.pageNum < this.winnersTable.pagesQuantity
       ) {
-        const data: QueryWinnersParams = {
-          page: this.winnersTable.pageNum,
-          limit: 10,
-        };
-
         this.winnersTable.prevBtn.button.classList.remove('inactive');
         this.winnersTable.pageNum += 1;
         this.winnersTable.pageNumContainer.textContent = `# ${this.winnersTable.pageNum}`;
