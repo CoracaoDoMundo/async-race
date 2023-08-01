@@ -14,7 +14,7 @@ import {
   moveBalloon,
   moveBalloonOnStart,
   createWinnerAnnounce,
-  sortValues
+  sortValues,
 } from '../../../../utilities/service-functions';
 
 class Race {
@@ -66,14 +66,15 @@ class Race {
       const color: string = this.controls.inputColorCreate.colorInput.value;
       let id: number;
       let index: number;
-
       try {
         const obj: BalloonData[] = await this.controller.getGarageObject();
         const arr = sortValues(obj);
         if (arr.length === 0) {
           index = 1;
         } else {
-          const filteredArr = arr.filter((el): el is number => el !== undefined);
+          const filteredArr: number[] = arr.filter(
+            (el): el is number => el !== undefined
+          );
           index = filteredArr[filteredArr.length - 1];
         }
         const balloonInfo: BalloonData | void = await this.controller
@@ -86,7 +87,6 @@ class Race {
             await this.controller.postNewBalloon(data);
           });
         this.controls.inputCreate.input.value = '';
-        const updatedGarageObj: BalloonData[] = await this.controller.getGarageObject();
         if (
           this.hangar.pageNum === this.hangar.pagesQuantity ||
           this.hangar.pagesQuantity === 0
@@ -108,14 +108,11 @@ class Race {
 
   pushUpdateButton(elem: Button): void {
     elem.button.addEventListener('click', async (): Promise<void> => {
-      let name: string;
-      let color: string;
-      let data: BalloonData;
-      name = this.controls.inputUpdate.input.value;
-      color = this.controls.inputColorUpdate.colorInput.value;
+      const name: string = this.controls.inputUpdate.input.value;
+      const color: string = this.controls.inputColorUpdate.colorInput.value;
 
       try {
-        data = { name, color };
+        const data: BalloonData = { name, color };
         if (typeof this.hangar.selected === 'number') {
           await this.controller.postUpdatedBalloon(this.hangar.selected, data);
           this.controls.inputUpdate.input.value = '';
@@ -125,7 +122,8 @@ class Race {
             ''
           );
           this.controls.updateBtn.button.classList.add('inactive');
-          const updatedGarageObj = await this.controller.getGarageObject();
+          const updatedGarageObj: BalloonData[] =
+            await this.controller.getGarageObject();
           await this.hangar.cleanBalloonBlocks();
           this.drawHangar();
           this.hangar.selected = null;
@@ -142,7 +140,7 @@ class Race {
 
   pushRemoveBtn(elem: Button): void {
     elem.button.addEventListener('click', (): void => {
-      const id = Number(elem.button.id);
+      const id: number = Number(elem.button.id);
       this.controller.deleteBalloon(id);
       this.controller
         .getGarageObject()
@@ -159,7 +157,7 @@ class Race {
   }
 
   addListenerOnRemoveButton(arr: BalloonBlock[]): void {
-    arr.forEach((elem) => this.pushRemoveBtn(elem.removeBtn));
+    arr.forEach((elem): void => this.pushRemoveBtn(elem.removeBtn));
   }
 
   pushSelectBtn(elem: Button): void {
@@ -167,7 +165,7 @@ class Race {
       this.hangar.selected = Number(elem.button.id);
       this.controls.inputUpdate.input.removeAttribute('disabled');
       if (this.hangar.selected !== null) {
-        const balloonInfo = await this.controller
+        await this.controller
           .getBalloonInfo(this.hangar.selected)
           .then((result) => {
             this.controls.inputUpdate.input.value = result.name;
@@ -252,22 +250,22 @@ class Race {
       let data: BalloonData = this.createDataForBalloon();
 
       try {
-        const obj = await this.controller.getGarageObject();
+        const obj: BalloonData[] = await this.controller.getGarageObject();
         const arr = sortValues(obj);
-        const filteredArr = arr.filter((el): el is number => el !== undefined);
+        const filteredArr: number[] = arr.filter(
+          (el): el is number => el !== undefined
+        );
         index = filteredArr[filteredArr.length - 1] + 1;
-        const balloonInfo = await this.controller
-          .getBalloonInfo(index)
-          .then(async (result) => {
-            if (result.id) {
-              id = result.id + 1;
-              data.id = id;
-            }
-            await this.controller.postNewBalloon(data);
-            await this.createHundredOfBalloons(id);
-          });
+        await this.controller.getBalloonInfo(index).then(async (result) => {
+          if (result.id) {
+            id = result.id + 1;
+            data.id = id;
+          }
+          await this.controller.postNewBalloon(data);
+          await this.createHundredOfBalloons(id);
+        });
 
-        const updatedGarageObj = await this.controller.getGarageObject();
+        await this.controller.getGarageObject();
         if (this.hangar.pageNum === this.hangar.pagesQuantity) {
           this.hangar.cleanBalloonBlocks();
           this.drawHangar();
@@ -288,47 +286,39 @@ class Race {
     { resp: Response; balloonId: number; velocity: number } | undefined
   > {
     if (!elem.classList.contains('inactive')) {
-      let data: QueryBurnerParams = {
+      const data: QueryBurnerParams = {
         id: Number(elem.id),
         status: 'started',
       };
       const startResponse = await this.controller.startStopBurner(data);
       if (startResponse) {
-        const stopBtn = elem.nextSibling ? elem.nextSibling : null;
-        if (stopBtn instanceof HTMLDivElement) {
+        const stopBtn: ChildNode | null = elem.nextSibling;
+        if (stopBtn !== null && stopBtn instanceof HTMLDivElement) {
           stopBtn.classList.remove('inactive');
           elem.classList.add('inactive');
         }
         data.status = 'drive';
-        let animatedBalloon: SVGElement;
-        let parentContainer: HTMLDivElement;
         let timer: NodeJS.Timer | undefined;
         this.hangar.balloonBlocks.forEach((el) => {
           if (data.id === Number(el.balloonSvg.balloon.id)) {
-            animatedBalloon = el.balloonSvg.balloon;
-            if (
-              el.balloonSvg.balloon.parentElement instanceof HTMLDivElement &&
-              el.balloonSvg.balloon.parentElement.parentElement instanceof
-                HTMLDivElement
-            ) {
-              parentContainer =
-                el.balloonSvg.balloon.parentElement.parentElement;
+            const parentContainer: HTMLDivElement | null =
+              el.balloonSvg.balloon.closest('.raceBlock');
+            if (parentContainer) {
+              timer = moveBalloon(
+                el.balloonSvg.balloon,
+                parentContainer,
+                startResponse.velocity
+              );
             }
-            timer = moveBalloon(
-              animatedBalloon,
-              parentContainer,
-              startResponse.velocity
-            );
           }
         });
         if (timer) {
-          let driveResponse = await this.controller.switchBalloonEngineToDrive(
+          return await this.controller.switchBalloonEngineToDrive(
             data,
             timer,
             startResponse.velocity,
             isRace
           );
-          return driveResponse;
         }
       }
     }
@@ -336,7 +326,7 @@ class Race {
 
   addListenerOnUpButton(arr: BalloonBlock[]): void {
     arr.forEach((elem): void => {
-      elem.upButton.button.addEventListener('click', () => {
+      elem.upButton.button.addEventListener('click', (): void => {
         this.pushUpButton(elem.upButton.button, false);
       });
     });
@@ -350,16 +340,15 @@ class Race {
       };
       const endResponse = await this.controller.startStopBurner(data);
       if (endResponse) {
-        const startBtn = elem.previousSibling ? elem.previousSibling : null;
+        const startBtn = elem.previousSibling;
         if (startBtn instanceof HTMLDivElement) {
           startBtn.classList.remove('inactive');
           elem.classList.add('inactive');
         }
 
-        let animatedBalloon: SVGElement;
-        this.hangar.balloonBlocks.forEach((el) => {
+        this.hangar.balloonBlocks.forEach((el): void => {
           if (data.id === Number(el.balloonSvg.balloon.id)) {
-            animatedBalloon = el.balloonSvg.balloon;
+            const animatedBalloon: SVGElement = el.balloonSvg.balloon;
             moveBalloonOnStart(animatedBalloon);
           }
         });
@@ -369,7 +358,7 @@ class Race {
 
   addListenerOnLandButton(arr: BalloonBlock[]): void {
     arr.forEach((elem): void => {
-      elem.landButton.button.addEventListener('click', () => {
+      elem.landButton.button.addEventListener('click', (): void => {
         this.pushLandButton(elem.landButton.button);
       });
     });
@@ -377,35 +366,26 @@ class Race {
 
   pushRaceButton(elem: Button): void {
     elem.button.addEventListener('click', async (): Promise<void> => {
-      let promises: ({ resp: Response; balloonId: number } | undefined)[] = [];
-
       if (!elem.button.classList.contains('inactive')) {
         elem.button.classList.add('inactive');
-        const promisesArr = this.hangar.balloonBlocks.map(async (el) => {
-          let prom:
-            | { resp: Response; balloonId: number; velocity: number }
-            | undefined = await this.pushUpButton(el.upButton.button, true);
-          return prom;
-        });
+        const promisesArr = this.hangar.balloonBlocks.map(
+          async (el): Promise<
+            { resp: Response; balloonId: number; velocity: number } | undefined
+          > => await this.pushUpButton(el.upButton.button, true));
         this.controls.resetBtn.button.classList.remove('inactive');
         try {
           const winnerPromise = await Promise.any(promisesArr);
-
           if (winnerPromise) {
             const { resp, balloonId, velocity } = winnerPromise;
-            let winnerName: string;
-            let winnerTime: number;
-            let winnerColor: string | null;
-            this.hangar.balloonBlocks.forEach(async (el) => {
+            this.hangar.balloonBlocks.forEach(async (el): Promise<void> => {
               if (Number(el.balloonName.id) === balloonId) {
-                winnerName = el.balloonName.innerText;
-                winnerTime =
+                const winnerName: string = el.balloonName.innerText;
+                const winnerTime: number =
                   (this.hangar.balloonBlocksContainer.clientWidth -
                     16.6 -
                     14.6 -
                     4.8) /
                   velocity;
-                winnerColor = el.balloonSvg.balloon.getAttribute('color');
                 createWinnerAnnounce(
                   document.body,
                   winnerName,
@@ -415,29 +395,26 @@ class Race {
                   wins: 1,
                   time: Number(winnerTime.toFixed(2)),
                   id: balloonId,
-                  name: winnerName,
-                  color: winnerColor,
                 });
               }
             });
           }
         } catch {
-          console.log('Unfortunately, there is no winner!');
           this.controls.resetBtn.button.classList.remove('inactive');
         }
       }
     });
   }
 
-  pushResetButton(elem: Button) {
-    elem.button.addEventListener('click', () => {
+  pushResetButton(elem: Button): void {
+    elem.button.addEventListener('click', (): void => {
       if (!elem.button.classList.contains('inactive')) {
-        this.hangar.balloonBlocks.forEach(async (el) => {
-          let prom = await this.pushLandButton(el.landButton.button);
+        this.hangar.balloonBlocks.forEach(async (el): Promise<void> => {
+          await this.pushLandButton(el.landButton.button);
         });
         elem.button.classList.add('inactive');
         setTimeout(
-          () => this.controls.raceBtn.button.classList.remove('inactive'),
+          (): void => this.controls.raceBtn.button.classList.remove('inactive'),
           3000
         );
       }

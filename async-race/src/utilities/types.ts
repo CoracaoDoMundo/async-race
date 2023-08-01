@@ -122,8 +122,6 @@ export type winnerInfo = {
   wins: number;
   time: number;
   id: number;
-  name: string;
-  color: string | null;
 }
 
 export type winnerRespond = {

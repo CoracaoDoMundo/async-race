@@ -267,8 +267,6 @@ class Controller {
       body: JSON.stringify({
         id: data.id,
         wins: currentWins,
-        name: data.name,
-        color: data.color,
         time: currentBestTime,
       }),
     });
