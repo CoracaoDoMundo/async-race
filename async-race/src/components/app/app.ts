@@ -13,10 +13,7 @@ class App {
     this.main = new Main(this.header.hangarBtn, this.header.winnersBtn);
   }
 
-  start(): void {
-  }
-
-  refreshWinners() {
+  refreshWinners(): void {
     this.header.winnersBtn.button.addEventListener('click', () => {
       this.main.winners.refreshWinnersTable();
     });

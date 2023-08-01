@@ -18,16 +18,16 @@ class Main {
     this.addListener(this.winnersBtn, this.pushWinnersBtn.bind(this));
   }
 
-  addListener(elem: Button, func: Function) {
-    elem.button.addEventListener('click', () => func(elem));
+  addListener(elem: Button, func: Function): void {
+    elem.button.addEventListener('click', (): void => func(elem));
   }
 
-  pushWinnersBtn() {
+  pushWinnersBtn(): void {
     this.race.removeContentWhileChangePage();
     this.winners.draw();
   }
 
-  pushHangarBtn() {
+  pushHangarBtn(): void {
     this.winners.removeContentWhileChangePage();
     this.race.controls.draw();
     this.race.hangar.draw();
