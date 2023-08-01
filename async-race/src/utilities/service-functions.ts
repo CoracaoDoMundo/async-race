@@ -1,3 +1,5 @@
+import { BalloonData } from './types';
+
 const createElement = <T extends HTMLElement>(
   tagName: keyof HTMLElementTagNameMap,
   classNames: string[],
@@ -83,7 +85,11 @@ const moveBalloonOnStart = (elem: SVGElement) => {
   }
 };
 
-const createWinnerAnnounce = (container: HTMLElement, name: string, time: string): void => {
+const createWinnerAnnounce = (
+  container: HTMLElement,
+  name: string,
+  time: string
+): void => {
   if (name === '') {
     name = 'no name';
   }
@@ -101,7 +107,31 @@ const createWinnerAnnounce = (container: HTMLElement, name: string, time: string
   );
 
   announceCover.addEventListener('click', () => announceCover.remove());
+};
 
-}
+const sortValues = (obj: BalloonData[]): (number | undefined)[] => {
+  return obj
+    .map((el) => el.id)
+    .sort((a, b) => {
+      if (a === undefined && b === undefined) {
+        return 0;
+      }
+      if (a === undefined) {
+        return -1;
+      }
+      if (b === undefined) {
+        return 1;
+      }
+      return a - b;
+    });
+};
 
-export { createElement, createBalloonBlocks, moveBalloon, moveBalloonOnStart, insertElement, createWinnerAnnounce };
+export {
+  createElement,
+  createBalloonBlocks,
+  moveBalloon,
+  moveBalloonOnStart,
+  insertElement,
+  createWinnerAnnounce,
+  sortValues
+};

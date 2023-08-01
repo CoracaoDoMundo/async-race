@@ -21,7 +21,7 @@ class Controller {
     return Controller.instance;
   }
 
-  getGarageObject(): Promise<Object> {
+  getGarageObject(): Promise<BalloonData[]> {
     const num = async () => {
       const data = await fetch(`${this.url}/garage/`);
       const body = await data.json();

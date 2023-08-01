@@ -24,7 +24,7 @@ class BalloonBlock {
     container: HTMLDivElement,
     name: string,
     color: string,
-    id: number
+    id: number | undefined
   ) {
     this.controller = Controller.getInstance();
     this.buttonsNameBlock = createElement(

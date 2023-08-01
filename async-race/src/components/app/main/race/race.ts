@@ -14,6 +14,7 @@ import {
   moveBalloon,
   moveBalloonOnStart,
   createWinnerAnnounce,
+  sortValues
 } from '../../../../utilities/service-functions';
 
 class Race {
@@ -29,13 +30,12 @@ class Race {
     this.controller = Controller.getInstance();
   }
 
-  draw() {
-    // alert('Привет! Спасибо, что проверяешь мою работу.\nПри проверке, пожалуйста, прежде чем нажимать кнопку start после reset, подожди пару секунд, чтобы были получены все ответы от сервера, это поможет анимации прийти в себя после отработки.\nУдачи тебе на кроссчеке! (=')
+  draw(): void {
     this.controls.draw();
     this.hangar.draw();
   }
 
-  addListeners() {
+  addListeners(): void {
     this.pushPreviousPaginationButton(this.hangar.prevBtn);
     this.pushNextPaginationButton(this.hangar.nextBtn);
     this.addListenerOnCreateButton(this.controls.createBtn);
@@ -45,7 +45,7 @@ class Race {
     this.pushResetButton(this.controls.resetBtn);
   }
 
-  removeContentWhileChangePage() {
+  removeContentWhileChangePage(): void {
     this.controls.controlBlock.remove();
     this.hangar.hangarBlock.remove();
     this.hangar.balloonBlocksContainer.remove();
@@ -62,33 +62,31 @@ class Race {
 
   async pushCreateButton(elem: Button): Promise<void> {
     elem.button.addEventListener('click', async () => {
-      let name: string;
-      let color: string;
+      const name: string = this.controls.inputCreate.input.value;
+      const color: string = this.controls.inputColorCreate.colorInput.value;
       let id: number;
       let index: number;
-      let data: BalloonData;
-      name = this.controls.inputCreate.input.value;
-      color = this.controls.inputColorCreate.colorInput.value;
 
       try {
-        const obj = await this.controller.getGarageObject();
-        const arr: number[] = Object.values(obj)
-          .map((el) => el.id)
-          .sort((a, b) => a - b);
+        const obj: BalloonData[] = await this.controller.getGarageObject();
+        const arr = sortValues(obj);
         if (arr.length === 0) {
           index = 1;
         } else {
-          index = arr[arr.length - 1];
+          const filteredArr = arr.filter((el): el is number => el !== undefined);
+          index = filteredArr[filteredArr.length - 1];
         }
-        const balloonInfo = await this.controller.getBalloonInfo(index).then(async (result) => {
-          if (result.id) {
-            id = result.id + 1;
-          }
-          data = { name, color, id };
-          await this.controller.postNewBalloon(data);
-        });
+        const balloonInfo: BalloonData | void = await this.controller
+          .getBalloonInfo(index)
+          .then(async (result) => {
+            if (result.id) {
+              id = result.id + 1;
+            }
+            const data: BalloonData = { name, color, id };
+            await this.controller.postNewBalloon(data);
+          });
         this.controls.inputCreate.input.value = '';
-        const updatedGarageObj = await this.controller.getGarageObject();
+        const updatedGarageObj: BalloonData[] = await this.controller.getGarageObject();
         if (
           this.hangar.pageNum === this.hangar.pagesQuantity ||
           this.hangar.pagesQuantity === 0
@@ -169,14 +167,13 @@ class Race {
       this.hangar.selected = Number(elem.button.id);
       this.controls.inputUpdate.input.removeAttribute('disabled');
       if (this.hangar.selected !== null) {
-        const balloonInfo = await this.controller.getBalloonInfo(
-          this.hangar.selected
-        ).then((result) => {
-          this.controls.inputUpdate.input.value = result.name;
-          this.controls.inputColorUpdate.colorInput.value = result.color;
-        });
+        const balloonInfo = await this.controller
+          .getBalloonInfo(this.hangar.selected)
+          .then((result) => {
+            this.controls.inputUpdate.input.value = result.name;
+            this.controls.inputColorUpdate.colorInput.value = result.color;
+          });
         this.controls.inputColorUpdate.colorInput.removeAttribute('disabled');
-
       }
       this.controls.updateBtn.button.classList.remove('inactive');
     });
@@ -256,18 +253,19 @@ class Race {
 
       try {
         const obj = await this.controller.getGarageObject();
-        const arr: number[] = Object.values(obj)
-          .map((el) => el.id)
-          .sort((a, b) => a - b);
-        index = arr[arr.length - 1] + 1;
-        const balloonInfo = await this.controller.getBalloonInfo(index).then(async (result) => {
-          if (result.id) {
-            id = result.id + 1;
-            data.id = id;
-          }
-          await this.controller.postNewBalloon(data);
-          await this.createHundredOfBalloons(id);
-        });
+        const arr = sortValues(obj);
+        const filteredArr = arr.filter((el): el is number => el !== undefined);
+        index = filteredArr[filteredArr.length - 1] + 1;
+        const balloonInfo = await this.controller
+          .getBalloonInfo(index)
+          .then(async (result) => {
+            if (result.id) {
+              id = result.id + 1;
+              data.id = id;
+            }
+            await this.controller.postNewBalloon(data);
+            await this.createHundredOfBalloons(id);
+          });
 
         const updatedGarageObj = await this.controller.getGarageObject();
         if (this.hangar.pageNum === this.hangar.pagesQuantity) {
