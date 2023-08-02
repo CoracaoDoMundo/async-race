@@ -20,7 +20,7 @@ const createElement = <T extends HTMLElement>(
   return element;
 };
 
-const insertElement = <T extends HTMLElement>(
+const insertElement = (
   element: HTMLElement,
   classNames: string[],
   parentNode: HTMLElement,
@@ -61,12 +61,12 @@ const moveBalloon = (
   if (elem.parentElement) {
     elem.classList.remove('animatedBalloon');
     elem.setAttribute('air', 'true');
-    let currentPlace = elem.parentElement.offsetLeft;
-    const endPlace = container.clientWidth - 80;
+    let currentPlace: number = elem.parentElement.offsetLeft;
+    const endPlace: number = container.clientWidth - 80;
     const time: number = (endPlace - currentPlace) / speed;
-    const framesQuantity = time * 60;
-    const shift = (endPlace - currentPlace) / framesQuantity;
-    const intervalId = setInterval(() => {
+    const framesQuantity: number = time * 60;
+    const shift: number = (endPlace - currentPlace) / framesQuantity;
+    const intervalId: NodeJS.Timer = setInterval((): void => {
       currentPlace += shift;
       if (currentPlace > endPlace) {
         clearInterval(intervalId);
@@ -77,7 +77,7 @@ const moveBalloon = (
   }
 };
 
-const moveBalloonOnStart = (elem: SVGElement) => {
+const moveBalloonOnStart = (elem: SVGElement): void => {
   if (elem.getAttribute('air') === 'true') {
     elem.removeAttribute('air');
     elem.style.transform = `translateX(0px)`;
@@ -93,7 +93,7 @@ const createWinnerAnnounce = (
   if (name === '') {
     name = 'no name';
   }
-  const announceInfo = `The winner is ${name} balloon for ${time} seconds!`;
+  const announceInfo: string = `The winner is ${name} balloon for ${time} seconds!`;
   const announceCover: HTMLDivElement = createElement(
     'div',
     ['announceCover'],
@@ -106,7 +106,7 @@ const createWinnerAnnounce = (
     announceInfo
   );
 
-  announceCover.addEventListener('click', () => announceCover.remove());
+  announceCover.addEventListener('click', (): void => announceCover.remove());
 };
 
 const sortValues = (obj: BalloonData[]): (number | undefined)[] => {
