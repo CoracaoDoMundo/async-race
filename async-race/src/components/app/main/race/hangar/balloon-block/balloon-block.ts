@@ -3,7 +3,6 @@ import { createElement } from '../../../../../../utilities/service-functions';
 import Button from '../../../button/button';
 import Balloon from './balloon/balloon';
 import Ribbon from './ribbon/ribbon';
-import Controller from '../../../../../../utilities/server-requests';
 
 class BalloonBlock {
   private buttonsNameBlock: HTMLDivElement;
@@ -18,7 +17,6 @@ class BalloonBlock {
   private ribbon: HTMLDivElement;
   private ribbonSvg: Ribbon;
   private trackLine: HTMLDivElement;
-  private controller: Controller;
 
   constructor(
     container: HTMLDivElement,
@@ -26,7 +24,6 @@ class BalloonBlock {
     color: string,
     id: number | undefined
   ) {
-    this.controller = Controller.getInstance();
     this.buttonsNameBlock = createElement(
       'div',
       ['buttonsNameBlock'],
