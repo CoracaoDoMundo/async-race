@@ -6,6 +6,7 @@ import {
 import Controller from '../../../../../utilities/server-requests';
 import Button from '../../button/button';
 import BalloonBlock from './balloon-block/balloon-block';
+import { BalloonData } from '../../../../../utilities/types';
 
 class Hangar {
   private controller: Controller;
@@ -32,7 +33,7 @@ class Hangar {
     this.controller = Controller.getInstance();
   }
 
-  draw() {
+  draw(): void {
     insertElement(this.hangarBlock, ['hangarBlock'], document.body);
     insertElement(this.headerLine, ['headerLine'], this.hangarBlock);
     insertElement(this.header, ['hangarHeader'], this.headerLine, 'Hangar');
@@ -69,15 +70,15 @@ class Hangar {
   }
 
   async fillBalloonBlocks(page: number): Promise<void> {
-    const obj = await this.controller.getGarageObject();
-    const length = Object.keys(obj).length;
-    let i = 0 + (page - 1) * 7;
-    let k = 0;
+    const obj: BalloonData[] = await this.controller.getGarageObject();
+    const length: number = Object.keys(obj).length;
+    let i: number = 0 + (page - 1) * 7;
+    let k: number = 0;
     while (i < length && k < 7) {
-      const name = Object.values(obj)[i].name;
-      const color = Object.values(obj)[i].color;
-      const id = Object.values(obj)[i].id;
-      let block = new BalloonBlock(
+      const name: string = Object.values(obj)[i].name;
+      const color: string = Object.values(obj)[i].color;
+      const id: number | undefined = Object.values(obj)[i].id;
+      const block: BalloonBlock = new BalloonBlock(
         this.balloonBlocksContainers[k],
         name,
         color,
@@ -90,8 +91,8 @@ class Hangar {
   }
 
   async countPages(): Promise<void> {
-    const obj = await this.controller.getGarageObject();
-    const itemsOnPage = 7;
+    const obj: BalloonData[] = await this.controller.getGarageObject();
+    const itemsOnPage: number = 7;
     this.pagesQuantity = Math.ceil(Object.keys(obj).length / itemsOnPage);
     if (this.pageNum === this.pagesQuantity) {
       this.nextBtn.button.classList.add('inactive');
@@ -101,13 +102,13 @@ class Hangar {
   }
 
   updateBalloonsNum(elem: HTMLHeadingElement): void {
-    this.controller.getGarageObject().then((obj) => {
+    this.controller.getGarageObject().then((obj): void => {
       elem.innerText = `(${Object.keys(obj).length})`;
     });
   }
 
   cleanBalloonBlocks(): void {
-    this.balloonBlocksContainers.forEach((el) => {
+    this.balloonBlocksContainers.forEach((el): void => {
       el.innerHTML = '';
     });
   }
