@@ -22,28 +22,28 @@ class Controller {
   }
 
   getGarageObject(): Promise<BalloonData[]> {
-    const num = async () => {
-      const data = await fetch(`${this.url}/garage/`);
-      const body = await data.json();
+    const num = async (): Promise<BalloonData[]> => {
+      const data: Response = await fetch(`${this.url}/garage/`);
+      const body: BalloonData[] = await data.json();
       return body;
     };
-    const res = num();
+    const res: Promise<BalloonData[]> = num();
     return res;
   }
 
   getBalloonInfo(index: number): Promise<BalloonData> {
-    const balloon = async () => {
-      const data = await fetch(`${this.url}/garage/${index}`);
-      const body = await data.json();
+    const balloon = async (): Promise<BalloonData> => {
+      const data: Response = await fetch(`${this.url}/garage/${index}`);
+      const body: BalloonData = await data.json();
       return body;
     };
-    const res = balloon();
+    const res: Promise<BalloonData> = balloon();
     return res;
   }
 
   createNewBalloon(data: BalloonData): void {
     const balloon = async (): Promise<void> => {
-      const resp = await fetch(`${this.url}/garage`, {
+      await fetch(`${this.url}/garage`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -60,26 +60,26 @@ class Controller {
 
   postNewBalloon(data: BalloonData): void {
     const balloon = async (): Promise<void> => {
-      const res = await this.createNewBalloon(data);
+      await this.createNewBalloon(data);
     };
     balloon();
   }
 
   deleteBalloon(id: number): void {
     const balloon = async (id: number): Promise<void> => {
-      const resp = await fetch(`${this.url}/garage/${id}`, {
+      await fetch(`${this.url}/garage/${id}`, {
         method: 'DELETE',
       });
     };
     const del = async (): Promise<void> => {
-      const res = await balloon(id);
+      await balloon(id);
     };
     del();
   }
 
   updateBalloon(id: number, data: BalloonData): void {
     const balloon = async (): Promise<void> => {
-      const resp = await fetch(`${this.url}/garage/${id}`, {
+      await fetch(`${this.url}/garage/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -95,16 +95,16 @@ class Controller {
 
   postUpdatedBalloon(id: number, data: BalloonData): void {
     const balloon = async (): Promise<void> => {
-      const res = await this.updateBalloon(id, data);
+      await this.updateBalloon(id, data);
     };
     balloon();
   }
 
   generateQueryString(data: QueryParams): string {
-    let result = '?';
+    let result: string = '?';
     for (const key in data) {
       if (Object.prototype.hasOwnProperty.call(data, key)) {
-        const value = String(data[key as keyof QueryParams]);
+        const value: string = String(data[key as keyof QueryParams]);
         if (result === '?') {
           result = result + `${key}=${value}`;
         } else if (key === 'sort' || key === 'order') {
@@ -119,12 +119,12 @@ class Controller {
 
   startStopBurner(data: QueryBurnerParams): Promise<StartRaceData | void> {
     const race = async (): Promise<StartRaceData | void> => {
-      const params = this.generateQueryString(data);
-      const resp = await fetch(`${this.url}/engine${params}`, {
+      const params: string = this.generateQueryString(data);
+      const resp: Response = await fetch(`${this.url}/engine${params}`, {
         method: 'PATCH',
       });
       try {
-        const body = await resp.json();
+        const body: StartRaceData = await resp.json();
         return body;
       } catch (error) {
         switch (resp.status) {
@@ -139,8 +139,7 @@ class Controller {
         }
       }
     };
-    const result = race();
-    return result;
+    return race();
   }
 
   async race(
@@ -151,29 +150,23 @@ class Controller {
   ): Promise<
     { resp: Response; balloonId: number; velocity: number } | undefined
   > {
-    const params = this.generateQueryString(data);
-    const resp = await fetch(`${this.url}/engine${params}`, {
+    const params: string = this.generateQueryString(data);
+    const resp: Response = await fetch(`${this.url}/engine${params}`, {
       method: 'PATCH',
     });
-    const balloonId = data.id;
+    const balloonId: number = data.id;
     try {
-      const body = await resp.json();
+      await resp.json();
       return { resp, balloonId, velocity };
     } catch (error) {
       switch (resp.status) {
         case 500:
           clearInterval(timer);
+          console.log(
+            `Balloon has been landed suddenly. It's burner was broken down.`
+          );
           if (isRace === true) {
-            console.log(
-              `Balloon has been landed suddenly. It's burner was broken down.`
-            );
-            throw new Error(
-              `Balloon has been landed suddenly. It's burner was broken down.`
-            );
-          } else {
-            console.log(
-              `Balloon has been landed suddenly. It's burner was broken down.`
-            );
+            throw new Error();
           }
           break;
         case 400:
@@ -189,8 +182,6 @@ class Controller {
             `Flight already in progress. You can't run flight for the same balloon twice while it's not stopped.`
           );
           break;
-        default:
-          console.log('Something went wrong!');
       }
     }
   }
@@ -203,7 +194,7 @@ class Controller {
   ): Promise<
     { resp: Response; balloonId: number; velocity: number } | undefined
   > {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject): void => {
       this.race(data, timer, velocity, isRace)
         .then((resp) => {
           resolve(resp);
@@ -222,10 +213,10 @@ class Controller {
       if (data) {
         params = this.generateQueryString(data);
       }
-      const winners = await fetch(`${this.url}/winners${params}`, {
+      const winners: Response = await fetch(`${this.url}/winners${params}`, {
         method: 'GET',
       });
-      const body = await winners.json();
+      const body: winnerRespond[] | undefined = await winners.json();
       return body;
     } catch {
       console.log('Wrong winners request!');
@@ -234,10 +225,10 @@ class Controller {
 
   async getWinner(id: number): Promise<winnerRespond | undefined> {
     try {
-      const winner = await fetch(`${this.url}/winners/${id}`, {
+      const winner: Response = await fetch(`${this.url}/winners/${id}`, {
         method: 'GET',
       });
-      const body = await winner.json();
+      const body: winnerRespond | undefined = await winner.json();
       return body;
     } catch {
       console.log('Wrong winners request!');
@@ -259,7 +250,7 @@ class Controller {
     if (bestTime && bestTime < data.time) {
       currentBestTime = bestTime;
     }
-    const resp = await fetch(`${this.url}/winners`, {
+    await fetch(`${this.url}/winners`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -273,7 +264,7 @@ class Controller {
   }
 
   async chooseUpdateOrCreateUser(id: number, data: winnerInfo) {
-    const winner = await this.getWinner(id);
+    const winner: winnerRespond | undefined = await this.getWinner(id);
     let wins: number;
     let time: number;
     if (winner instanceof Object) {
@@ -291,7 +282,7 @@ class Controller {
   }
 
   async deleteWinner(id: number): Promise<void> {
-    const resp = await fetch(`${this.url}/winners/${id}`, {
+    await fetch(`${this.url}/winners/${id}`, {
       method: 'DELETE',
     });
   }
