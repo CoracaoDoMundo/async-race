@@ -7,7 +7,8 @@ import Controller from '../../../../../utilities/server-requests';
 import Button from '../../button/button';
 import {
   columnNames,
-  QueryWinnersParams
+  QueryWinnersParams,
+  winnerRespond,
 } from '../../../../../utilities/types';
 import Balloon from '../../race/hangar/balloon-block/balloon/balloon';
 
@@ -150,13 +151,13 @@ class WinnersTable {
     if (dataToSort) {
       data = dataToSort;
     }
-    const obj = await this.controller.getWinners(data);
+    const obj: winnerRespond[] | undefined = await this.controller.getWinners(
+      data
+    );
     if (Array.isArray(obj)) {
-      const length = Object.values(obj).length;
       let wins: number = 1;
-      let time: number;
       let i = 0 + (page - 1) * itemsOnPage;
-      while (i < itemsOnPage * page && i < length) {
+      while (i < itemsOnPage * page && i < Object.values(obj).length) {
         const numContainer: HTMLDivElement = createElement(
           'div',
           ['numContainer', 'cell'],
@@ -186,7 +187,6 @@ class WinnersTable {
         );
         this.controller.getBalloonInfo(obj[i].id).then((result) => {
           const winnerNameStr: string = result.name;
-          console.log('name:', winnerNameStr);
           const winnerName: HTMLSpanElement = createElement(
             'span',
             ['winnerName'],
@@ -213,7 +213,7 @@ class WinnersTable {
           ['bestTimeContainer', 'cell'],
           container
         );
-        time = obj[i].time;
+        const time: number = obj[i].time;
         const bestTime: HTMLSpanElement = createElement(
           'span',
           ['bestTime'],
@@ -239,7 +239,7 @@ class WinnersTable {
   }
 
   updateWinnersNum(elem: HTMLHeadingElement): void {
-    this.controller.getWinners().then((obj) => {
+    this.controller.getWinners().then((obj): void => {
       if (obj instanceof Object) {
         elem.innerText = `(${Object.keys(obj).length})`;
       }
