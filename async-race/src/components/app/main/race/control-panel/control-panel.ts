@@ -1,11 +1,8 @@
 import './control-panel.scss';
-import {
-  insertElement,
-} from '../../../../../utilities/service-functions';
+import { insertElement } from '../../../../../utilities/service-functions';
 import TextInput from './input/input';
 import ColorInput from './color-input/color-input';
 import Button from '../../button/button';
-import Controller from '../../../../../utilities/server-requests';
 
 class Controls {
   public controlBlock: HTMLDivElement = document.createElement('div');
@@ -31,13 +28,8 @@ class Controls {
     this.buttonsLine,
     'GENERATE BALLOONS'
   );
-  private controller: Controller;
 
-  constructor() {
-    this.controller = Controller.getInstance();
-  }
-
-  draw() {
+  draw(): void {
     insertElement(this.controlBlock, ['controlBlock'], document.body);
     insertElement(this.inputCreateLine, ['inputsLine'], this.controlBlock);
     insertElement(this.inputUpdateLine, ['inputsLine'], this.controlBlock);
