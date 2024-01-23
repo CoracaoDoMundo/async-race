@@ -52,7 +52,7 @@ class WinnersTable {
     this.controller = Controller.getInstance();
   }
 
-  draw(): void {
+  public draw(): void {
     insertElement(this.winnersBlock, ["winnersBlock"], document.body);
     insertElement(this.headerLine, ["headerLine"], this.winnersBlock);
     insertElement(this.header, ["winnersHeader"], this.headerLine, "Winners");
@@ -90,7 +90,7 @@ class WinnersTable {
     }
   }
 
-  drawTableHeadline(container: HTMLDivElement): void {
+  public drawTableHeadline(container: HTMLDivElement): void {
     this.restartQuantity = 1;
     let i = 0;
     while (i < 5) {
@@ -122,7 +122,10 @@ class WinnersTable {
     }
   }
 
-  addListenerForSort(column: "wins" | "time", flag: "ASC" | "DESC") {
+  private addListenerForSort(
+    column: "wins" | "time",
+    flag: "ASC" | "DESC",
+  ): void {
     let data: QueryWinnersParams;
     this.winnersTableBlock.innerText = "";
     if (flag === "ASC") {
@@ -154,11 +157,11 @@ class WinnersTable {
     this.fillTable(this.pageNum, this.winnersTableBlock, data);
   }
 
-  async fillTable(
+  public async fillTable(
     page: number,
     container: HTMLDivElement,
     dataToSort?: QueryWinnersParams,
-  ) {
+  ): Promise<void> {
     const itemsOnPage = 10;
     let data: QueryWinnersParams = {
       page,
@@ -241,7 +244,7 @@ class WinnersTable {
     }
   }
 
-  async countPages(): Promise<void> {
+  private async countPages(): Promise<void> {
     const obj = await this.controller.getWinners();
     const itemsOnPage = 10;
     if (obj instanceof Object) {
@@ -254,7 +257,7 @@ class WinnersTable {
     }
   }
 
-  updateWinnersNum(elem: HTMLHeadingElement): void {
+  private updateWinnersNum(elem: HTMLHeadingElement): void {
     this.controller.getWinners().then((obj): void => {
       if (obj instanceof Object) {
         elem.innerText = `(${Object.keys(obj).length})`;

@@ -1,11 +1,14 @@
-import Race from './race/race';
-import Winners from './winners/winners';
-import Button from './button/button';
+import Race from "./race/race";
+import Winners from "./winners/winners";
+import Button from "./button/button";
 
 class Main {
   private race: Race;
+
   public winners: Winners;
+
   private hangarBtn: Button;
+
   private winnersBtn: Button;
 
   constructor(hangarBtn: Button, winnersBtn: Button) {
@@ -18,16 +21,16 @@ class Main {
     this.addListener(this.winnersBtn, this.pushWinnersBtn.bind(this));
   }
 
-  addListener(elem: Button, func: Function): void {
-    elem.button.addEventListener('click', (): void => func(elem));
+  private addListener(elem: Button, func: Function): void {
+    elem.button.addEventListener("click", (): void => func(elem));
   }
 
-  pushWinnersBtn(): void {
+  private pushWinnersBtn(): void {
     this.race.removeContentWhileChangePage();
     this.winners.draw();
   }
 
-  pushHangarBtn(): void {
+  private pushHangarBtn(): void {
     this.winners.removeContentWhileChangePage();
     this.race.controls.draw();
     this.race.hangar.draw();

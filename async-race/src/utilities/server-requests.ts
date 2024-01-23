@@ -22,7 +22,7 @@ class Controller {
     return Controller.instance;
   }
 
-  getGarageObject(): Promise<BalloonData[]> {
+  public getGarageObject(): Promise<BalloonData[]> {
     const num = async (): Promise<BalloonData[]> => {
       const data: Response = await fetch(`${this.url}/garage/`);
       const body: BalloonData[] = await data.json();
@@ -32,7 +32,7 @@ class Controller {
     return res;
   }
 
-  getBalloonInfo(index: number): Promise<BalloonData> {
+  public getBalloonInfo(index: number): Promise<BalloonData> {
     const balloon = async (): Promise<BalloonData> => {
       const data: Response = await fetch(`${this.url}/garage/${index}`);
       const body: BalloonData = await data.json();
@@ -42,7 +42,7 @@ class Controller {
     return res;
   }
 
-  createNewBalloon(data: BalloonData): void {
+  private createNewBalloon(data: BalloonData): void {
     const balloon = async (): Promise<void> => {
       await fetch(`${this.url}/garage`, {
         method: "POST",
@@ -59,14 +59,14 @@ class Controller {
     balloon();
   }
 
-  postNewBalloon(data: BalloonData): void {
+  public postNewBalloon(data: BalloonData): void {
     const balloon = async (): Promise<void> => {
       await this.createNewBalloon(data);
     };
     balloon();
   }
 
-  deleteBalloon(id: number): void {
+  public deleteBalloon(id: number): void {
     const balloon = async (id: number): Promise<void> => {
       await fetch(`${this.url}/garage/${id}`, {
         method: "DELETE",
@@ -78,7 +78,7 @@ class Controller {
     del();
   }
 
-  updateBalloon(id: number, data: BalloonData): void {
+  private updateBalloon(id: number, data: BalloonData): void {
     const balloon = async (): Promise<void> => {
       await fetch(`${this.url}/garage/${id}`, {
         method: "PUT",
@@ -94,14 +94,14 @@ class Controller {
     balloon();
   }
 
-  postUpdatedBalloon(id: number, data: BalloonData): void {
+  public postUpdatedBalloon(id: number, data: BalloonData): void {
     const balloon = async (): Promise<void> => {
       await this.updateBalloon(id, data);
     };
     balloon();
   }
 
-  generateQueryString(data: QueryParams): string {
+  private generateQueryString(data: QueryParams): string {
     let result: string = "?";
     for (const key in data) {
       if (Object.prototype.hasOwnProperty.call(data, key)) {
@@ -118,7 +118,9 @@ class Controller {
     return result;
   }
 
-  startStopBurner(data: QueryBurnerParams): Promise<StartRaceData | void> {
+  public startStopBurner(
+    data: QueryBurnerParams,
+  ): Promise<StartRaceData | void> {
     const race = async (): Promise<StartRaceData | void> => {
       const params: string = this.generateQueryString(data);
       const resp: Response = await fetch(`${this.url}/engine${params}`, {
@@ -143,7 +145,7 @@ class Controller {
     return race();
   }
 
-  async race(
+  private async race(
     data: QueryBurnerParams,
     timer: NodeJS.Timer,
     velocity: number,
@@ -187,7 +189,7 @@ class Controller {
     }
   }
 
-  switchBalloonEngineToDrive(
+  public switchBalloonEngineToDrive(
     data: QueryBurnerParams,
     timer: NodeJS.Timer,
     velocity: number,
@@ -206,7 +208,7 @@ class Controller {
     });
   }
 
-  async getWinners(
+  public async getWinners(
     data?: QueryWinnersParams,
   ): Promise<Array<WinnerRespond> | undefined> {
     try {
@@ -224,7 +226,7 @@ class Controller {
     }
   }
 
-  async getWinner(id: number): Promise<WinnerRespond | undefined> {
+  private async getWinner(id: number): Promise<WinnerRespond | undefined> {
     try {
       const winner: Response = await fetch(`${this.url}/winners/${id}`, {
         method: "GET",
@@ -236,7 +238,7 @@ class Controller {
     }
   }
 
-  async createWinner(
+  private async createWinner(
     data: WinnerInfo,
     wins?: number,
     bestTime?: number,
@@ -264,7 +266,10 @@ class Controller {
     });
   }
 
-  async chooseUpdateOrCreateUser(id: number, data: WinnerInfo) {
+  public async chooseUpdateOrCreateUser(
+    id: number,
+    data: WinnerInfo,
+  ): Promise<void> {
     const winner: WinnerRespond | undefined = await this.getWinner(id);
     let wins: number;
     let time: number;
@@ -282,7 +287,7 @@ class Controller {
     }
   }
 
-  async deleteWinner(id: number): Promise<void> {
+  public async deleteWinner(id: number): Promise<void> {
     await fetch(`${this.url}/winners/${id}`, {
       method: "DELETE",
     });

@@ -1,25 +1,29 @@
-import './header.scss';
-import { createElement } from '../../../utilities/service-functions';
-import Button from '../main/button/button';
+import "./header.scss";
+import { createElement } from "../../../utilities/service-functions";
+import Button from "../main/button/button";
 
 class Header {
   private header: HTMLDivElement;
+
   private headline: HTMLHeadingElement;
+
   private buttonBlock: HTMLDivElement;
+
   public hangarBtn: Button;
+
   public winnersBtn: Button;
 
   constructor() {
-    this.header = createElement('div', ['header'], document.body);
+    this.header = createElement("div", ["header"], document.body);
     this.headline = createElement(
-      'h1',
-      ['mainHeader'],
+      "h1",
+      ["mainHeader"],
       this.header,
-      'Async Air Race'
+      "Async Air Race",
     );
-    this.buttonBlock = createElement('div', ['buttonBlock'], this.header);
-    this.hangarBtn = new Button(this.buttonBlock, 'TO HANGAR');
-    this.winnersBtn = new Button(this.buttonBlock, 'TO WINNERS');
+    this.buttonBlock = createElement("div", ["buttonBlock"], this.header);
+    this.hangarBtn = new Button(this.buttonBlock, "TO HANGAR");
+    this.winnersBtn = new Button(this.buttonBlock, "TO WINNERS");
   }
 }
 
