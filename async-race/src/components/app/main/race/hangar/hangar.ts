@@ -1,32 +1,49 @@
-import './hangar.scss';
+import "./hangar.scss";
 import {
   createBalloonBlocks,
   insertElement,
-} from '../../../../../utilities/service-functions';
-import Controller from '../../../../../utilities/server-requests';
-import Button from '../../button/button';
-import BalloonBlock from './balloon-block/balloon-block';
-import { BalloonData } from '../../../../../utilities/types';
+} from "../../../../../utilities/service-functions";
+import Controller from "../../../../../utilities/server-requests";
+import Button from "../../button/button";
+import BalloonBlock from "./balloon-block/balloon-block";
+import { BalloonData } from "../../../../../utilities/types";
 
 class Hangar {
   private controller: Controller;
-  public hangarBlock: HTMLDivElement = document.createElement('div');
-  private headerLine: HTMLDivElement = document.createElement('div');
-  private header: HTMLHeadingElement = document.createElement('h3');
-  public balloonNum: HTMLHeadingElement = document.createElement('h3');
-  private paginationLine: HTMLDivElement = document.createElement('div');
-  private pageText: HTMLHeadingElement = document.createElement('h5');
-  public pageNumContainer: HTMLHeadingElement = document.createElement('h5');
+
+  public hangarBlock: HTMLDivElement = document.createElement("div");
+
+  private headerLine: HTMLDivElement = document.createElement("div");
+
+  private header: HTMLHeadingElement = document.createElement("h3");
+
+  public balloonNum: HTMLHeadingElement = document.createElement("h3");
+
+  private paginationLine: HTMLDivElement = document.createElement("div");
+
+  private pageText: HTMLHeadingElement = document.createElement("h5");
+
+  public pageNumContainer: HTMLHeadingElement = document.createElement("h5");
+
   public pageNum: number = 1;
+
   public pagesQuantity: number = 1;
-  public balloonBlocksContainer: HTMLDivElement = document.createElement('div');
+
+  public balloonBlocksContainer: HTMLDivElement = document.createElement("div");
+
   public balloonBlocksContainers: HTMLDivElement[] = [];
+
   public balloonBlocks: BalloonBlock[] = [];
+
   public selected: number | null = null;
+
   private paginationButtonsBlock: HTMLDivElement =
-    document.createElement('div');
-  public prevBtn: Button = new Button(this.paginationButtonsBlock, 'PREV');
-  public nextBtn: Button = new Button(this.paginationButtonsBlock, 'NEXT');
+    document.createElement("div");
+
+  public prevBtn: Button = new Button(this.paginationButtonsBlock, "PREV");
+
+  public nextBtn: Button = new Button(this.paginationButtonsBlock, "NEXT");
+
   private restartQuantity: number = 0;
 
   constructor() {
@@ -34,55 +51,55 @@ class Hangar {
   }
 
   draw(): void {
-    insertElement(this.hangarBlock, ['hangarBlock'], document.body);
-    insertElement(this.headerLine, ['headerLine'], this.hangarBlock);
-    insertElement(this.header, ['hangarHeader'], this.headerLine, 'Hangar');
-    insertElement(this.balloonNum, ['balloonsNum'], this.headerLine);
+    insertElement(this.hangarBlock, ["hangarBlock"], document.body);
+    insertElement(this.headerLine, ["headerLine"], this.hangarBlock);
+    insertElement(this.header, ["hangarHeader"], this.headerLine, "Hangar");
+    insertElement(this.balloonNum, ["balloonsNum"], this.headerLine);
     this.updateBalloonsNum(this.balloonNum);
-    insertElement(this.paginationLine, ['paginationLine'], this.hangarBlock);
-    insertElement(this.pageText, ['pageText'], this.paginationLine, 'Page');
+    insertElement(this.paginationLine, ["paginationLine"], this.hangarBlock);
+    insertElement(this.pageText, ["pageText"], this.paginationLine, "Page");
     insertElement(
       this.pageNumContainer,
-      ['pageNumContainer'],
+      ["pageNumContainer"],
       this.paginationLine,
-      `# ${this.pageNum}`
+      `# ${this.pageNum}`,
     );
     insertElement(
       this.balloonBlocksContainer,
-      ['balloonBlocksContainer'],
-      this.hangarBlock
+      ["balloonBlocksContainer"],
+      this.hangarBlock,
     );
     if (this.restartQuantity === 0) {
       this.restartQuantity = 1;
       this.balloonBlocksContainers = createBalloonBlocks(
-        this.balloonBlocksContainer
+        this.balloonBlocksContainer,
       );
     }
     insertElement(
       this.paginationButtonsBlock,
-      ['paginationButtonsBlock'],
-      this.hangarBlock
+      ["paginationButtonsBlock"],
+      this.hangarBlock,
     );
     if (this.pageNum === 1) {
-      this.prevBtn.button.classList.add('inactive');
+      this.prevBtn.button.classList.add("inactive");
     }
     this.countPages();
   }
 
   async fillBalloonBlocks(page: number): Promise<void> {
     const obj: BalloonData[] = await this.controller.getGarageObject();
-    const length: number = Object.keys(obj).length;
+    const { length } = Object.keys(obj);
     let i: number = 0 + (page - 1) * 7;
     let k: number = 0;
     while (i < length && k < 7) {
-      const name: string = Object.values(obj)[i].name;
-      const color: string = Object.values(obj)[i].color;
-      const id: number | undefined = Object.values(obj)[i].id;
+      const { name } = Object.values(obj)[i];
+      const { color } = Object.values(obj)[i];
+      const { id } = Object.values(obj)[i];
       const block: BalloonBlock = new BalloonBlock(
         this.balloonBlocksContainers[k],
         name,
         color,
-        id
+        id,
       );
       this.balloonBlocks.push(block);
       i += 1;
@@ -95,9 +112,9 @@ class Hangar {
     const itemsOnPage: number = 7;
     this.pagesQuantity = Math.ceil(Object.keys(obj).length / itemsOnPage);
     if (this.pageNum === this.pagesQuantity) {
-      this.nextBtn.button.classList.add('inactive');
+      this.nextBtn.button.classList.add("inactive");
     } else if (this.pagesQuantity > 1 && this.pageNum !== this.pagesQuantity) {
-      this.nextBtn.button.classList.remove('inactive');
+      this.nextBtn.button.classList.remove("inactive");
     }
   }
 
@@ -109,7 +126,7 @@ class Hangar {
 
   cleanBalloonBlocks(): void {
     this.balloonBlocksContainers.forEach((el): void => {
-      el.innerHTML = '';
+      el.innerHTML = "";
     });
   }
 }

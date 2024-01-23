@@ -1,10 +1,11 @@
-import './app.scss';
-import '../../assets/fonts/fonts.scss';
-import Header from './header/header';
-import Main from './main/main';
+import "./app.scss";
+import "../../assets/fonts/fonts.scss";
+import Header from "./header/header";
+import Main from "./main/main";
 
 class App {
   private header: Header;
+
   private main: Main;
 
   constructor() {
@@ -14,7 +15,7 @@ class App {
   }
 
   refreshWinners(): void {
-    this.header.winnersBtn.button.addEventListener('click', () => {
+    this.header.winnersBtn.button.addEventListener("click", () => {
       this.main.winners.refreshWinnersTable();
     });
   }

@@ -4,13 +4,14 @@ import {
   StartRaceData,
   QueryWinnersParams,
   QueryParams,
-  winnerInfo,
-  winnerRespond,
-} from './types';
+  WinnerInfo,
+  WinnerRespond,
+} from "./types";
 
 class Controller {
   private static instance: Controller;
-  public url: string = 'http://localhost:3000';
+
+  public url: string = "http://localhost:3000";
 
   private constructor() {}
 
@@ -44,9 +45,9 @@ class Controller {
   createNewBalloon(data: BalloonData): void {
     const balloon = async (): Promise<void> => {
       await fetch(`${this.url}/garage`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name: data.name,
@@ -68,7 +69,7 @@ class Controller {
   deleteBalloon(id: number): void {
     const balloon = async (id: number): Promise<void> => {
       await fetch(`${this.url}/garage/${id}`, {
-        method: 'DELETE',
+        method: "DELETE",
       });
     };
     const del = async (): Promise<void> => {
@@ -80,9 +81,9 @@ class Controller {
   updateBalloon(id: number, data: BalloonData): void {
     const balloon = async (): Promise<void> => {
       await fetch(`${this.url}/garage/${id}`, {
-        method: 'PUT',
+        method: "PUT",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name: data.name,
@@ -101,16 +102,16 @@ class Controller {
   }
 
   generateQueryString(data: QueryParams): string {
-    let result: string = '?';
+    let result: string = "?";
     for (const key in data) {
       if (Object.prototype.hasOwnProperty.call(data, key)) {
         const value: string = String(data[key as keyof QueryParams]);
-        if (result === '?') {
-          result = result + `${key}=${value}`;
-        } else if (key === 'sort' || key === 'order') {
-          result = result + `&_${key}=${value}`;
+        if (result === "?") {
+          result += `${key}=${value}`;
+        } else if (key === "sort" || key === "order") {
+          result += `&_${key}=${value}`;
         } else {
-          result = result + `&${key}=${value}`;
+          result += `&${key}=${value}`;
         }
       }
     }
@@ -121,7 +122,7 @@ class Controller {
     const race = async (): Promise<StartRaceData | void> => {
       const params: string = this.generateQueryString(data);
       const resp: Response = await fetch(`${this.url}/engine${params}`, {
-        method: 'PATCH',
+        method: "PATCH",
       });
       try {
         const body: StartRaceData = await resp.json();
@@ -129,13 +130,13 @@ class Controller {
       } catch (error) {
         switch (resp.status) {
           case 404:
-            console.log('Balloon with such id was not found in the hangar');
+            console.log("Balloon with such id was not found in the hangar");
             break;
           case 400:
-            console.log('Wrong parameters for start of the moving');
+            console.log("Wrong parameters for start of the moving");
             break;
           default:
-            console.log('Something went wrong!');
+            console.log("Something went wrong!");
         }
       }
     };
@@ -146,13 +147,13 @@ class Controller {
     data: QueryBurnerParams,
     timer: NodeJS.Timer,
     velocity: number,
-    isRace: boolean
+    isRace: boolean,
   ): Promise<
     { resp: Response; balloonId: number; velocity: number } | undefined
   > {
     const params: string = this.generateQueryString(data);
     const resp: Response = await fetch(`${this.url}/engine${params}`, {
-      method: 'PATCH',
+      method: "PATCH",
     });
     const balloonId: number = data.id;
     try {
@@ -163,23 +164,23 @@ class Controller {
         case 500:
           clearInterval(timer);
           console.log(
-            `Balloon has been landed suddenly. It's burner was broken down.`
+            `Balloon has been landed suddenly. It's burner was broken down.`,
           );
           if (isRace === true) {
             throw new Error();
           }
           break;
         case 400:
-          console.log('Wrong parameters for start of the moving');
+          console.log("Wrong parameters for start of the moving");
           break;
         case 404:
           console.log(
-            'Burner parameters for balloon with such id was not found in the hangar. Have you tried to set burner status to "started" before?'
+            'Burner parameters for balloon with such id was not found in the hangar. Have you tried to set burner status to "started" before?',
           );
           break;
         case 429:
           console.log(
-            `Flight already in progress. You can't run flight for the same balloon twice while it's not stopped.`
+            `Flight already in progress. You can't run flight for the same balloon twice while it's not stopped.`,
           );
           break;
       }
@@ -190,7 +191,7 @@ class Controller {
     data: QueryBurnerParams,
     timer: NodeJS.Timer,
     velocity: number,
-    isRace: boolean
+    isRace: boolean,
   ): Promise<
     { resp: Response; balloonId: number; velocity: number } | undefined
   > {
@@ -206,39 +207,39 @@ class Controller {
   }
 
   async getWinners(
-    data?: QueryWinnersParams
-  ): Promise<Array<winnerRespond> | undefined> {
+    data?: QueryWinnersParams,
+  ): Promise<Array<WinnerRespond> | undefined> {
     try {
-      let params: string = '';
+      let params: string = "";
       if (data) {
         params = this.generateQueryString(data);
       }
       const winners: Response = await fetch(`${this.url}/winners${params}`, {
-        method: 'GET',
+        method: "GET",
       });
-      const body: winnerRespond[] | undefined = await winners.json();
+      const body: WinnerRespond[] | undefined = await winners.json();
       return body;
     } catch {
-      console.log('Wrong winners request!');
+      console.log("Wrong winners request!");
     }
   }
 
-  async getWinner(id: number): Promise<winnerRespond | undefined> {
+  async getWinner(id: number): Promise<WinnerRespond | undefined> {
     try {
       const winner: Response = await fetch(`${this.url}/winners/${id}`, {
-        method: 'GET',
+        method: "GET",
       });
-      const body: winnerRespond | undefined = await winner.json();
+      const body: WinnerRespond | undefined = await winner.json();
       return body;
     } catch {
-      console.log('Wrong winners request!');
+      console.log("Wrong winners request!");
     }
   }
 
   async createWinner(
-    data: winnerInfo,
+    data: WinnerInfo,
     wins?: number,
-    bestTime?: number
+    bestTime?: number,
   ): Promise<void> {
     let currentWins: number;
     let currentBestTime: number = data.time;
@@ -251,9 +252,9 @@ class Controller {
       currentBestTime = bestTime;
     }
     await fetch(`${this.url}/winners`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         id: data.id,
@@ -263,8 +264,8 @@ class Controller {
     });
   }
 
-  async chooseUpdateOrCreateUser(id: number, data: winnerInfo) {
-    const winner: winnerRespond | undefined = await this.getWinner(id);
+  async chooseUpdateOrCreateUser(id: number, data: WinnerInfo) {
+    const winner: WinnerRespond | undefined = await this.getWinner(id);
     let wins: number;
     let time: number;
     if (winner instanceof Object) {
@@ -283,7 +284,7 @@ class Controller {
 
   async deleteWinner(id: number): Promise<void> {
     await fetch(`${this.url}/winners/${id}`, {
-      method: 'DELETE',
+      method: "DELETE",
     });
   }
 }
