@@ -50,7 +50,7 @@ class Hangar {
     this.controller = Controller.getInstance();
   }
 
-  draw(): void {
+  public draw(): void {
     insertElement(this.hangarBlock, ["hangarBlock"], document.body);
     insertElement(this.headerLine, ["headerLine"], this.hangarBlock);
     insertElement(this.header, ["hangarHeader"], this.headerLine, "Hangar");
@@ -86,7 +86,7 @@ class Hangar {
     this.countPages();
   }
 
-  async fillBalloonBlocks(page: number): Promise<void> {
+  public async fillBalloonBlocks(page: number): Promise<void> {
     const obj: BalloonData[] = await this.controller.getGarageObject();
     const { length } = Object.keys(obj);
     let i: number = 0 + (page - 1) * 7;
@@ -107,7 +107,7 @@ class Hangar {
     }
   }
 
-  async countPages(): Promise<void> {
+  public async countPages(): Promise<void> {
     const obj: BalloonData[] = await this.controller.getGarageObject();
     const itemsOnPage: number = 7;
     this.pagesQuantity = Math.ceil(Object.keys(obj).length / itemsOnPage);
@@ -118,15 +118,21 @@ class Hangar {
     }
   }
 
-  updateBalloonsNum(elem: HTMLHeadingElement): void {
+  public updateBalloonsNum(elem: HTMLHeadingElement): void {
     this.controller.getGarageObject().then((obj): void => {
-      elem.innerText = `(${Object.keys(obj).length})`;
+      const updatedElem = elem;
+      updatedElem.innerText = `(${Object.keys(obj).length})`;
+      if (this.headerLine.lastChild) this.headerLine.lastChild.remove();
+      this.balloonNum = updatedElem;
+      this.headerLine.appendChild(this.balloonNum);
     });
   }
 
-  cleanBalloonBlocks(): void {
+  public cleanBalloonBlocks(): void {
     this.balloonBlocksContainers.forEach((el): void => {
-      el.innerHTML = "";
+      while (el.firstChild) {
+        el.removeChild(el.firstChild);
+      }
     });
   }
 }
