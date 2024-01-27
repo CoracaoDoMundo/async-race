@@ -173,75 +173,71 @@ class WinnersTable {
     const obj: WinnerRespond[] | undefined = await this.controller.getWinners(
       data,
     );
-    if (Array.isArray(obj)) {
-      let wins: number = 1;
-      let i = 0 + (page - 1) * itemsOnPage;
-      while (i < itemsOnPage * page && i < Object.values(obj).length) {
-        const numContainer: HTMLDivElement = createElement(
-          "div",
-          ["numContainer", "cell"],
-          container,
-        );
-        const num: HTMLSpanElement = createElement(
-          "span",
-          ["num"],
-          numContainer,
-          `${i + 1}`,
-        );
-        const balloonContainer: HTMLDivElement = createElement(
-          "div",
-          ["balloonContainer", "cell"],
-          container,
-        );
-        const balloon = new Balloon();
-        this.controller.getBalloonInfo(obj[i].id).then((result) => {
-          const { color } = result;
-          balloon.draw(balloonContainer, color);
-        });
-        balloon.balloon.classList.remove("animatedBalloon");
-        const nameContainer: HTMLDivElement = createElement(
-          "div",
-          ["nameContainer", "cell"],
-          container,
-        );
-        this.controller.getBalloonInfo(obj[i].id).then((result) => {
-          const winnerNameStr: string = result.name;
-          const winnerName: HTMLSpanElement = createElement(
-            "span",
-            ["winnerName"],
-            nameContainer,
-            winnerNameStr,
-          );
-        });
-        const winsNumContainer: HTMLDivElement = createElement(
-          "div",
-          ["winsNumContainer", "cell"],
-          container,
-        );
-        if (obj[i].wins) {
-          wins = obj[i].wins;
-        }
-        const winsNum: HTMLSpanElement = createElement(
-          "span",
-          ["winsNum"],
-          winsNumContainer,
-          `${wins}`,
-        );
-        const bestTimeContainer: HTMLDivElement = createElement(
-          "div",
-          ["bestTimeContainer", "cell"],
-          container,
-        );
-        const { time } = obj[i];
-        const bestTime: HTMLSpanElement = createElement(
-          "span",
-          ["bestTime"],
-          bestTimeContainer,
-          `${time}`,
-        );
-        i += 1;
+    if (!Array.isArray(obj)) return;
+    this.drawTableLoop(page, itemsOnPage, obj, container);
+  }
+
+  private drawTableLoop(
+    page: number,
+    itemsOnPage: number,
+    obj: WinnerRespond[],
+    container: HTMLDivElement,
+  ): void {
+    let wins: number = 1;
+    let i = 0 + (page - 1) * itemsOnPage;
+    while (i < itemsOnPage * page && i < Object.values(obj).length) {
+      const numContainer: HTMLDivElement = createElement(
+        "div",
+        ["numContainer", "cell"],
+        container,
+      );
+      createElement("span", ["num"], numContainer, `${i + 1}`);
+      this.drawBalloonWithNameInTable(obj, i, container);
+      const winsNumContainer: HTMLDivElement = createElement(
+        "div",
+        ["winsNumContainer", "cell"],
+        container,
+      );
+      if (obj[i].wins) {
+        wins = obj[i].wins;
       }
+      createElement("span", ["winsNum"], winsNumContainer, `${wins}`);
+      const bestTimeContainer: HTMLDivElement = createElement(
+        "div",
+        ["bestTimeContainer", "cell"],
+        container,
+      );
+      const { time } = obj[i];
+      createElement("span", ["bestTime"], bestTimeContainer, `${time}`);
+      i += 1;
     }
+  }
+
+  private drawBalloonWithNameInTable(
+    obj: WinnerRespond[],
+    i: number,
+    container: HTMLDivElement,
+  ): void {
+    const balloonContainer: HTMLDivElement = createElement(
+      "div",
+      ["balloonContainer", "cell"],
+      container,
+    );
+    const balloon = new Balloon();
+    this.controller.getBalloonInfo(obj[i].id).then((result) => {
+      const { color } = result;
+      balloon.draw(balloonContainer, color);
+    });
+    balloon.balloon.classList.remove("animatedBalloon");
+    const nameContainer: HTMLDivElement = createElement(
+      "div",
+      ["nameContainer", "cell"],
+      container,
+    );
+    this.controller.getBalloonInfo(obj[i].id).then((result) => {
+      const winnerNameStr: string = result.name;
+      createElement("span", ["winnerName"], nameContainer, winnerNameStr);
+    });
   }
 
   private async countPages(): Promise<void> {
@@ -259,9 +255,13 @@ class WinnersTable {
 
   private updateWinnersNum(elem: HTMLHeadingElement): void {
     this.controller.getWinners().then((obj): void => {
+      const updatedElem = elem;
       if (obj instanceof Object) {
-        elem.innerText = `(${Object.keys(obj).length})`;
+        updatedElem.innerText = `(${Object.keys(obj).length})`;
       }
+      if (this.headerLine.lastChild) this.headerLine.lastChild.remove();
+      this.winnersNum = updatedElem;
+      this.headerLine.appendChild(this.winnersNum);
     });
   }
 }
