@@ -11,9 +11,9 @@ import {
 class Controller {
   private static instance: Controller;
 
-  public url: string = "http://localhost:3000";
+  private queryString: string = "?";
 
-  private constructor() {}
+  public url: string = "http://localhost:3000";
 
   public static getInstance(): Controller {
     if (!Controller.instance) {
@@ -67,13 +67,13 @@ class Controller {
   }
 
   public deleteBalloon(id: number): void {
-    const balloon = async (id: number): Promise<void> => {
+    const balloon = async (): Promise<void> => {
       await fetch(`${this.url}/garage/${id}`, {
         method: "DELETE",
       });
     };
     const del = async (): Promise<void> => {
-      await balloon(id);
+      await balloon();
     };
     del();
   }
@@ -102,20 +102,19 @@ class Controller {
   }
 
   private generateQueryString(data: QueryParams): string {
-    let result: string = "?";
-    for (const key in data) {
-      if (Object.prototype.hasOwnProperty.call(data, key)) {
-        const value: string = String(data[key as keyof QueryParams]);
-        if (result === "?") {
-          result += `${key}=${value}`;
-        } else if (key === "sort" || key === "order") {
-          result += `&_${key}=${value}`;
-        } else {
-          result += `&${key}=${value}`;
-        }
+    this.queryString = "?";
+    const dataArr = Object.entries(data);
+    for (let i = 0; i <= dataArr.length - 1; i += 1) {
+      const value: string = String(dataArr[i][1]);
+      if (this.queryString === "?") {
+        this.queryString += `${dataArr[i][0]}=${value}`;
+      } else if (dataArr[i][0] === "sort" || dataArr[i][0] === "order") {
+        this.queryString += `&_${dataArr[i][0]}=${value}`;
+      } else {
+        this.queryString += `&${dataArr[i][0]}=${value}`;
       }
     }
-    return result;
+    return this.queryString;
   }
 
   public startStopBurner(
@@ -141,6 +140,7 @@ class Controller {
             console.log("Something went wrong!");
         }
       }
+      return undefined;
     };
     return race();
   }
