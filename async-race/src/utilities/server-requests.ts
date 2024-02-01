@@ -13,6 +13,8 @@ class Controller {
 
   private queryString: string = "?";
 
+  private errorText: string = "Error occurred";
+
   public url: string = "http://localhost:3000";
 
   public static getInstance(): Controller {
@@ -162,30 +164,40 @@ class Controller {
       await resp.json();
       return { resp, balloonId, velocity };
     } catch (error) {
-      switch (resp.status) {
-        case 500:
-          clearInterval(timer);
-          console.log(
-            `Balloon has been landed suddenly. It's burner was broken down.`,
-          );
-          if (isRace === true) {
-            throw new Error();
-          }
-          break;
-        case 400:
-          console.log("Wrong parameters for start of the moving");
-          break;
-        case 404:
-          console.log(
-            'Burner parameters for balloon with such id was not found in the hangar. Have you tried to set burner status to "started" before?',
-          );
-          break;
-        case 429:
-          console.log(
-            `Flight already in progress. You can't run flight for the same balloon twice while it's not stopped.`,
-          );
-          break;
-      }
+      this.formErrorText(resp.status, timer, isRace);
+      return undefined;
+    }
+  }
+
+  private formErrorText(
+    status: number,
+    timer: NodeJS.Timer,
+    isRace: boolean,
+  ): void {
+    switch (status) {
+      case 500:
+        clearInterval(timer);
+        this.errorText = `Balloon has been landed suddenly. It's burner was broken down.`;
+        console.log(this.errorText);
+        if (isRace === true) {
+          throw new Error();
+        }
+        break;
+      case 400:
+        this.errorText = "Wrong parameters for start of the moving";
+        console.log(this.errorText);
+        break;
+      case 404:
+        this.errorText =
+          'Burner parameters for balloon with such id was not found in the hangar. Have you tried to set burner status to "started" before?';
+        console.log(this.errorText);
+        break;
+      case 429:
+        this.errorText = `Flight already in progress. You can't run flight for the same balloon twice while it's not stopped.`;
+        console.log(this.errorText);
+        break;
+      default:
+        console.log(this.errorText);
     }
   }
 
@@ -223,6 +235,7 @@ class Controller {
       return body;
     } catch {
       console.log("Wrong winners request!");
+      return undefined;
     }
   }
 
@@ -235,6 +248,7 @@ class Controller {
       return body;
     } catch {
       console.log("Wrong winners request!");
+      return undefined;
     }
   }
 
