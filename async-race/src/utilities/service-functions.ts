@@ -29,7 +29,11 @@ const insertElement = (
 ): void => {
   element.classList.add(...classNames);
   if (text) {
-    element.textContent = text;
+    const textNode = document.createTextNode(text);
+    while (element.firstChild) {
+      element.removeChild(element.firstChild);
+    }
+    element.appendChild(textNode);
   }
   if (place === "before") {
     parentNode.prepend(element);
@@ -75,6 +79,7 @@ const moveBalloon = (
     }, 16);
     return intervalId;
   }
+  return undefined;
 };
 
 const moveBalloonOnStart = (elem: SVGElement): void => {
