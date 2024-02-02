@@ -95,9 +95,6 @@ const createWinnerAnnounce = (
   name: string,
   time: string,
 ): void => {
-  if (name === "") {
-    name = "no name";
-  }
   const announceInfo: string = `The winner is ${name} balloon for ${time} seconds!`;
   const announceCover: HTMLDivElement = createElement(
     "div",
