@@ -16,13 +16,13 @@ class Main {
     this.race.draw();
     this.winners = new Winners();
     this.hangarBtn = hangarBtn;
-    this.addListener(this.hangarBtn, this.pushHangarBtn.bind(this));
+    this.hangarBtn.button.addEventListener("click", (): void =>
+      this.pushHangarBtn(),
+    );
     this.winnersBtn = winnersBtn;
-    this.addListener(this.winnersBtn, this.pushWinnersBtn.bind(this));
-  }
-
-  private addListener(elem: Button, func: Function): void {
-    elem.button.addEventListener("click", (): void => func(elem));
+    this.winnersBtn.button.addEventListener("click", (): void =>
+      this.pushWinnersBtn(),
+    );
   }
 
   private pushWinnersBtn(): void {
