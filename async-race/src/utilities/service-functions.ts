@@ -64,6 +64,7 @@ const moveBalloon = (
 ): NodeJS.Timer | undefined => {
   if (elem.parentElement) {
     elem.classList.remove("animatedBalloon");
+    elem.classList.remove("onStart");
     elem.setAttribute("air", "true");
     let currentPlace: number = elem.parentElement.offsetLeft;
     const endPlace: number = container.clientWidth - 80;
@@ -85,7 +86,7 @@ const moveBalloon = (
 const moveBalloonOnStart = (elem: SVGElement): void => {
   if (elem.getAttribute("air") === "true") {
     elem.removeAttribute("air");
-    elem.style.transform = `translateX(0px)`;
+    elem.classList.add("onStart");
     elem.classList.add("animatedBalloon");
   }
 };

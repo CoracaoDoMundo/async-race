@@ -20,6 +20,7 @@ class Balloon {
     this.balloon.setAttribute("viewBox", "37.98 9.97 63.31 78.2");
     this.balloon.setAttribute("xml:space", "preserve");
     this.balloon.classList.add("balloon", "animatedBalloon");
+    this.balloon.classList.add("balloon", "onStart");
     const gBlock: SVGGraphicsElement = document.createElementNS(
       "http://www.w3.org/2000/svg",
       "g",
