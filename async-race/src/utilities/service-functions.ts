@@ -76,7 +76,12 @@ const moveBalloon = (
       if (currentPlace > endPlace) {
         clearInterval(intervalId);
       }
-      elem.style.transform = `translateX(${currentPlace}px)`;
+      const raceLaneNumber = container.id;
+      document.documentElement.style.setProperty(
+        `--position${raceLaneNumber}`,
+        `${currentPlace}px`,
+      );
+      elem.classList.add(`onMove${raceLaneNumber}`);
     }, 16);
     return intervalId;
   }

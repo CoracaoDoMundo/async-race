@@ -1,5 +1,15 @@
 @import '../../../../../app.scss';
 
+:root {
+  --position1: 1px;
+  --position2: 1px;
+  --position3: 1px;
+  --position4: 1px;
+  --position5: 1px;
+  --position6: 1px;
+  --position7: 1px;
+}
+
 .balloon {
   width: 100%;
   height: 100%;
@@ -29,4 +39,32 @@
   100% {
     transform: translateY(2px);
   }
+}
+
+.onMove1 {
+  transform: translateX(var(--position1))
+}
+
+.onMove2 {
+  transform: translateX(var(--position2))
+}
+
+.onMove3 {
+  transform: translateX(var(--position3))
+}
+
+.onMove4 {
+  transform: translateX(var(--position4))
+}
+
+.onMove5 {
+  transform: translateX(var(--position5))
+}
+
+.onMove6 {
+  transform: translateX(var(--position6))
+}
+
+.onMove7 {
+  transform: translateX(var(--position7))
 }

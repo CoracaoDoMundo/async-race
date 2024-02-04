@@ -101,6 +101,7 @@ class Hangar {
         color,
         id,
       );
+      block.raceBlock.id = `${k + 1}`;
       this.balloonBlocks.push(block);
       i += 1;
       k += 1;
