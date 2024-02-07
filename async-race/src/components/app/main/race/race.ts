@@ -28,6 +28,8 @@ class Race {
 
   public data: BalloonData;
 
+  public isRaceOn: boolean = false;
+
   constructor() {
     this.controls = new Controls();
     this.hangar = new Hangar();
@@ -377,6 +379,7 @@ class Race {
       const time = startTimer();
       if (!elem.button.classList.contains("inactive")) {
         elem.button.classList.add("inactive");
+        this.isRaceOn = true;
         const promisesArr = this.hangar.balloonBlocks.map(
           async (
             el,
@@ -394,7 +397,9 @@ class Race {
               const winnerName: string = el.balloonName.innerText;
               const winnerTime = this.countWinnerTime(velocity);
               const timeResult = time();
-              this.nameWinner(winnerTime, timeResult, winnerName, balloonId);
+              if (this.isRaceOn) {
+                this.nameWinner(winnerTime, timeResult, winnerName, balloonId);
+              }
             }
           });
         } catch {
@@ -434,6 +439,7 @@ class Race {
       time: Number(winnerTime.toFixed(2)),
       id: balloonId,
     });
+    this.isRaceOn = false;
   }
 
   private countWinnerTime(velocity: number): number {
@@ -446,6 +452,7 @@ class Race {
   private pushResetButton(elem: Button): void {
     elem.button.addEventListener("click", (): void => {
       if (!elem.button.classList.contains("inactive")) {
+        this.isRaceOn = false;
         this.hangar.balloonBlocks.forEach(async (el): Promise<void> => {
           await this.pushLandButton(el.landButton.button);
         });
