@@ -1,4 +1,4 @@
-import { BalloonData } from "./types";
+import { BalloonData, TimerFunc } from "./types";
 
 const createElement = <T extends HTMLElement>(
   tagName: keyof HTMLElementTagNameMap,
@@ -112,6 +112,16 @@ const createWinnerAnnounce = (
   announceCover.addEventListener("click", (): void => announceCover.remove());
 };
 
+const startTimer = (): TimerFunc => {
+  const startTime = Date.now();
+
+  return (): number => {
+    const currentTime = Date.now();
+    const elapsedTime = currentTime - startTime;
+    return elapsedTime;
+  };
+};
+
 const sortValues = (obj: BalloonData[]): (number | undefined)[] => {
   return obj
     .map((el) => el.id)
@@ -136,5 +146,6 @@ export {
   moveBalloonOnStart,
   insertElement,
   createWinnerAnnounce,
+  startTimer,
   sortValues,
 };

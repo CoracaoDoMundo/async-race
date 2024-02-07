@@ -131,3 +131,5 @@ export type WinnerRespond = {
   name: string;
   color: string;
 };
+
+export type TimerFunc = () => number;

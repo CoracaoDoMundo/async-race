@@ -15,6 +15,7 @@ import {
   moveBalloon,
   moveBalloonOnStart,
   createWinnerAnnounce,
+  startTimer,
   sortValues,
 } from "../../../../utilities/service-functions";
 
@@ -373,6 +374,7 @@ class Race {
 
   private pushRaceButton(elem: Button): void {
     elem.button.addEventListener("click", async (): Promise<void> => {
+      const time = startTimer();
       if (!elem.button.classList.contains("inactive")) {
         elem.button.classList.add("inactive");
         const promisesArr = this.hangar.balloonBlocks.map(
@@ -391,22 +393,46 @@ class Race {
             if (Number(el.balloonName.id) === balloonId) {
               const winnerName: string = el.balloonName.innerText;
               const winnerTime = this.countWinnerTime(velocity);
-              createWinnerAnnounce(
-                document.body,
-                winnerName,
-                String(winnerTime.toFixed(2)),
-              );
-              this.controller.chooseUpdateOrCreateUser(balloonId, {
-                wins: 1,
-                time: Number(winnerTime.toFixed(2)),
-                id: balloonId,
-              });
+              const timeResult = time();
+              this.nameWinner(winnerTime, timeResult, winnerName, balloonId);
             }
           });
         } catch {
           this.controls.resetBtn.button.classList.remove("inactive");
         }
       }
+    });
+  }
+
+  private nameWinner(
+    winnerTime: number,
+    timeResult: number,
+    winnerName: string,
+    balloonId: number,
+  ): void {
+    const timeDifference = winnerTime - timeResult / 1000;
+    if (timeDifference < 0) {
+      createWinnerAnnounce(
+        document.body,
+        winnerName,
+        String(winnerTime.toFixed(2)),
+      );
+    } else {
+      setTimeout(
+        () => {
+          createWinnerAnnounce(
+            document.body,
+            winnerName,
+            String(winnerTime.toFixed(2)),
+          );
+        },
+        timeDifference * 1000 - 500,
+      );
+    }
+    this.controller.chooseUpdateOrCreateUser(balloonId, {
+      wins: 1,
+      time: Number(winnerTime.toFixed(2)),
+      id: balloonId,
     });
   }
 
