@@ -349,20 +349,19 @@ class Race {
         status: "stopped",
       };
       const endResponse = await this.controller.startStopBurner(data);
-      if (endResponse) {
-        const startBtn = elem.previousSibling;
-        if (startBtn instanceof HTMLDivElement) {
-          startBtn.classList.remove("inactive");
-          elem.classList.add("inactive");
-        }
-
-        this.hangar.balloonBlocks.forEach((el): void => {
-          if (data.id === Number(el.balloonSvg.balloon.id)) {
-            const animatedBalloon: SVGElement = el.balloonSvg.balloon;
-            moveBalloonOnStart(animatedBalloon);
-          }
-        });
+      if (!endResponse) return;
+      const startBtn = elem.previousSibling;
+      if (startBtn instanceof HTMLDivElement) {
+        startBtn.classList.remove("inactive");
+        elem.classList.add("inactive");
       }
+
+      this.hangar.balloonBlocks.forEach((el): void => {
+        if (data.id === Number(el.balloonSvg.balloon.id)) {
+          const animatedBalloon: SVGElement = el.balloonSvg.balloon;
+          moveBalloonOnStart(animatedBalloon);
+        }
+      });
     }
   }
 

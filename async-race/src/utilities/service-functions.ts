@@ -91,6 +91,8 @@ const moveBalloon = (
 const moveBalloonOnStart = (elem: SVGElement): void => {
   if (elem.getAttribute("air") === "true") {
     elem.removeAttribute("air");
+    const container = elem.closest(".raceBlock");
+    if (container) elem.classList.remove(`onMove${container.id}`);
     elem.classList.add("onStart");
     elem.classList.add("animatedBalloon");
   }
