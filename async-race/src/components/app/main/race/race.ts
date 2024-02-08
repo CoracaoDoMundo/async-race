@@ -389,6 +389,7 @@ class Race {
         );
         this.controls.resetBtn.button.classList.remove("inactive");
         try {
+          if (!this.isRaceOn) return;
           const winnerPromise = await Promise.any(promisesArr);
           if (!winnerPromise) return;
           const { balloonId, velocity } = winnerPromise;
@@ -397,9 +398,8 @@ class Race {
               const winnerName: string = el.balloonName.innerText;
               const winnerTime = this.countWinnerTime(velocity);
               const timeResult = time();
-              if (this.isRaceOn) {
-                this.nameWinner(winnerTime, timeResult, winnerName, balloonId);
-              }
+              if (!this.isRaceOn) return;
+              this.nameWinner(winnerTime, timeResult, winnerName, balloonId);
             }
           });
         } catch {
@@ -416,6 +416,7 @@ class Race {
     balloonId: number,
   ): void {
     const timeDifference = winnerTime - timeResult / 1000;
+    if (!this.isRaceOn) return;
     if (timeDifference < 0) {
       createWinnerAnnounce(
         document.body,
