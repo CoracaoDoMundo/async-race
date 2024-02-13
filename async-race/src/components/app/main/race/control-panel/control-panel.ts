@@ -15,7 +15,7 @@ class Controls {
 
   public inputCreate: TextInput = new TextInput(this.inputCreateLine);
 
-  public inputUpdate: TextInput = new TextInput(this.inputUpdateLine, false);
+  public inputUpdate: TextInput = new TextInput(this.inputUpdateLine, true);
 
   public inputColorCreate: ColorInput = new ColorInput(
     this.inputCreateLine,
