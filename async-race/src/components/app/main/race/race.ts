@@ -489,9 +489,11 @@ class Race {
         Promise.resolve()
           .then(() => Promise.all(promises))
           .then(() => {
-            elem.button.classList.add("inactive");
-            this.controls.raceBtn.button.classList.remove("inactive");
-            this.isReset = false;
+            setTimeout((): void => {
+              this.controls.raceBtn.button.classList.remove("inactive");
+              elem.button.classList.add("inactive");
+              this.isReset = false;
+            }, 1500);
           });
       }
     });
