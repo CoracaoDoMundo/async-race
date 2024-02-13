@@ -94,24 +94,19 @@ class Hangar {
 
   public async fillBalloonBlocks(page: number): Promise<void> {
     const obj: BalloonData[] = await this.controller.getGarageObject();
-    const { length } = Object.keys(obj);
-    let i: number = 0 + (page - 1) * this.balloonsPerPage;
-    let k: number = 0;
-    while (i < length && k < this.balloonsPerPage) {
-      const { name } = Object.values(obj)[i];
-      const { color } = Object.values(obj)[i];
-      const { id } = Object.values(obj)[i];
-      const block: BalloonBlock = new BalloonBlock(
-        this.balloonBlocksContainers[k],
-        name,
-        color,
-        id,
-      );
-      block.raceBlock.id = `${k + 1}`;
-      this.balloonBlocks.push(block);
-      i += 1;
-      k += 1;
-    }
+    const startPageId = 0 + (page - 1) * this.balloonsPerPage;
+    this.balloonBlocks = obj
+      .slice(startPageId, startPageId + this.balloonsPerPage)
+      .map((item, index) => {
+        const block: BalloonBlock = new BalloonBlock(
+          this.balloonBlocksContainers[index],
+          item.name,
+          item.color,
+          item.id,
+        );
+        block.raceBlock.id = `${index + 1}`;
+        return block;
+      });
   }
 
   public async countPages(): Promise<void> {
