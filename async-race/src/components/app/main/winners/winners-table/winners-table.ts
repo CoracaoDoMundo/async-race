@@ -105,14 +105,14 @@ class WinnersTable {
         columnNameBlock,
         ColumnNames[i],
       );
-      if (columnName.innerText === "Wins") {
+      if (columnName.innerText.startsWith("Wins")) {
         columnNameBlock.style.cursor = "pointer";
         columnNameBlock.addEventListener("click", () => {
           this.addListenerForSort("wins", this.winsSort);
         });
       }
 
-      if (columnName.innerText === "Best time (sec)") {
+      if (columnName.innerText.startsWith("Best time (sec)")) {
         columnNameBlock.style.cursor = "pointer";
         columnNameBlock.addEventListener("click", () => {
           this.addListenerForSort("time", this.timeSort);

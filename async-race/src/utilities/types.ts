@@ -114,8 +114,8 @@ export enum ColumnNames {
   "Number",
   "Balloon",
   "Name",
-  "Wins",
-  "Best time (sec)",
+  "Wins ⇅",
+  "Best time (sec) ⇅",
 }
 
 export type WinnerInfo = {
