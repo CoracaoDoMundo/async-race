@@ -48,7 +48,9 @@ class Hangar {
     name: "NEXT",
   });
 
-  private restartQuantity: number = 0;
+  private restartQuantity = 0;
+
+  private balloonsPerPage = 7;
 
   constructor() {
     this.controller = Controller.getInstance();
@@ -93,9 +95,9 @@ class Hangar {
   public async fillBalloonBlocks(page: number): Promise<void> {
     const obj: BalloonData[] = await this.controller.getGarageObject();
     const { length } = Object.keys(obj);
-    let i: number = 0 + (page - 1) * 7;
+    let i: number = 0 + (page - 1) * this.balloonsPerPage;
     let k: number = 0;
-    while (i < length && k < 7) {
+    while (i < length && k < this.balloonsPerPage) {
       const { name } = Object.values(obj)[i];
       const { color } = Object.values(obj)[i];
       const { id } = Object.values(obj)[i];
@@ -114,8 +116,9 @@ class Hangar {
 
   public async countPages(): Promise<void> {
     const obj: BalloonData[] = await this.controller.getGarageObject();
-    const itemsOnPage: number = 7;
-    this.pagesQuantity = Math.ceil(Object.keys(obj).length / itemsOnPage);
+    this.pagesQuantity = Math.ceil(
+      Object.keys(obj).length / this.balloonsPerPage,
+    );
     if (this.pageNum === this.pagesQuantity) {
       this.nextBtn.button.classList.add("inactive");
     } else if (this.pagesQuantity > 1 && this.pageNum !== this.pagesQuantity) {
