@@ -132,4 +132,10 @@ export type WinnerRespond = {
   color: string;
 };
 
+export type TButtonOptions = {
+  name: string;
+  inactive?: boolean;
+  id?: number;
+};
+
 export type TimerFunc = () => number;

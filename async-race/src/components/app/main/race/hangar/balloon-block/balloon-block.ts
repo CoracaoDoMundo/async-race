@@ -25,7 +25,9 @@ class BalloonBlock {
 
   private ribbon: HTMLDivElement;
 
-  private ribbonSvg: Ribbon;
+  private ribbonSvg: Ribbon = new Ribbon();
+
+  private inactive: boolean = false;
 
   constructor(
     container: HTMLDivElement,
@@ -38,8 +40,8 @@ class BalloonBlock {
       ["buttonsNameBlock"],
       container,
     );
-    this.selectBtn = new Button(this.buttonsNameBlock, "SELECT", id);
-    this.removeBtn = new Button(this.buttonsNameBlock, "REMOVE", id);
+    this.selectBtn = this.createButton(this.buttonsNameBlock, "SELECT", id);
+    this.removeBtn = this.createButton(this.buttonsNameBlock, "REMOVE", id);
     this.balloonName = createElement(
       "span",
       ["balloonName"],
@@ -48,15 +50,27 @@ class BalloonBlock {
     );
     this.balloonName.setAttribute("id", String(id));
     this.raceBlock = createElement("div", ["raceBlock"], container);
-    this.upButton = new Button(this.raceBlock, "Up", id);
-    this.landButton = new Button(this.raceBlock, "Land", id);
+    this.upButton = this.createButton(this.raceBlock, "Up", id);
+    this.landButton = this.createButton(this.raceBlock, "Land", id, true);
     this.balloon = createElement("div", ["balloonContainer"], this.raceBlock);
     this.balloonSvg = new Balloon(id);
     this.balloonSvg.draw(this.balloon, color);
     this.ribbon = createElement("div", ["ribbonContainer"], this.raceBlock);
-    this.ribbonSvg = new Ribbon();
     this.ribbonSvg.draw(this.ribbon);
     createElement("div", ["trackLine"], this.raceBlock);
+  }
+
+  private createButton(
+    container: HTMLDivElement,
+    name: string,
+    id: number | undefined,
+    inactive: boolean = this.inactive,
+  ): Button {
+    return new Button(container, {
+      name,
+      inactive,
+      id,
+    });
   }
 }
 

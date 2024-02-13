@@ -28,18 +28,27 @@ class Controls {
     false,
   );
 
-  public createBtn: Button = new Button(this.inputCreateLine, "CREATE");
+  public createBtn: Button = new Button(this.inputCreateLine, {
+    name: "CREATE",
+  });
 
-  public updateBtn: Button = new Button(this.inputUpdateLine, "UPDATE");
+  public updateBtn: Button = new Button(this.inputUpdateLine, {
+    name: "UPDATE",
+    inactive: true,
+  });
 
-  public raceBtn: Button = new Button(this.buttonsLine, "RACE");
+  public raceBtn: Button = new Button(this.buttonsLine, {
+    name: "RACE",
+  });
 
-  public resetBtn: Button = new Button(this.buttonsLine, "RESET");
+  public resetBtn: Button = new Button(this.buttonsLine, {
+    name: "RESET",
+    inactive: true,
+  });
 
-  public generateBtn: Button = new Button(
-    this.buttonsLine,
-    "GENERATE BALLOONS",
-  );
+  public generateBtn: Button = new Button(this.buttonsLine, {
+    name: "GENERATE BALLOONS",
+  });
 
   public draw(): void {
     insertElement(this.controlBlock, ["controlBlock"], document.body);

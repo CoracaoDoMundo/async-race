@@ -38,9 +38,13 @@ class WinnersTable {
   private paginationButtonsBlock: HTMLDivElement =
     document.createElement("div");
 
-  public prevBtn: Button = new Button(this.paginationButtonsBlock, "PREV");
+  public prevBtn: Button = new Button(this.paginationButtonsBlock, {
+    name: "PREV",
+  });
 
-  public nextBtn: Button = new Button(this.paginationButtonsBlock, "NEXT");
+  public nextBtn: Button = new Button(this.paginationButtonsBlock, {
+    name: "NEXT",
+  });
 
   private restartQuantity: number = 0;
 
