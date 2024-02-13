@@ -57,37 +57,6 @@ const createBalloonBlocks = (container: HTMLDivElement): HTMLDivElement[] => {
   return arr;
 };
 
-const moveBalloon = (
-  elem: SVGElement,
-  container: HTMLDivElement,
-  speed: number,
-): NodeJS.Timer | undefined => {
-  if (elem.parentElement) {
-    elem.classList.remove("animatedBalloon");
-    elem.classList.remove("onStart");
-    elem.setAttribute("air", "true");
-    let currentPlace: number = elem.parentElement.offsetLeft;
-    const endPlace: number = container.clientWidth - 80;
-    const time: number = (endPlace - currentPlace) / speed;
-    const framesQuantity: number = time * 60;
-    const shift: number = (endPlace - currentPlace) / framesQuantity;
-    const intervalId: NodeJS.Timer = setInterval((): void => {
-      currentPlace += shift;
-      if (currentPlace > endPlace) {
-        clearInterval(intervalId);
-      }
-      const raceLaneNumber = container.id;
-      document.documentElement.style.setProperty(
-        `--position${raceLaneNumber}`,
-        `${currentPlace}px`,
-      );
-      elem.classList.add(`onMove${raceLaneNumber}`);
-    }, 16);
-    return intervalId;
-  }
-  return undefined;
-};
-
 const moveBalloonOnStart = (elem: SVGElement): void => {
   if (elem.getAttribute("air") === "true") {
     elem.removeAttribute("air");
@@ -144,7 +113,7 @@ const sortValues = (obj: BalloonData[]): (number | undefined)[] => {
 export {
   createElement,
   createBalloonBlocks,
-  moveBalloon,
+  // moveBalloon,
   moveBalloonOnStart,
   insertElement,
   createWinnerAnnounce,
