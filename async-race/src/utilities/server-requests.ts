@@ -163,6 +163,7 @@ class Controller {
         this.errorText =
           'Burner parameters for balloon with such id was not found in the hangar. Have you tried to set burner status to "started" before?';
         console.log(this.errorText);
+        if (isRace) throw new Error();
         break;
       case 429:
         this.errorText = `Flight already in progress. You can't run flight for the same balloon twice while it's not stopped.`;
