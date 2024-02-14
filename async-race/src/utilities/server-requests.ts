@@ -153,9 +153,7 @@ class Controller {
         clearInterval(timer);
         this.errorText = `Balloon has been landed suddenly. It's burner was broken down.`;
         console.log(this.errorText);
-        if (isRace === true) {
-          throw new Error();
-        }
+        if (isRace) throw new Error();
         break;
       case 400:
         this.errorText = "Wrong parameters for start of the moving";
