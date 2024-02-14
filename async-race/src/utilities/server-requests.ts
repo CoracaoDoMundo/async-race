@@ -24,83 +24,60 @@ class Controller {
     return Controller.instance;
   }
 
-  public getGarageObject(): Promise<BalloonData[]> {
-    const num = async (): Promise<BalloonData[]> => {
-      const data: Response = await fetch(`${this.url}/garage/`);
-      const body: BalloonData[] = await data.json();
-      return body;
-    };
-    const res: Promise<BalloonData[]> = num();
-    return res;
+  public async getGarageObject(): Promise<BalloonData[]> {
+    const data: Response = await fetch(`${this.url}/garage/`);
+    const body: BalloonData[] = await data.json();
+    return body;
   }
 
-  public getBalloonInfo(index: number): Promise<BalloonData> {
-    const balloon = async (): Promise<BalloonData> => {
-      const data: Response = await fetch(`${this.url}/garage/${index}`);
-      const body: BalloonData = await data.json();
-      return body;
-    };
-    const res: Promise<BalloonData> = balloon();
-    return res;
+  public async getBalloonInfo(index: number): Promise<BalloonData> {
+    const data: Response = await fetch(`${this.url}/garage/${index}`);
+    const body: BalloonData = await data.json();
+    return body;
   }
 
-  private createNewBalloon(data: BalloonData): void {
-    const balloon = async (): Promise<void> => {
-      await fetch(`${this.url}/garage`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: data.name,
-          color: data.color,
-          id: data.id,
-        }),
-      });
-    };
-    balloon();
+  private async createNewBalloon(data: BalloonData): Promise<void> {
+    await fetch(`${this.url}/garage`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: data.name,
+        color: data.color,
+        id: data.id,
+      }),
+    });
   }
 
-  public postNewBalloon(data: BalloonData): void {
-    const balloon = async (): Promise<void> => {
-      await this.createNewBalloon(data);
-    };
-    balloon();
+  public async postNewBalloon(data: BalloonData): Promise<void> {
+    await this.createNewBalloon(data);
   }
 
-  public deleteBalloon(id: number): void {
-    const balloon = async (): Promise<void> => {
-      await fetch(`${this.url}/garage/${id}`, {
-        method: "DELETE",
-      });
-    };
-    const del = async (): Promise<void> => {
-      await balloon();
-    };
-    del();
+  public async deleteBalloon(id: number): Promise<void> {
+    await fetch(`${this.url}/garage/${id}`, {
+      method: "DELETE",
+    });
   }
 
-  private updateBalloon(id: number, data: BalloonData): void {
-    const balloon = async (): Promise<void> => {
-      await fetch(`${this.url}/garage/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: data.name,
-          color: data.color,
-        }),
-      });
-    };
-    balloon();
+  private async updateBalloon(id: number, data: BalloonData): Promise<void> {
+    await fetch(`${this.url}/garage/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: data.name,
+        color: data.color,
+      }),
+    });
   }
 
-  public postUpdatedBalloon(id: number, data: BalloonData): void {
-    const balloon = async (): Promise<void> => {
-      await this.updateBalloon(id, data);
-    };
-    balloon();
+  public async postUpdatedBalloon(
+    id: number,
+    data: BalloonData,
+  ): Promise<void> {
+    await this.updateBalloon(id, data);
   }
 
   private generateQueryString(data: QueryParams): string {
@@ -119,32 +96,29 @@ class Controller {
     return this.queryString;
   }
 
-  public startStopBurner(
+  public async startStopBurner(
     data: QueryBurnerParams,
   ): Promise<StartRaceData | void> {
-    const race = async (): Promise<StartRaceData | void> => {
-      const params: string = this.generateQueryString(data);
-      const resp: Response = await fetch(`${this.url}/engine${params}`, {
-        method: "PATCH",
-      });
-      try {
-        const body: StartRaceData = await resp.json();
-        return body;
-      } catch (error) {
-        switch (resp.status) {
-          case 404:
-            console.log("Balloon with such id was not found in the hangar");
-            break;
-          case 400:
-            console.log("Wrong parameters for start of the moving");
-            break;
-          default:
-            console.log("Something went wrong!");
-        }
+    const params: string = this.generateQueryString(data);
+    const resp: Response = await fetch(`${this.url}/engine${params}`, {
+      method: "PATCH",
+    });
+    try {
+      const body: StartRaceData = await resp.json();
+      return body;
+    } catch (error) {
+      switch (resp.status) {
+        case 404:
+          console.log("Balloon with such id was not found in the hangar");
+          break;
+        case 400:
+          console.log("Wrong parameters for start of the moving");
+          break;
+        default:
+          console.log("Something went wrong!");
       }
-      return undefined;
-    };
-    return race();
+    }
+    return undefined;
   }
 
   private async race(
@@ -201,7 +175,7 @@ class Controller {
     }
   }
 
-  public switchBalloonEngineToDrive(
+  public async switchBalloonEngineToDrive(
     data: QueryBurnerParams,
     timer: NodeJS.Timer,
     velocity: number,
@@ -280,24 +254,22 @@ class Controller {
     });
   }
 
-  public async chooseUpdateOrCreateUser(
+  public async chooseUpdateOrCreateWinner(
     id: number,
     data: WinnerInfo,
   ): Promise<void> {
     const winner: WinnerRespond | undefined = await this.getWinner(id);
     let wins: number;
     let time: number;
-    if (winner instanceof Object) {
-      if (Object.keys(winner).length === 0) {
-        if (data) {
-          this.createWinner(data);
-        }
-      } else {
-        await this.deleteWinner(data.id);
-        wins = winner.wins + 1;
-        time = winner.time;
-        this.createWinner(data, wins, time);
-      }
+    if (!(winner instanceof Object)) return;
+    if (Object.keys(winner).length === 0) {
+      if (!data) return;
+      this.createWinner(data);
+    } else {
+      await this.deleteWinner(data.id);
+      wins = winner.wins + 1;
+      time = winner.time;
+      this.createWinner(data, wins, time);
     }
   }
 

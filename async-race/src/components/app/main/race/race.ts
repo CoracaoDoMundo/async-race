@@ -463,7 +463,7 @@ class Race {
         );
       }, timeDifference * 1000);
     }
-    this.controller.chooseUpdateOrCreateUser(balloonId, {
+    this.controller.chooseUpdateOrCreateWinner(balloonId, {
       wins: 1,
       time: Number(winnerTime.toFixed(2)),
       id: balloonId,
