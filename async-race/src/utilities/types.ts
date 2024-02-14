@@ -139,3 +139,5 @@ export type TButtonOptions = {
 };
 
 export type TimerFunc = () => number;
+
+export type SortTypes = "ASC" | "DESC";

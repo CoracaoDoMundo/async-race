@@ -9,6 +9,7 @@ import {
   ColumnNames,
   QueryWinnersParams,
   WinnerRespond,
+  SortTypes,
 } from "../../../../../utilities/types";
 import Balloon from "../../race/hangar/balloon-block/balloon/balloon";
 
@@ -48,9 +49,9 @@ class WinnersTable {
 
   private restartQuantity: number = 0;
 
-  private winsSort: "ASC" | "DESC" = "ASC";
+  private winsSort: SortTypes = "ASC";
 
-  private timeSort: "ASC" | "DESC" = "ASC";
+  private timeSort: SortTypes = "ASC";
 
   constructor() {
     this.controller = Controller.getInstance();
@@ -97,7 +98,8 @@ class WinnersTable {
   public drawTableHeadline(container: HTMLDivElement): void {
     this.restartQuantity = 1;
     let i = 0;
-    while (i < 5) {
+    const columnsQuantity = 5;
+    while (i < columnsQuantity) {
       const columnNameBlock: HTMLDivElement = createElement(
         "div",
         ["columnNameBlock", "tableHeadline", "cell"],
@@ -126,10 +128,7 @@ class WinnersTable {
     }
   }
 
-  private addListenerForSort(
-    column: "wins" | "time",
-    flag: "ASC" | "DESC",
-  ): void {
+  private addListenerForSort(column: "wins" | "time", flag: SortTypes): void {
     let data: QueryWinnersParams;
     this.winnersTableBlock.innerText = "";
     if (flag === "ASC") {
@@ -189,7 +188,9 @@ class WinnersTable {
   ): void {
     let wins: number = 1;
     let i = 0 + (page - 1) * itemsOnPage;
-    while (i < itemsOnPage * page && i < Object.values(obj).length) {
+    const startItemNum = itemsOnPage * page;
+    const linesQuantity = Object.values(obj).length;
+    while (i < startItemNum && i < linesQuantity) {
       const numContainer: HTMLDivElement = createElement(
         "div",
         ["numContainer", "cell"],
