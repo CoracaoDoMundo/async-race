@@ -1,0 +1,57 @@
+@import '../../../../app.scss';
+
+.buttonsNameBlock {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 0.5rem;
+  .button {
+    width: fit-content;
+    font-size: 0.7rem;
+    border-radius: 2px;
+    .buttonInner {
+      border-radius: 2px;
+    }
+  }
+  .balloonName {
+    font-size: 0.9rem;
+    margin-top: 0.1rem;
+  }
+}
+
+.raceBlock {
+  display: flex;
+  position: relative;
+  gap: 0.3rem;
+  .button {
+    font-size: 0.5rem;
+    box-shadow: 1px 1.5px 0px 0px $font-color;
+    height: fit-content;
+    .buttonInner {
+      padding: 0 0.2rem;
+    }
+  }
+  .button:active {
+    box-shadow: 0.5px 0.7px 0px 0px $font-color;
+  }
+}
+
+.balloonContainer {
+  width: 25px;
+}
+
+.ribbonContainer {
+  display: flex;
+  align-items: flex-end;
+  position: absolute;
+  right: 6%;
+  width: 20px;
+  height: 40px;
+}
+
+.trackLine {
+  position: absolute;
+  top: 117%;
+  border-bottom: 2px dashed $font-color;
+  width: 100%;
+}

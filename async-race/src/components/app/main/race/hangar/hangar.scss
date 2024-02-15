@@ -1,0 +1,56 @@
+@import '../../../app.scss';
+
+.hangarBlock,
+.winnersBlock {
+  display: flex;
+  flex-direction: column;
+  padding: 0 3%;
+}
+
+.headerLine,
+.paginationLine {
+  display: flex;
+  font-family: 'Bangers', sans-serif;
+  color: $font-header-color;
+  gap: 0.3rem;
+}
+
+.hangarHeader,
+.winnersHeader,
+.balloonsNum,
+.winnersNum {
+  margin: 0.5rem 0;
+}
+
+.pageText,
+.pageNumContainer {
+  margin: 0 0 0.5rem;
+}
+
+.balloonBlocksContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.balloonBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 100%;
+  height: fit-content;
+  margin: 0.3rem 0;
+}
+
+.paginationButtonsBlock {
+  display: flex;
+  justify-content: space-between;
+  width: 20%;
+  margin-top: 0.5rem;
+  .button {
+    width: 45%;
+    .buttonInner {
+      flex-grow: 1;
+      font-size: 0.7rem;
+    }
+  }
+}
